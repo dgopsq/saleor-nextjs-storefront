@@ -1,4 +1,4 @@
-import { AppApolloProvider } from "@/misc/apollo";
+import { ApolloWrapper } from "@/misc/apolloWrapper";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppApolloProvider>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </AppApolloProvider>
+    <html lang="en">
+      <body className={inter.className}>
+        <ApolloWrapper>{children}</ApolloWrapper>
+      </body>
+    </html>
   );
 }
