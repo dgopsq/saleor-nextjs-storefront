@@ -1,0 +1,38 @@
+query GetHomepageProducts($first: Int!) {
+  products(first: $first) {
+    edges {
+      node {
+        id
+        name
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+
+            stop {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+
+          discount {
+            gross {
+              amount
+              currency
+            }
+          }
+        }
+        media {
+          url
+          sortOrder
+        }
+      }
+    }
+  }
+}

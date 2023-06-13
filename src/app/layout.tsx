@@ -1,3 +1,4 @@
+import "./globals.css";
 import { Products } from "@/components/products/Products";
 import { ApolloWrapper } from "@/misc/apolloWrapper";
 import { Inter } from "next/font/google";
