@@ -1,3 +1,4 @@
+import { Products } from "@/components/products/Products";
 import { ApolloWrapper } from "@/misc/apolloWrapper";
 import { Inter } from "next/font/google";
 
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <ApolloWrapper>
+          <Products />
+        </ApolloWrapper>
       </body>
     </html>
   );

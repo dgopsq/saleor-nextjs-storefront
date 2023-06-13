@@ -1,3 +1,3 @@
-export const config = {
-  graphqlUrl: process.env.GRAPHQL_URL || "",
+export const publicConfig = {
+  graphqlUrl: process.env.NEXT_PUBLIC_GRAPHQL_URL || "",
 };

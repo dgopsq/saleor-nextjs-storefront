@@ -1,0 +1,14 @@
+query GetProducts($first: Int!) {
+  products(first: $first) {
+    edges {
+      node {
+        id
+        name
+        media {
+          url
+          sortOrder
+        }
+      }
+    }
+  }
+}

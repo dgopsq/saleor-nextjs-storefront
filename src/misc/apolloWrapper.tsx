@@ -1,6 +1,6 @@
 "use client";
 
-import { config } from "@/misc/config";
+import { publicConfig } from "@/misc/config";
 import {
   ApolloClient,
   ApolloLink,
@@ -15,7 +15,7 @@ import {
 
 function makeClient() {
   const httpLink = new HttpLink({
-    uri: config.graphqlUrl,
+    uri: publicConfig.graphqlUrl,
   });
 
   return new ApolloClient({
