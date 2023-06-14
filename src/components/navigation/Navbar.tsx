@@ -312,7 +312,9 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                       />
 
                       <div className="flow-root">
-                        <CartButton />
+                        <Link href="/cart">
+                          <CartButton />
+                        </Link>
                       </div>
                     </div>
                   </div>
