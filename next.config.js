@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "orologiomalvagio.eu.saleor.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "tailwindui.com",
+      },
     ],
   },
 };

@@ -21,7 +21,9 @@ export default function RootLayout({
         <ApolloWrapper>
           <Navbar />
 
-          <div>{children}</div>
+          <main className="flex min-h-screen flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">
+            {children}
+          </main>
         </ApolloWrapper>
       </body>
     </html>

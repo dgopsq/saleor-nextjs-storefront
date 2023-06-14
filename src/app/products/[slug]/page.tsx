@@ -31,9 +31,5 @@ export default async function SingleProductPage({
     ? parseProduct(retrievedProduct)
     : null;
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {parsedProduct ? <ProductDetails product={parsedProduct} /> : null}
-    </main>
-  );
+  return parsedProduct ? <ProductDetails product={parsedProduct} /> : null;
 }

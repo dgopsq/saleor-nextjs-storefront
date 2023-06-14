@@ -11,9 +11,5 @@ export default async function HomePage() {
     variables: getAllProductsVariables(),
   });
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Products prefetchedData={res.data} />
-    </main>
-  );
+  return <Products prefetchedData={res.data} />;
 }
