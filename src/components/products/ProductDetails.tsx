@@ -3,10 +3,7 @@ import { ProductImages } from "@/components/products/ProductImages";
 import { Product } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import { useCallback, useMemo } from "react";
-import { useMutation } from "@apollo/client";
-import { AddProductToCartDocument } from "@/__generated__/graphql";
-import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
+import { useMemo } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 
 type Props = {

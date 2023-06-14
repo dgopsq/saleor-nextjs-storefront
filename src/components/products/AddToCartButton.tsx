@@ -1,7 +1,9 @@
 "use client";
 
 import { AddProductToCartDocument } from "@/__generated__/graphql";
+import { Spinner } from "@/components/core/Spinner";
 import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
+import { classNames } from "@/misc/styles";
 import { useMutation } from "@apollo/client";
 import { useCallback } from "react";
 
@@ -14,25 +16,29 @@ type Props = {
  */
 export const AddToCartButton: React.FC<Props> = ({ variantId }) => {
   const checkoutToken = useCheckoutToken();
-  const [addToCart] = useMutation(AddProductToCartDocument);
+  const [addToCart, { loading }] = useMutation(AddProductToCartDocument);
 
   const handleAddToCart = useCallback(() => {
-    addToCart({
-      variables: {
-        checkoutToken,
-        variantId,
-      },
-      refetchQueries: ["GetCheckoutInfo"],
-    });
-  }, [addToCart, checkoutToken, variantId]);
+    if (!loading)
+      addToCart({
+        variables: {
+          checkoutToken,
+          variantId,
+        },
+        refetchQueries: ["GetCheckoutInfo"],
+      });
+  }, [addToCart, checkoutToken, variantId, loading]);
 
   return (
     <button
       type="button"
-      className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+      className={classNames(
+        loading ? "opacity-75 cursor-not-allowed" : "hover:bg-indigo-700",
+        "max-w-xs sm:w-full h-18 flex flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+      )}
       onClick={handleAddToCart}
     >
-      Add to cart
+      {loading ? <Spinner /> : "Add to cart"}
     </button>
   );
 };
