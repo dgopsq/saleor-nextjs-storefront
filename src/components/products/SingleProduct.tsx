@@ -47,10 +47,8 @@ export const SingleProduct: React.FC<Props> = ({ product }) => {
       <div className="mt-4 flex justify-between">
         <div>
           <h3 className="text-sm text-gray-700">
-            <a href="#">
-              <span aria-hidden="true" className="absolute inset-0" />
-              {name}
-            </a>
+            <span aria-hidden="true" className="absolute inset-0" />
+            {name}
           </h3>
         </div>
         <p className="text-sm font-medium text-gray-900">{formattedPrice}</p>

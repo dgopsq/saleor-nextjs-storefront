@@ -2,6 +2,9 @@ import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   GenericProductFragmentDoc,
   GenericProductVariantFragmentDoc,
+  GetProductsQueryVariables,
+  OrderDirection,
+  ProductOrderField,
 } from "@/__generated__/graphql";
 
 type ProductImage = {
@@ -41,6 +44,7 @@ type ProductVariant = {
  */
 export type Product = {
   id: string;
+  slug: string;
   name: string;
   images: Array<ProductImage>;
   prices: {
@@ -104,12 +108,13 @@ function parseVariant(
 export function parseProduct(
   input: FragmentType<typeof GenericProductFragmentDoc>
 ): Product {
-  const { id, name, media, pricing, defaultVariant, variants } =
+  const { id, name, slug, media, pricing, defaultVariant, variants } =
     getFragmentData(GenericProductFragmentDoc, input);
 
   return {
     id,
     name,
+    slug,
     images:
       media?.map((media) => ({
         url: media?.url ?? "",
@@ -133,3 +138,11 @@ export function parseProduct(
     variants: variants?.map(parseVariant) ?? [],
   };
 }
+
+/**
+ *
+ */
+export const getAllProductsVariables: GetProductsQueryVariables = {
+  first: 20,
+  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
+};

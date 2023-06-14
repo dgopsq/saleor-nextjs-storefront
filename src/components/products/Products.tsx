@@ -1,14 +1,13 @@
 "use client";
 
-import {
-  GetProductsDocument,
-  GetProductsQuery,
-  OrderDirection,
-  ProductOrderField,
-} from "@/__generated__/graphql";
+import { GetProductsDocument, GetProductsQuery } from "@/__generated__/graphql";
 import { SingleProduct } from "@/components/products/SingleProduct";
-import { Product, parseProduct } from "@/components/products/data";
+import {
+  getAllProductsVariables,
+  parseProduct,
+} from "@/components/products/data";
 import { useQuery } from "@apollo/client";
+import Link from "next/link";
 import { useMemo } from "react";
 
 type Props = {
@@ -17,11 +16,7 @@ type Props = {
 
 export const Products: React.FC<Props> = ({ prefetchedData }) => {
   const { data } = useQuery(GetProductsDocument, {
-    variables: {
-      first: 10,
-      filters: { categories: ["Q2F0ZWdvcnk6Mjc="] },
-      sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
-    },
+    variables: getAllProductsVariables,
     skip: !!prefetchedData,
   });
 
@@ -31,10 +26,15 @@ export const Products: React.FC<Props> = ({ prefetchedData }) => {
   );
 
   return (
-    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-6 xl:gap-x-8">
+    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 xl:gap-x-8">
       {computedData?.products?.edges?.map(({ node }) => {
         const product = parseProduct(node);
-        return <SingleProduct key={product.id} product={product} />;
+
+        return (
+          <Link key={product.id} href={`/products/${product.slug}`}>
+            <SingleProduct product={product} />
+          </Link>
+        );
       })}
     </div>
   );
