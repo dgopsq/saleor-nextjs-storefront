@@ -2,7 +2,6 @@ import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
 import { Product } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
-import { HeartIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 
@@ -55,17 +54,6 @@ export const ProductDetails: React.FC<Props> = ({ product }) => {
                 {variantId ? (
                   <AddToCartButton variantId={variantId} />
                 ) : undefined}
-
-                <button
-                  type="button"
-                  className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                >
-                  <HeartIcon
-                    className="h-6 w-6 flex-shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span className="sr-only">Add to favorites</span>
-                </button>
               </div>
             </form>
           </div>
