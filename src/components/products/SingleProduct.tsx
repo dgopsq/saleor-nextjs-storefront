@@ -24,11 +24,16 @@ export const SingleProduct: React.FC<Props> = ({ product }) => {
   const priceFrom = product.prices.from;
   const priceTo = product.prices.to;
 
-  const formattedPriceFrom = formatPrice(priceFrom.amount, priceFrom.currency);
-  const formattedPriceTo = formatPrice(priceTo.amount, priceTo.currency);
+  const formattedPriceFrom = priceFrom
+    ? formatPrice(priceFrom.amount, priceFrom.currency)
+    : null;
+
+  const formattedPriceTo = priceTo
+    ? formatPrice(priceTo.amount, priceTo.currency)
+    : null;
 
   const formattedPrice =
-    priceFrom.amount === priceTo.amount
+    priceFrom?.amount === priceTo?.amount
       ? formattedPriceFrom
       : `${formattedPriceFrom} - ${formattedPriceTo}`;
 

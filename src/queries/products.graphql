@@ -1,6 +1,46 @@
+fragment GenericProductVariant on ProductVariant {
+  id
+  sku
+  quantityAvailable
+  quantityLimitPerCustomer
+  name
+  media {
+    url
+    sortOrder
+    alt
+  }
+  pricing {
+    onSale
+    discount {
+      gross {
+        amount
+        currency
+      }
+    }
+    price {
+      gross {
+        amount
+        currency
+      }
+    }
+  }
+  attributes {
+    attribute {
+      id
+      name
+    }
+    values {
+      id
+      name
+    }
+  }
+}
+
 fragment GenericProduct on Product {
   id
   name
+  description
+  slug
   pricing {
     priceRange {
       start {
@@ -29,6 +69,12 @@ fragment GenericProduct on Product {
     url
     sortOrder
     alt
+  }
+  defaultVariant {
+    ...GenericProductVariant
+  }
+  variants {
+    ...GenericProductVariant
   }
 }
 
