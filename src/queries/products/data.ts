@@ -177,6 +177,17 @@ export const getAllProductsVariables = (): GetProductsQueryVariables => ({
 /**
  *
  */
+export const getCategoryProductsVariables = (
+  categorySlug: string
+): GetProductsQueryVariables => ({
+  first: 20,
+  filters: { categories: [categorySlug] },
+  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
+});
+
+/**
+ *
+ */
 export const getSingleProductVariables = (
   slug: string
 ): GetProductsQueryVariables => ({

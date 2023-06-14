@@ -1,6 +1,6 @@
 import { GetProductsDocument } from "@/__generated__/graphql";
 import { Products } from "@/components/products/Products";
-import { getAllProductsVariables } from "@/queries/products/data";
+import { getAllProductsVariables, parseProduct } from "@/queries/products/data";
 import { getApolloClient } from "@/misc/apollo";
 
 export default async function ProductsPage() {
@@ -11,5 +11,10 @@ export default async function ProductsPage() {
     variables: getAllProductsVariables(),
   });
 
-  return <Products prefetchedData={res.data} />;
+  const parsedProducts =
+    res.data?.products?.edges?.map(({ node }) => {
+      return parseProduct(node);
+    }) ?? [];
+
+  return <Products products={parsedProducts} />;
 }

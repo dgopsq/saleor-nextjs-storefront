@@ -22,3 +22,15 @@ query GetCategories($first: Int!) {
     }
   }
 }
+
+query GetCategoryProducts($slug: String!, $first: Int!) {
+  category(slug: $slug) {
+    products(first: $first) {
+      edges {
+        node {
+          ...GenericProduct
+        }
+      }
+    }
+  }
+}
