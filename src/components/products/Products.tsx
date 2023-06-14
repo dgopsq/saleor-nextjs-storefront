@@ -16,7 +16,7 @@ type Props = {
 
 export const Products: React.FC<Props> = ({ prefetchedData }) => {
   const { data } = useQuery(GetProductsDocument, {
-    variables: getAllProductsVariables,
+    variables: getAllProductsVariables(),
     skip: !!prefetchedData,
   });
 

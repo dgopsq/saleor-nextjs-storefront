@@ -142,7 +142,18 @@ export function parseProduct(
 /**
  *
  */
-export const getAllProductsVariables: GetProductsQueryVariables = {
+export const getAllProductsVariables = (): GetProductsQueryVariables => ({
   first: 20,
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
-};
+});
+
+/**
+ *
+ */
+export const getSingleProductVariables = (
+  slug: string
+): GetProductsQueryVariables => ({
+  first: 1,
+  filters: { slugs: [slug] },
+  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
+});

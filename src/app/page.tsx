@@ -3,12 +3,12 @@ import { Products } from "@/components/products/Products";
 import { getAllProductsVariables } from "@/components/products/data";
 import { getApolloClient } from "@/misc/apollo";
 
-export default async function Home() {
+export default async function HomePage() {
   const client = getApolloClient();
 
   const res = await client.query({
     query: GetProductsDocument,
-    variables: getAllProductsVariables,
+    variables: getAllProductsVariables(),
   });
 
   return (
