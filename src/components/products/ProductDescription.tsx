@@ -1,6 +1,4 @@
-"use client";
-
-import Output from "editorjs-react-renderer";
+import edjsHTML from "editorjs-html";
 
 type Props = {
   description: string;
@@ -10,5 +8,10 @@ type Props = {
  *
  */
 export const ProductDescription: React.FC<Props> = ({ description }) => {
-  return <Output data={JSON.parse(description)} />;
+  const edjsParser = edjsHTML();
+  const parsedDescription = edjsParser.parse(JSON.parse(description));
+
+  return (
+    <div dangerouslySetInnerHTML={{ __html: parsedDescription.join("") }} />
+  );
 };

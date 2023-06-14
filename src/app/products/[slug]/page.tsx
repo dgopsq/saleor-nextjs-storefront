@@ -1,11 +1,14 @@
 import { GetProductsDocument } from "@/__generated__/graphql";
 import { ProductDetails } from "@/components/products/ProductDetails";
-import { SingleProduct } from "@/components/products/SingleProduct";
 import {
   getSingleProductVariables,
   parseProduct,
 } from "@/components/products/data";
 import { getApolloClient } from "@/misc/apollo";
+
+export async function generateStaticParams() {
+  return [];
+}
 
 type Params = {
   slug: string;
