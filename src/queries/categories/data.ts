@@ -58,3 +58,10 @@ export function parsePopulatedCategories(
 
   return result;
 }
+
+/**
+ *
+ */
+export function generateCategoryUrl(category: Category): string {
+  return `/categories/${category.slug}`;
+}

@@ -12,7 +12,7 @@ import {
 import { classNames } from "@/misc/styles";
 import Link from "next/link";
 import Image from "next/image";
-import { Category } from "@/queries/categories/data";
+import { Category, generateCategoryUrl } from "@/queries/categories/data";
 
 type Props = {
   categories: Array<Category>;
@@ -93,21 +93,18 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                         <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
                           <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                             <div>
-                              <p
-                                id={`mobile-featured-heading-${categoryIdx}`}
-                                className="font-medium text-gray-900"
-                              >
-                                Featured
-                              </p>
                               <ul
                                 role="list"
                                 aria-labelledby={`mobile-featured-heading-${categoryIdx}`}
                                 className="mt-6 space-y-6"
                               >
-                                {category.children.map((item) => (
-                                  <li key={item.name} className="flex">
-                                    <a href="#" className="text-gray-500">
-                                      {item.name}
+                                {category.children.map((subCategory) => (
+                                  <li key={subCategory.name} className="flex">
+                                    <a
+                                      href={generateCategoryUrl(subCategory)}
+                                      className="text-gray-500"
+                                    >
+                                      {subCategory.name}
                                     </a>
                                   </li>
                                 ))}
@@ -130,12 +127,12 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                     </a>
                   </div>
                   <div className="flow-root">
-                    <a
+                    <Link
                       href="#"
                       className="-m-2 block p-2 font-medium text-gray-900"
                     >
                       Sign in
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </Dialog.Panel>
@@ -211,19 +208,23 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                                               aria-labelledby="desktop-collection-heading"
                                               className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                             >
-                                              {category.children.map((item) => (
-                                                <li
-                                                  key={item.name}
-                                                  className="flex"
-                                                >
-                                                  <a
-                                                    href="#"
-                                                    className="hover:text-gray-800"
+                                              {category.children.map(
+                                                (subCategory) => (
+                                                  <li
+                                                    key={subCategory.name}
+                                                    className="flex"
                                                   >
-                                                    {item.name}
-                                                  </a>
-                                                </li>
-                                              ))}
+                                                    <Link
+                                                      href={generateCategoryUrl(
+                                                        subCategory
+                                                      )}
+                                                      className="hover:text-gray-800"
+                                                    >
+                                                      {subCategory.name}
+                                                    </Link>
+                                                  </li>
+                                                )
+                                              )}
                                             </ul>
                                           </div>
                                         </div>

@@ -4,10 +4,7 @@ import { ApolloWrapper } from "@/misc/apolloWrapper";
 import { Inter } from "next/font/google";
 import { getApolloClient } from "@/misc/apollo";
 import { GetCategoriesDocument } from "@/__generated__/graphql";
-import {
-  parseCategory,
-  parsePopulatedCategories,
-} from "@/queries/categories/data";
+import { parsePopulatedCategories } from "@/queries/categories/data";
 
 const inter = Inter({ subsets: ["latin"] });
 

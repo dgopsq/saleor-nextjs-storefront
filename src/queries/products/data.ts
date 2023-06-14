@@ -184,3 +184,10 @@ export const getSingleProductVariables = (
   filters: { slugs: [slug] },
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });
+
+/**
+ *
+ */
+export function generateProductUrl(product: Product): string {
+  return `/products/${product.slug}`;
+}
