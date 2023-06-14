@@ -72,7 +72,7 @@ export type Product = {
 /**
  *
  */
-function parseVariant(
+export function parseVariant(
   input: FragmentType<typeof GenericProductVariantFragmentDoc>
 ): ProductVariant {
   const { id, sku, name, media, pricing, attributes } = getFragmentData(

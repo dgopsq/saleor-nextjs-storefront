@@ -2,6 +2,10 @@ query GetCheckoutInfo($checkoutToken: UUID!) {
   checkout(token: $checkoutToken) {
     lines {
       id
+      quantity
+      variant {
+        ...GenericProductVariant
+      }
     }
   }
 }
