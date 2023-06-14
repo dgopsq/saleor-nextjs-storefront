@@ -1,3 +1,11 @@
+query GetCheckoutInfo($checkoutToken: UUID!) {
+  checkout(token: $checkoutToken) {
+    lines {
+      id
+    }
+  }
+}
+
 mutation CreateCheckout($channel: String!, $email: String!) {
   checkoutCreate(input: { channel: $channel, email: $email, lines: [] }) {
     checkout {
@@ -6,6 +14,30 @@ mutation CreateCheckout($channel: String!, $email: String!) {
     errors {
       field
       code
+    }
+  }
+}
+
+mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
+  checkoutLinesAdd(
+    token: $checkoutToken
+    lines: [{ quantity: 1, variantId: $variantId }]
+  ) {
+    checkout {
+      id
+      lines {
+        id
+        quantity
+        variant {
+          name
+          product {
+            name
+          }
+        }
+      }
+    }
+    errors {
+      message
     }
   }
 }
