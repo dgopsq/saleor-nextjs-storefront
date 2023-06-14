@@ -1,11 +1,8 @@
-"use client";
-
 import { ProductDescription } from "@/components/products/ProductDescription";
+import { ProductImages } from "@/components/products/ProductImages";
 import { Product } from "@/components/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
-import { Tab } from "@headlessui/react";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import { useMemo } from "react";
 
 function classNames(...classes: Array<string>) {
@@ -29,56 +26,9 @@ export const ProductDetails: React.FC<Props> = ({ product }) => {
     <div className="bg-white w-screen">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
-          <Tab.Group as="div" className="flex flex-col-reverse">
-            <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-              <Tab.List className="grid grid-cols-4 gap-6">
-                {product.images.map((image) => (
-                  <Tab
-                    key={image.id}
-                    className="relative flex h-28 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none"
-                  >
-                    {({ selected }) => (
-                      <div>
-                        <span
-                          className={classNames(
-                            selected ? "bg-gray-200" : "",
-                            "pointer-events-none absolute inset-0 rounded-md"
-                          )}
-                          aria-hidden="true"
-                        />
-
-                        <span className="absolute inset-0 overflow-hidden rounded-md p-2">
-                          <Image
-                            src={image.url}
-                            alt=""
-                            className="h-full w-full object-cover object-center"
-                            width={200}
-                            height={200}
-                          />
-                        </span>
-                      </div>
-                    )}
-                  </Tab>
-                ))}
-              </Tab.List>
-            </div>
-
-            <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
-              {product.images.map((image) => (
-                <Tab.Panel key={image.id}>
-                  <div className="rounded-md bg-gray-200">
-                    <Image
-                      src={image.url}
-                      alt={image.alt ?? ""}
-                      className="h-full w-full object-cover object-center sm:rounded-lg"
-                      width={600}
-                      height={600}
-                    />
-                  </div>
-                </Tab.Panel>
-              ))}
-            </Tab.Panels>
-          </Tab.Group>
+          <div>
+            <ProductImages images={product.images} />
+          </div>
 
           {/* Product info */}
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
