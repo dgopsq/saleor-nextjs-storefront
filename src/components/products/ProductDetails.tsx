@@ -34,11 +34,19 @@ export const ProductDetails: React.FC<Props> = ({ product }) => {
                 {product.images.map((image) => (
                   <Tab
                     key={image.id}
-                    className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                    className="relative flex h-28 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none"
                   >
                     {({ selected }) => (
                       <div>
-                        <span className="absolute inset-0 overflow-hidden rounded-md">
+                        <span
+                          className={classNames(
+                            selected ? "bg-gray-200" : "",
+                            "pointer-events-none absolute inset-0 rounded-md"
+                          )}
+                          aria-hidden="true"
+                        />
+
+                        <span className="absolute inset-0 overflow-hidden rounded-md p-2">
                           <Image
                             src={image.url}
                             alt=""
@@ -47,13 +55,6 @@ export const ProductDetails: React.FC<Props> = ({ product }) => {
                             height={200}
                           />
                         </span>
-                        <span
-                          className={classNames(
-                            selected ? "ring-indigo-500" : "ring-transparent",
-                            "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
-                          )}
-                          aria-hidden="true"
-                        />
                       </div>
                     )}
                   </Tab>
