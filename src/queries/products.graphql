@@ -1,5 +1,9 @@
-query GetHomepageProducts($first: Int!) {
-  products(first: $first) {
+query GetProducts(
+  $first: Int!
+  $filters: ProductFilterInput
+  $sortBy: ProductOrder
+) {
+  products(first: $first, filter: $filters, sortBy: $sortBy) {
     edges {
       node {
         id
