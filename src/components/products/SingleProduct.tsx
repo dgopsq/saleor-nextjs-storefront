@@ -1,7 +1,7 @@
 import { Product } from "@/components/products/data";
-import { formatPrice } from "@/misc/currencies";
+import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
 
 type Props = {
   product: Product;
@@ -15,21 +15,10 @@ export const SingleProduct: React.FC<Props> = ({ product }) => {
   const imageAlt = product.images[0]?.alt ?? null;
   const name = product.name;
 
-  const priceFrom = product.prices.from;
-  const priceTo = product.prices.to;
-
-  const formattedPriceFrom = priceFrom
-    ? formatPrice(priceFrom.amount, priceFrom.currency)
-    : null;
-
-  const formattedPriceTo = priceTo
-    ? formatPrice(priceTo.amount, priceTo.currency)
-    : null;
-
-  const formattedPrice =
-    priceFrom?.amount === priceTo?.amount
-      ? formattedPriceFrom
-      : `${formattedPriceFrom} - ${formattedPriceTo}`;
+  const formattedPrice = useMemo(
+    () => formatSingleProductPrice(product.prices),
+    [product]
+  );
 
   return (
     <div className="group relative">

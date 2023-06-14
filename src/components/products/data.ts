@@ -8,6 +8,7 @@ import {
 } from "@/__generated__/graphql";
 
 type ProductImage = {
+  id: string;
   url: string;
   alt?: string;
 };
@@ -46,6 +47,7 @@ export type Product = {
   id: string;
   slug: string;
   name: string;
+  description: string | null;
   images: Array<ProductImage>;
   prices: {
     from: ProductPrice | null;
@@ -70,11 +72,13 @@ function parseVariant(
     id,
     name,
     sku: sku ?? null,
-    images:
-      media?.map((media) => ({
-        url: media?.url ?? "",
-        alt: media?.alt ?? "",
-      })) ?? [],
+    images: media
+      ? media.map((media) => ({
+          id: media.id,
+          url: media.url,
+          alt: media.alt,
+        }))
+      : [],
     price: pricing?.price?.gross
       ? {
           amount: pricing.price.gross.amount,
@@ -108,18 +112,29 @@ function parseVariant(
 export function parseProduct(
   input: FragmentType<typeof GenericProductFragmentDoc>
 ): Product {
-  const { id, name, slug, media, pricing, defaultVariant, variants } =
-    getFragmentData(GenericProductFragmentDoc, input);
+  const {
+    id,
+    name,
+    description,
+    slug,
+    media,
+    pricing,
+    defaultVariant,
+    variants,
+  } = getFragmentData(GenericProductFragmentDoc, input);
 
   return {
     id,
     name,
     slug,
-    images:
-      media?.map((media) => ({
-        url: media?.url ?? "",
-        alt: media?.alt ?? "",
-      })) ?? [],
+    description: description ?? null,
+    images: media
+      ? media?.map((media) => ({
+          id: media.id,
+          url: media.url,
+          alt: media.alt,
+        }))
+      : [],
     prices: {
       from: pricing?.priceRange?.start?.gross
         ? {

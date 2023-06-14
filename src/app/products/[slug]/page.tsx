@@ -1,4 +1,5 @@
 import { GetProductsDocument } from "@/__generated__/graphql";
+import { ProductDetails } from "@/components/products/ProductDetails";
 import { SingleProduct } from "@/components/products/SingleProduct";
 import {
   getSingleProductVariables,
@@ -29,7 +30,7 @@ export default async function SingleProductPage({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {parsedProduct ? <SingleProduct product={parsedProduct} /> : null}
+      {parsedProduct ? <ProductDetails product={parsedProduct} /> : null}
     </main>
   );
 }
