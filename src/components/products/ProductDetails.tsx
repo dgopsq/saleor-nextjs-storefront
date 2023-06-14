@@ -1,5 +1,6 @@
 "use client";
 
+import { ProductDescription } from "@/components/products/ProductDescription";
 import { Product } from "@/components/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import { Tab } from "@headlessui/react";
@@ -95,10 +96,9 @@ export const ProductDetails: React.FC<Props> = ({ product }) => {
             <div className="mt-6">
               <h3 className="sr-only">Description</h3>
 
-              <div
-                className="space-y-6 text-base text-gray-700"
-                dangerouslySetInnerHTML={{ __html: product.description ?? "" }}
-              />
+              {product.description ? (
+                <ProductDescription description={product.description} />
+              ) : null}
             </div>
 
             <form className="mt-6">
