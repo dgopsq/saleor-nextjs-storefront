@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -12,30 +12,17 @@ import {
 import { classNames } from "@/misc/styles";
 import Link from "next/link";
 import Image from "next/image";
-import { Category, parseCategory } from "@/queries/categories/data";
-import { useQuery } from "@apollo/client";
-import { GetCategoriesDocument } from "@/__generated__/graphql";
+import { Category } from "@/queries/categories/data";
+
+type Props = {
+  categories: Array<Category>;
+};
 
 /**
  *
  */
-export const Navbar: React.FC = () => {
+export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
-
-  const { data } = useQuery(GetCategoriesDocument, {
-    variables: { first: 100 },
-  });
-
-  const categories = useMemo(() => {
-    const categories: Array<Category> = [];
-
-    for (const { node } of data?.categories?.edges ?? []) {
-      const products = node.products?.totalCount ?? 0;
-      if (products > 0) categories.push(parseCategory(node));
-    }
-
-    return categories;
-  }, [data]);
 
   return (
     <div className="bg-white">
