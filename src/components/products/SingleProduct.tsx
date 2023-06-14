@@ -1,13 +1,7 @@
 import { Product } from "@/components/products/data";
+import { formatPrice } from "@/misc/currencies";
 import Image from "next/image";
 import React from "react";
-
-function formatPrice(amount: number, currency: string) {
-  return Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(amount);
-}
 
 type Props = {
   product: Product;
