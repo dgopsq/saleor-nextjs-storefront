@@ -7,17 +7,26 @@ import {
   ProductOrderField,
 } from "@/__generated__/graphql";
 
+/**
+ *
+ */
 type ProductImage = {
   id: string;
   url: string;
   alt?: string;
 };
 
+/**
+ *
+ */
 type ProductPrice = {
   amount: number;
   currency: string;
 };
 
+/**
+ *
+ */
 type ProductAttribute = {
   attribute: {
     id: string;
@@ -30,6 +39,9 @@ type ProductAttribute = {
   }>;
 };
 
+/**
+ *
+ */
 type ProductVariant = {
   id: string;
   sku: string | null;

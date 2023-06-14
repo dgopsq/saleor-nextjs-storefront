@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -12,77 +12,30 @@ import {
 import { classNames } from "@/misc/styles";
 import Link from "next/link";
 import Image from "next/image";
-
-const navigation = {
-  categories: [
-    {
-      name: "Women",
-      featured: [
-        { name: "Sleep", href: "#" },
-        { name: "Swimwear", href: "#" },
-        { name: "Underwear", href: "#" },
-      ],
-      collection: [
-        { name: "Everything", href: "#" },
-        { name: "Core", href: "#" },
-        { name: "New Arrivals", href: "#" },
-        { name: "Sale", href: "#" },
-      ],
-      categories: [
-        { name: "Basic Tees", href: "#" },
-        { name: "Artwork Tees", href: "#" },
-        { name: "Bottoms", href: "#" },
-        { name: "Underwear", href: "#" },
-        { name: "Accessories", href: "#" },
-      ],
-      brands: [
-        { name: "Full Nelson", href: "#" },
-        { name: "My Way", href: "#" },
-        { name: "Re-Arranged", href: "#" },
-        { name: "Counterfeit", href: "#" },
-        { name: "Significant Other", href: "#" },
-      ],
-    },
-    {
-      name: "Men",
-      featured: [
-        { name: "Casual", href: "#" },
-        { name: "Boxers", href: "#" },
-        { name: "Outdoor", href: "#" },
-      ],
-      collection: [
-        { name: "Everything", href: "#" },
-        { name: "Core", href: "#" },
-        { name: "New Arrivals", href: "#" },
-        { name: "Sale", href: "#" },
-      ],
-      categories: [
-        { name: "Artwork Tees", href: "#" },
-        { name: "Pants", href: "#" },
-        { name: "Accessories", href: "#" },
-        { name: "Boxers", href: "#" },
-        { name: "Basic Tees", href: "#" },
-      ],
-      brands: [
-        { name: "Significant Other", href: "#" },
-        { name: "My Way", href: "#" },
-        { name: "Counterfeit", href: "#" },
-        { name: "Re-Arranged", href: "#" },
-        { name: "Full Nelson", href: "#" },
-      ],
-    },
-  ],
-  pages: [
-    { name: "Company", href: "#" },
-    { name: "Stores", href: "#" },
-  ],
-};
+import { Category, parseCategory } from "@/queries/categories/data";
+import { useQuery } from "@apollo/client";
+import { GetCategoriesDocument } from "@/__generated__/graphql";
 
 /**
  *
  */
 export const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+
+  const { data } = useQuery(GetCategoriesDocument, {
+    variables: { first: 100 },
+  });
+
+  const categories = useMemo(() => {
+    const categories: Array<Category> = [];
+
+    for (const { node } of data?.categories?.edges ?? []) {
+      const products = node.products?.totalCount ?? 0;
+      if (products > 0) categories.push(parseCategory(node));
+    }
+
+    return categories;
+  }, [data]);
 
   return (
     <div className="bg-white">
@@ -127,7 +80,7 @@ export const Navbar: React.FC = () => {
                 <Tab.Group as="div" className="mt-2">
                   <div className="border-b border-gray-200">
                     <Tab.List className="-mb-px flex space-x-8 px-4">
-                      {navigation.categories.map((category) => (
+                      {categories.map((category) => (
                         <Tab
                           key={category.name}
                           className={({ selected }) =>
@@ -145,7 +98,7 @@ export const Navbar: React.FC = () => {
                     </Tab.List>
                   </div>
                   <Tab.Panels as={Fragment}>
-                    {navigation.categories.map((category, categoryIdx) => (
+                    {categories.map((category, categoryIdx) => (
                       <Tab.Panel
                         key={category.name}
                         className="space-y-12 px-4 pb-6 pt-10"
@@ -164,87 +117,9 @@ export const Navbar: React.FC = () => {
                                 aria-labelledby={`mobile-featured-heading-${categoryIdx}`}
                                 className="mt-6 space-y-6"
                               >
-                                {category.featured.map((item) => (
+                                {category.children.map((item) => (
                                   <li key={item.name} className="flex">
-                                    <a
-                                      href={item.href}
-                                      className="text-gray-500"
-                                    >
-                                      {item.name}
-                                    </a>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div>
-                              <p
-                                id="mobile-categories-heading"
-                                className="font-medium text-gray-900"
-                              >
-                                Categories
-                              </p>
-                              <ul
-                                role="list"
-                                aria-labelledby="mobile-categories-heading"
-                                className="mt-6 space-y-6"
-                              >
-                                {category.categories.map((item) => (
-                                  <li key={item.name} className="flex">
-                                    <a
-                                      href={item.href}
-                                      className="text-gray-500"
-                                    >
-                                      {item.name}
-                                    </a>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-1 gap-x-6 gap-y-10">
-                            <div>
-                              <p
-                                id="mobile-collection-heading"
-                                className="font-medium text-gray-900"
-                              >
-                                Collection
-                              </p>
-                              <ul
-                                role="list"
-                                aria-labelledby="mobile-collection-heading"
-                                className="mt-6 space-y-6"
-                              >
-                                {category.collection.map((item) => (
-                                  <li key={item.name} className="flex">
-                                    <a
-                                      href={item.href}
-                                      className="text-gray-500"
-                                    >
-                                      {item.name}
-                                    </a>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            <div>
-                              <p
-                                id="mobile-brand-heading"
-                                className="font-medium text-gray-900"
-                              >
-                                Brands
-                              </p>
-                              <ul
-                                role="list"
-                                aria-labelledby="mobile-brand-heading"
-                                className="mt-6 space-y-6"
-                              >
-                                {category.brands.map((item) => (
-                                  <li key={item.name} className="flex">
-                                    <a
-                                      href={item.href}
-                                      className="text-gray-500"
-                                    >
+                                    <a href="#" className="text-gray-500">
                                       {item.name}
                                     </a>
                                   </li>
@@ -257,19 +132,6 @@ export const Navbar: React.FC = () => {
                     ))}
                   </Tab.Panels>
                 </Tab.Group>
-
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {navigation.pages.map((page) => (
-                    <div key={page.name} className="flow-root">
-                      <a
-                        href={page.href}
-                        className="-m-2 block p-2 font-medium text-gray-900"
-                      >
-                        {page.name}
-                      </a>
-                    </div>
-                  ))}
-                </div>
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
@@ -320,7 +182,7 @@ export const Navbar: React.FC = () => {
                     {/* Mega menus */}
                     <Popover.Group className="ml-8 z-10">
                       <div className="flex h-full justify-center space-x-8">
-                        {navigation.categories.map((category, categoryIdx) => (
+                        {categories.map((category, categoryIdx) => (
                           <Popover key={category.name} className="flex">
                             {({ open }) => (
                               <>
@@ -357,123 +219,25 @@ export const Navbar: React.FC = () => {
                                       <div className="mx-auto max-w-7xl px-8">
                                         <div className="grid grid-cols-2 items-start gap-x-8 gap-y-10 pb-12 pt-10">
                                           <div className="grid grid-cols-2 gap-x-8 gap-y-10">
-                                            <div>
-                                              <p
-                                                id={`desktop-featured-heading-${categoryIdx}`}
-                                                className="font-medium text-gray-900"
-                                              >
-                                                Featured
-                                              </p>
-                                              <ul
-                                                role="list"
-                                                aria-labelledby={`desktop-featured-heading-${categoryIdx}`}
-                                                className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                              >
-                                                {category.featured.map(
-                                                  (item) => (
-                                                    <li
-                                                      key={item.name}
-                                                      className="flex"
-                                                    >
-                                                      <a
-                                                        href={item.href}
-                                                        className="hover:text-gray-800"
-                                                      >
-                                                        {item.name}
-                                                      </a>
-                                                    </li>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                            <div>
-                                              <p
-                                                id="desktop-categories-heading"
-                                                className="font-medium text-gray-900"
-                                              >
-                                                Categories
-                                              </p>
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="desktop-categories-heading"
-                                                className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                              >
-                                                {category.categories.map(
-                                                  (item) => (
-                                                    <li
-                                                      key={item.name}
-                                                      className="flex"
-                                                    >
-                                                      <a
-                                                        href={item.href}
-                                                        className="hover:text-gray-800"
-                                                      >
-                                                        {item.name}
-                                                      </a>
-                                                    </li>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                          </div>
-                                          <div className="grid grid-cols-2 gap-x-8 gap-y-10">
-                                            <div>
-                                              <p
-                                                id="desktop-collection-heading"
-                                                className="font-medium text-gray-900"
-                                              >
-                                                Collection
-                                              </p>
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="desktop-collection-heading"
-                                                className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                              >
-                                                {category.collection.map(
-                                                  (item) => (
-                                                    <li
-                                                      key={item.name}
-                                                      className="flex"
-                                                    >
-                                                      <a
-                                                        href={item.href}
-                                                        className="hover:text-gray-800"
-                                                      >
-                                                        {item.name}
-                                                      </a>
-                                                    </li>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-
-                                            <div>
-                                              <p
-                                                id="desktop-brand-heading"
-                                                className="font-medium text-gray-900"
-                                              >
-                                                Brands
-                                              </p>
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="desktop-brand-heading"
-                                                className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                              >
-                                                {category.brands.map((item) => (
-                                                  <li
-                                                    key={item.name}
-                                                    className="flex"
+                                            <ul
+                                              role="list"
+                                              aria-labelledby="desktop-collection-heading"
+                                              className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                            >
+                                              {category.children.map((item) => (
+                                                <li
+                                                  key={item.name}
+                                                  className="flex"
+                                                >
+                                                  <a
+                                                    href="#"
+                                                    className="hover:text-gray-800"
                                                   >
-                                                    <a
-                                                      href={item.href}
-                                                      className="hover:text-gray-800"
-                                                    >
-                                                      {item.name}
-                                                    </a>
-                                                  </li>
-                                                ))}
-                                              </ul>
-                                            </div>
+                                                    {item.name}
+                                                  </a>
+                                                </li>
+                                              ))}
+                                            </ul>
                                           </div>
                                         </div>
                                       </div>
@@ -483,16 +247,6 @@ export const Navbar: React.FC = () => {
                               </>
                             )}
                           </Popover>
-                        ))}
-
-                        {navigation.pages.map((page) => (
-                          <a
-                            key={page.name}
-                            href={page.href}
-                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                          >
-                            {page.name}
-                          </a>
                         ))}
                       </div>
                     </Popover.Group>

@@ -1,0 +1,24 @@
+query GetCategories($first: Int!) {
+  categories(first: $first, level: 0) {
+    edges {
+      node {
+        name
+        slug
+        products {
+          totalCount
+        }
+        children(first: $first) {
+          edges {
+            node {
+              name
+              slug
+              products {
+                totalCount
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
