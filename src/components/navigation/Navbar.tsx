@@ -100,12 +100,13 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                               >
                                 {category.children.map((subCategory) => (
                                   <li key={subCategory.name} className="flex">
-                                    <a
+                                    <Link
                                       href={generateCategoryUrl(subCategory)}
                                       className="text-gray-500"
+                                      onClick={() => setOpen(false)}
                                     >
                                       {subCategory.name}
-                                    </a>
+                                    </Link>
                                   </li>
                                 ))}
                               </ul>
@@ -166,7 +167,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                     {/* Mega menus */}
                     <Popover.Group className="ml-8 z-10">
                       <div className="flex h-full justify-center space-x-8">
-                        {categories.map((category, categoryIdx) => (
+                        {categories.map((category) => (
                           <Popover key={category.name} className="flex">
                             {({ open }) => (
                               <>
@@ -214,14 +215,15 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                                                     key={subCategory.name}
                                                     className="flex"
                                                   >
-                                                    <Link
+                                                    <Popover.Button
+                                                      as={Link}
                                                       href={generateCategoryUrl(
                                                         subCategory
                                                       )}
                                                       className="hover:text-gray-800"
                                                     >
                                                       {subCategory.name}
-                                                    </Link>
+                                                    </Popover.Button>
                                                   </li>
                                                 )
                                               )}
