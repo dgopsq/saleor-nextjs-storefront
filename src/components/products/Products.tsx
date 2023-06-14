@@ -2,10 +2,7 @@
 
 import { GetProductsDocument, GetProductsQuery } from "@/__generated__/graphql";
 import { SingleProduct } from "@/components/products/SingleProduct";
-import {
-  getAllProductsVariables,
-  parseProduct,
-} from "@/components/products/data";
+import { getAllProductsVariables, parseProduct } from "@/queries/products/data";
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useMemo } from "react";

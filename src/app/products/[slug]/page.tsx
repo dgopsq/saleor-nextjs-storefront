@@ -3,7 +3,7 @@ import { ProductDetails } from "@/components/products/ProductDetails";
 import {
   getSingleProductVariables,
   parseProduct,
-} from "@/components/products/data";
+} from "@/queries/products/data";
 import { getApolloClient } from "@/misc/apollo";
 
 export async function generateStaticParams() {

@@ -1,6 +1,6 @@
 import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
-import { Product } from "@/components/products/data";
+import { Product } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";

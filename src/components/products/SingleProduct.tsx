@@ -1,4 +1,4 @@
-import { Product } from "@/components/products/data";
+import { Product } from "@/queries/products/data";
 import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
 import Image from "next/image";
 import React, { useMemo } from "react";

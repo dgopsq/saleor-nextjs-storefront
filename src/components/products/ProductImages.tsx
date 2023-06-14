@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@/components/products/data";
+import { Product } from "@/queries/products/data";
 import { classNames } from "@/misc/styles";
 import { Tab } from "@headlessui/react";
 import Image from "next/image";

@@ -1,6 +1,6 @@
 import { GetProductsDocument } from "@/__generated__/graphql";
 import { Products } from "@/components/products/Products";
-import { getAllProductsVariables } from "@/components/products/data";
+import { getAllProductsVariables } from "@/queries/products/data";
 import { getApolloClient } from "@/misc/apollo";
 
 export default async function ProductsPage() {

@@ -1,4 +1,4 @@
-import { Product } from "@/components/products/data";
+import { Product } from "@/queries/products/data";
 
 /**
  *
