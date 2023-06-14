@@ -1,27 +1,37 @@
-import { Product } from "@/__generated__/graphql";
+import { Product } from "@/components/products/data";
 import Image from "next/image";
 import React from "react";
 
+function formatPrice(amount: number, currency: string) {
+  return Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(amount);
+}
+
 type Props = {
-  id: string;
-  name: string;
-  priceStartAmount: number;
-  priceStartCurrency: string;
-  imageSrc?: string;
-  imageAlt?: string;
+  product: Product;
 };
 
 /**
  *
  */
-export const SingleProduct: React.FC<Props> = ({
-  id,
-  name,
-  imageSrc,
-  imageAlt,
-  priceStartAmount,
-  priceStartCurrency,
-}) => {
+export const SingleProduct: React.FC<Props> = ({ product }) => {
+  const imageSrc = product.images[0]?.url ?? null;
+  const imageAlt = product.images[0]?.alt ?? null;
+  const name = product.name;
+
+  const priceFrom = product.prices.from;
+  const priceTo = product.prices.to;
+
+  const formattedPriceFrom = formatPrice(priceFrom.amount, priceFrom.currency);
+  const formattedPriceTo = formatPrice(priceTo.amount, priceTo.currency);
+
+  const formattedPrice =
+    priceFrom.amount === priceTo.amount
+      ? formattedPriceFrom
+      : `${formattedPriceFrom} - ${formattedPriceTo}`;
+
   return (
     <div className="group relative">
       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
@@ -44,9 +54,7 @@ export const SingleProduct: React.FC<Props> = ({
             </a>
           </h3>
         </div>
-        <p className="text-sm font-medium text-gray-900">
-          From {priceStartAmount} {priceStartCurrency}
-        </p>
+        <p className="text-sm font-medium text-gray-900">{formattedPrice}</p>
       </div>
     </div>
   );

@@ -1,3 +1,37 @@
+fragment GenericProduct on Product {
+  id
+  name
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+
+      stop {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+
+    discount {
+      gross {
+        amount
+        currency
+      }
+    }
+  }
+  media {
+    url
+    sortOrder
+    alt
+  }
+}
+
 query GetProducts(
   $first: Int!
   $filters: ProductFilterInput
@@ -6,36 +40,7 @@ query GetProducts(
   products(first: $first, filter: $filters, sortBy: $sortBy) {
     edges {
       node {
-        id
-        name
-        pricing {
-          priceRange {
-            start {
-              gross {
-                amount
-                currency
-              }
-            }
-
-            stop {
-              gross {
-                amount
-                currency
-              }
-            }
-          }
-
-          discount {
-            gross {
-              amount
-              currency
-            }
-          }
-        }
-        media {
-          url
-          sortOrder
-        }
+        ...GenericProduct
       }
     }
   }

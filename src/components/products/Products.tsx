@@ -6,6 +6,7 @@ import {
   ProductOrderField,
 } from "@/__generated__/graphql";
 import { SingleProduct } from "@/components/products/SingleProduct";
+import { parseProduct } from "@/components/products/data";
 import { useQuery } from "@apollo/client";
 
 export const Products: React.FC = () => {
@@ -22,20 +23,10 @@ export const Products: React.FC = () => {
 
   return (
     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-6 xl:gap-x-8">
-      {data?.products?.edges?.map(({ node: product }) => (
-        <SingleProduct
-          key={product.id}
-          id={product.id}
-          name={product.name}
-          priceStartAmount={
-            product.pricing?.priceRange?.start?.gross?.amount ?? 0
-          }
-          priceStartCurrency={
-            product.pricing?.priceRange?.start?.gross?.currency ?? "EUR"
-          }
-          imageSrc={product.media?.[0]?.url}
-        />
-      ))}
+      {data?.products?.edges?.map(({ node }) => {
+        const product = parseProduct(node);
+        return <SingleProduct key={product.id} product={product} />;
+      })}
     </div>
   );
 };
