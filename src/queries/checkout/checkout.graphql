@@ -16,6 +16,27 @@ query GetCheckoutInfo($checkoutToken: UUID!) {
         ...CheckoutProduct
       }
     }
+
+    subtotalPrice {
+      gross {
+        amount
+        currency
+      }
+    }
+
+    shippingPrice {
+      gross {
+        amount
+        currency
+      }
+    }
+
+    totalPrice {
+      gross {
+        amount
+        currency
+      }
+    }
   }
 }
 
@@ -36,6 +57,20 @@ mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
     token: $checkoutToken
     lines: [{ quantity: 1, variantId: $variantId }]
   ) {
+    checkout {
+      id
+    }
+    errors {
+      message
+    }
+  }
+}
+
+mutation UpdateProductInCart(
+  $checkoutToken: UUID!
+  $lines: [CheckoutLineUpdateInput!]!
+) {
+  checkoutLinesUpdate(token: $checkoutToken, lines: $lines) {
     checkout {
       id
     }

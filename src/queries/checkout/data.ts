@@ -25,17 +25,59 @@ type CheckoutProduct = {
  */
 export type Checkout = {
   lines: Array<CheckoutItem>;
+  subtotalPrice: {
+    amount: number;
+    currency: string;
+  } | null;
+  shippingPrice: {
+    amount: number;
+    currency: string;
+  } | null;
+  totalPrice: {
+    amount: number;
+    currency: string;
+  } | null;
 };
 
 /**
  *
  */
-export function parseCheckoutInfo(input: GetCheckoutInfoQuery): Checkout {
+export function parseCheckoutInfo({
+  checkout,
+}: GetCheckoutInfoQuery): Checkout {
+  if (!checkout) {
+    return {
+      lines: [],
+      subtotalPrice: null,
+      shippingPrice: null,
+      totalPrice: null,
+    };
+  }
+
+  const { lines, subtotalPrice, shippingPrice, totalPrice } = checkout;
+
   return {
-    lines:
-      input.checkout?.lines.map((line) => ({
-        id: line.id,
-      })) ?? [],
+    lines: lines.map((line) => ({
+      id: line.id,
+    })),
+    subtotalPrice: subtotalPrice
+      ? {
+          amount: subtotalPrice.gross.amount,
+          currency: subtotalPrice.gross.currency,
+        }
+      : null,
+    shippingPrice: shippingPrice
+      ? {
+          amount: shippingPrice.gross.amount,
+          currency: shippingPrice.gross.currency,
+        }
+      : null,
+    totalPrice: totalPrice
+      ? {
+          amount: totalPrice.gross.amount,
+          currency: totalPrice.gross.currency,
+        }
+      : null,
   };
 }
 
