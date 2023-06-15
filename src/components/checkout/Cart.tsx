@@ -4,15 +4,12 @@ import { GetCheckoutInfoDocument } from "@/__generated__/graphql";
 import { Button } from "@/components/core/Button";
 import { formatPrice } from "@/misc/currencies";
 import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
-import { parseVariant } from "@/queries/products/data";
+import { parseCheckoutProductVariant } from "@/queries/checkout/data";
+import { generateProductUrl, parseVariant } from "@/queries/products/data";
 import { useQuery } from "@apollo/client";
-import {
-  CheckIcon,
-  ClockIcon,
-  QuestionMarkCircleIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo } from "react";
 
 /**
@@ -30,6 +27,7 @@ export const Cart: React.FC = () => {
       data?.checkout?.lines.map(({ id, variant, quantity }) => ({
         id,
         variant: parseVariant(variant),
+        product: parseCheckoutProductVariant(variant),
         quantity,
       })) ?? []
     );
@@ -56,31 +54,40 @@ export const Cart: React.FC = () => {
                   <li key={line.id} className="flex py-6 sm:py-10">
                     <div className="flex-shrink-0">
                       {imageUrl ? (
-                        <Image
-                          src={imageUrl}
-                          alt={imageAlt}
-                          className="h-24 w-24 rounded-md object-cover object-center sm:h-40 sm:w-40 bg-gray-200"
-                          width={150}
-                          height={150}
-                        />
+                        <Link href={generateProductUrl(line.product)}>
+                          <Image
+                            src={imageUrl}
+                            alt={imageAlt}
+                            className="h-24 w-24 rounded-md object-cover object-center sm:h-40 sm:w-40 bg-gray-200"
+                            width={150}
+                            height={150}
+                          />
+                        </Link>
                       ) : undefined}
                     </div>
 
                     <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
                       <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                         <div>
-                          <div className="flex justify-between">
-                            <h3 className="text-sm">
-                              <a
-                                href="#"
-                                className="font-medium text-gray-700 hover:text-gray-800"
-                              >
-                                {line.variant.name}
-                              </a>
-                            </h3>
-                          </div>
+                          <Link href={generateProductUrl(line.product)}>
+                            <div className="flex justify-between">
+                              <h3 className="text-sm">
+                                <a
+                                  href="#"
+                                  className="font-medium text-gray-700 hover:text-gray-800"
+                                >
+                                  {line.product.name}
+                                </a>
+                              </h3>
+                            </div>
+
+                            <p className="mt-1 text-xs font-medium text-gray-400">
+                              {line.variant.name}
+                            </p>
+                          </Link>
+
                           {line.variant.price ? (
-                            <p className="mt-1 text-sm font-medium text-gray-900">
+                            <p className="mt-4 text-sm font-medium text-gray-900">
                               {formatPrice(
                                 line.variant.price.amount,
                                 line.variant.price.currency
@@ -96,6 +103,7 @@ export const Cart: React.FC = () => {
                           >
                             Quantity, {line.variant.name}
                           </label>
+
                           <select
                             id={`quantity-${productIdx}`}
                             name={`quantity-${productIdx}`}

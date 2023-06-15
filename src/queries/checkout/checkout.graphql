@@ -1,3 +1,11 @@
+fragment CheckoutProduct on ProductVariant {
+  product {
+    id
+    name
+    slug
+  }
+}
+
 query GetCheckoutInfo($checkoutToken: UUID!) {
   checkout(token: $checkoutToken) {
     lines {
@@ -5,6 +13,7 @@ query GetCheckoutInfo($checkoutToken: UUID!) {
       quantity
       variant {
         ...GenericProductVariant
+        ...CheckoutProduct
       }
     }
   }
@@ -29,16 +38,6 @@ mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
   ) {
     checkout {
       id
-      lines {
-        id
-        quantity
-        variant {
-          name
-          product {
-            name
-          }
-        }
-      }
     }
     errors {
       message

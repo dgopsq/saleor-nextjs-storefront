@@ -199,6 +199,6 @@ export const getSingleProductVariables = (
 /**
  *
  */
-export function generateProductUrl(product: Product): string {
+export function generateProductUrl(product: Pick<Product, "slug">): string {
   return `/products/${product.slug}`;
 }
