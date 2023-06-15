@@ -79,3 +79,14 @@ mutation UpdateProductInCart(
     }
   }
 }
+
+mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
+  checkoutLinesDelete(token: $checkoutToken, linesIds: $linesIds) {
+    checkout {
+      id
+    }
+    errors {
+      message
+    }
+  }
+}

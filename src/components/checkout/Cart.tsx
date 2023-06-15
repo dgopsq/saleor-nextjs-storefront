@@ -2,6 +2,7 @@
 
 import {
   GetCheckoutInfoDocument,
+  RemoveProductFromCartDocument,
   UpdateProductInCartDocument,
 } from "@/__generated__/graphql";
 import { Button } from "@/components/core/Button";
@@ -26,6 +27,9 @@ export const Cart: React.FC = () => {
   const checkoutToken = useCheckoutToken();
   const [updateProducts, { loading: updateProductLoading }] = useMutation(
     UpdateProductInCartDocument
+  );
+  const [removeProducts, { loading: deleteProductLoading }] = useMutation(
+    RemoveProductFromCartDocument
   );
 
   const { data, loading: checkoutInfoLoading } = useQuery(
@@ -67,11 +71,25 @@ export const Cart: React.FC = () => {
     [parsedLines, checkoutToken, updateProducts]
   );
 
+  const handleRemoveProduct = useCallback(
+    (lineId: string) => {
+      removeProducts({
+        variables: {
+          checkoutToken,
+          linesIds: [lineId],
+        },
+        refetchQueries: ["GetCheckoutInfo"],
+      });
+    },
+    [checkoutToken, removeProducts]
+  );
+
   if (!parsedCheckout) return null;
 
   // This will be `true` while re-fetching the checkout
   // after a change in a product.
-  const checkoutRefreshing = checkoutInfoLoading || updateProductLoading;
+  const checkoutRefreshing =
+    checkoutInfoLoading || updateProductLoading || deleteProductLoading;
 
   return (
     <div className="bg-white w-full">
@@ -171,6 +189,7 @@ export const Cart: React.FC = () => {
                             <button
                               type="button"
                               className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+                              onClick={() => handleRemoveProduct(line.id)}
                             >
                               <span className="sr-only">Remove</span>
                               <XMarkIcon
