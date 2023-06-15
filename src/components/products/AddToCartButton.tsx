@@ -1,6 +1,7 @@
 "use client";
 
 import { AddProductToCartDocument } from "@/__generated__/graphql";
+import { Button } from "@/components/core/Button";
 import { Spinner } from "@/components/core/Spinner";
 import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
 import { classNames } from "@/misc/styles";
@@ -30,15 +31,13 @@ export const AddToCartButton: React.FC<Props> = ({ variantId }) => {
   }, [addToCart, checkoutToken, variantId, loading]);
 
   return (
-    <button
+    <Button
       type="button"
-      className={classNames(
-        loading ? "opacity-75 cursor-not-allowed" : "hover:bg-indigo-700",
-        "max-w-xs sm:w-full h-12 flex flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-      )}
       onClick={handleAddToCart}
-    >
-      {loading ? <Spinner /> : "Add to cart"}
-    </button>
+      text="Add to cart"
+      variant="primary"
+      size="large"
+      isLoading={loading}
+    />
   );
 };
