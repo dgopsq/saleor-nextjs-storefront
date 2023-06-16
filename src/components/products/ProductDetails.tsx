@@ -6,8 +6,14 @@ import { parseProduct } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import { useMemo } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
-import { GetSingleProductDocument } from "@/__generated__/graphql";
 import { useQuery } from "@apollo/client";
+import {
+  DetailedProductFragment,
+  DetailedProductFragmentDoc,
+  PreviewProductFragment,
+  PreviewProductFragmentDoc,
+} from "@/__generated__/graphql";
+import { useFragment } from "@apollo/experimental-nextjs-app-support/ssr";
 
 type Props = {
   slug: string;
@@ -17,11 +23,33 @@ type Props = {
  *
  */
 export const ProductDetails: React.FC<Props> = ({ slug }) => {
-  const { data } = useQuery(GetSingleProductDocument, { variables: { slug } });
+  const { data: detailedData } = useFragment({
+    fragment: DetailedProductFragmentDoc,
+    fragmentName: "DetailedProduct",
+    from: {
+      __typename: "Product",
+      slug,
+    },
+  });
+
+  const { data: previewData } = useFragment({
+    fragment: PreviewProductFragmentDoc,
+    fragmentName: "PreviewProduct",
+    from: {
+      __typename: "Product",
+      slug,
+    },
+  });
 
   const product = useMemo(
-    () => (data?.product ? parseProduct(data.product) : null),
-    [data]
+    () =>
+      detailedData && previewData
+        ? parseProduct(
+            detailedData as DetailedProductFragment,
+            previewData as PreviewProductFragment
+          )
+        : null,
+    [detailedData, previewData]
   );
 
   const formattedPrice = useMemo(

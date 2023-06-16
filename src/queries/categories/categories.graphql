@@ -28,7 +28,8 @@ query GetCategoryProducts($slug: String!, $first: Int!) {
     products(first: $first) {
       edges {
         node {
-          ...GenericProduct
+          ...PreviewProduct
+          ...DetailedProduct
         }
       }
     }

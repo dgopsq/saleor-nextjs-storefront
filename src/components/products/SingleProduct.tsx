@@ -1,9 +1,12 @@
-import { Product, parsePreviewProduct } from "@/queries/products/data";
-import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
+import { parsePreviewProduct } from "@/queries/products/data";
+import { formatSingleProductPrice } from "@/misc/currencies";
 import Image from "next/image";
 import React, { useMemo } from "react";
-import { useQuery } from "@apollo/client";
-import { GetPreviewProductDocument } from "@/__generated__/graphql";
+import {
+  PreviewProductFragment,
+  PreviewProductFragmentDoc,
+} from "@/__generated__/graphql";
+import { useApolloClient, useFragment } from "@apollo/client";
 
 type Props = {
   slug: string;
@@ -13,12 +16,16 @@ type Props = {
  *
  */
 export const SingleProduct: React.FC<Props> = ({ slug }) => {
-  const { data } = useQuery(GetPreviewProductDocument, {
-    variables: { slug },
+  const { data } = useFragment({
+    fragment: PreviewProductFragmentDoc,
+    from: {
+      __typename: "Product",
+      slug,
+    },
   });
 
   const product = useMemo(
-    () => (data?.product ? parsePreviewProduct(data.product) : null),
+    () => (data ? parsePreviewProduct(data as PreviewProductFragment) : null),
     [data]
   );
 

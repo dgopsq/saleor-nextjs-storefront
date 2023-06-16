@@ -1,10 +1,12 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
-  GenericProductFragmentDoc,
+  DetailedProductFragment,
+  DetailedProductFragmentDoc,
   GenericProductVariantFragmentDoc,
   GetProductsQuery,
   GetProductsQueryVariables,
   OrderDirection,
+  PreviewProductFragment,
   PreviewProductFragmentDoc,
   ProductOrderField,
 } from "@/__generated__/graphql";
@@ -147,18 +149,12 @@ export function parseVariant(
  *
  */
 export function parseProduct(
-  input: FragmentType<typeof GenericProductFragmentDoc>
+  detailedProductFragment: DetailedProductFragment,
+  previewProductFragment: PreviewProductFragment
 ): Product {
-  const {
-    id,
-    name,
-    description,
-    slug,
-    media,
-    pricing,
-    defaultVariant,
-    variants,
-  } = getFragmentData(GenericProductFragmentDoc, input);
+  const { id, name, slug, media, pricing } = previewProductFragment;
+
+  const { description, defaultVariant, variants } = detailedProductFragment;
 
   return {
     id,
@@ -195,12 +191,9 @@ export function parseProduct(
  *
  */
 export function parsePreviewProduct(
-  input: FragmentType<typeof PreviewProductFragmentDoc>
+  input: PreviewProductFragment
 ): PreviewProduct {
-  const { id, name, slug, media, pricing } = getFragmentData(
-    PreviewProductFragmentDoc,
-    input
-  );
+  const { id, name, slug, media, pricing } = input;
 
   return {
     id,
@@ -237,10 +230,17 @@ export function parseAllProducts(
   input: GetProductsQuery
 ): Array<ProductListItem> {
   return input.products?.edges
-    ? input.products.edges.map((edge) => ({
-        id: edge.node.id,
-        slug: edge.node.slug,
-      }))
+    ? input.products.edges.map((edge) => {
+        const { id, slug } = getFragmentData(
+          PreviewProductFragmentDoc,
+          edge.node
+        );
+
+        return {
+          id: id,
+          slug: slug,
+        };
+      })
     : [];
 }
 

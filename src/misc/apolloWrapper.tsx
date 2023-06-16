@@ -19,7 +19,13 @@ function makeClient() {
   });
 
   return new ApolloClient({
-    cache: new NextSSRInMemoryCache(),
+    cache: new NextSSRInMemoryCache({
+      typePolicies: {
+        Product: {
+          keyFields: ["slug"],
+        },
+      },
+    }),
     link:
       typeof window === "undefined"
         ? ApolloLink.from([
