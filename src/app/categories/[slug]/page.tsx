@@ -16,17 +16,5 @@ export default async function SingleProductPage({
 }: {
   params: Params;
 }) {
-  const client = getApolloClient();
-
-  const res = await client.query({
-    query: GetCategoryProductsDocument,
-    variables: { slug: params.slug, first: 10 },
-  });
-
-  const parsedProducts =
-    res.data.category?.products?.edges?.map(({ node }) => {
-      return parseProduct(node);
-    }) ?? [];
-
-  return <Products products={parsedProducts} />;
+  return <Products />;
 }

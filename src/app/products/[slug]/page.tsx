@@ -19,17 +19,5 @@ export default async function SingleProductPage({
 }: {
   params: Params;
 }) {
-  const client = getApolloClient();
-
-  const res = await client.query({
-    query: GetProductsDocument,
-    variables: getSingleProductVariables(params.slug),
-  });
-
-  const retrievedProduct = res.data.products?.edges?.[0]?.node ?? null;
-  const parsedProduct = retrievedProduct
-    ? parseProduct(retrievedProduct)
-    : null;
-
-  return parsedProduct ? <ProductDetails product={parsedProduct} /> : null;
+  return <ProductDetails slug={params.slug} />;
 }

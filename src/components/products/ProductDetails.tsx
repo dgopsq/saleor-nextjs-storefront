@@ -1,24 +1,37 @@
+"use client";
+
 import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
-import { Product } from "@/queries/products/data";
+import { parseProduct } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import { useMemo } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
+import { GetSingleProductDocument } from "@/__generated__/graphql";
+import { useQuery } from "@apollo/client";
 
 type Props = {
-  product: Product;
+  slug: string;
 };
 
 /**
  *
  */
-export const ProductDetails: React.FC<Props> = ({ product }) => {
+export const ProductDetails: React.FC<Props> = ({ slug }) => {
+  const { data } = useQuery(GetSingleProductDocument, { variables: { slug } });
+
+  const product = useMemo(
+    () => (data?.product ? parseProduct(data.product) : null),
+    [data]
+  );
+
   const formattedPrice = useMemo(
-    () => formatSingleProductPrice(product.prices),
+    () => (product ? formatSingleProductPrice(product?.prices) : null),
     [product]
   );
 
-  const variantId = product.variants[0]?.id ?? null;
+  const variantId = product?.variants[0]?.id ?? null;
+
+  if (!product) return null;
 
   return (
     <div className="bg-white w-screen max-w-full">

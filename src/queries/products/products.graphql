@@ -126,6 +126,7 @@ query GetProducts(
     edges {
       node {
         id
+        slug
       }
     }
     pageInfo {
@@ -136,14 +137,14 @@ query GetProducts(
   }
 }
 
-query GetSingleProduct($id: ID!) {
-  product(id: $id) {
+query GetSingleProduct($slug: String!) {
+  product(slug: $slug) {
     ...GenericProduct
   }
 }
 
-query GetPreviewProduct($id: ID!) {
-  product(id: $id) {
+query GetPreviewProduct($slug: String!) {
+  product(slug: $slug) {
     ...PreviewProduct
   }
 }

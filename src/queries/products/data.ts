@@ -2,6 +2,7 @@ import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   GenericProductFragmentDoc,
   GenericProductVariantFragmentDoc,
+  GetProductsQuery,
   GetProductsQueryVariables,
   OrderDirection,
   PreviewProductFragmentDoc,
@@ -83,6 +84,14 @@ export type PreviewProduct = {
     from: ProductPrice | null;
     to: ProductPrice | null;
   };
+};
+
+/**
+ *
+ */
+export type ProductListItem = {
+  id: string;
+  slug: string;
 };
 
 /**
@@ -219,6 +228,20 @@ export function parsePreviewProduct(
         : null,
     },
   };
+}
+
+/**
+ *
+ */
+export function parseAllProducts(
+  input: GetProductsQuery
+): Array<ProductListItem> {
+  return input.products?.edges
+    ? input.products.edges.map((edge) => ({
+        id: edge.node.id,
+        slug: edge.node.slug,
+      }))
+    : [];
 }
 
 /**
