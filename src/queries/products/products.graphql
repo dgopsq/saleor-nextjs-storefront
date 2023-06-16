@@ -80,6 +80,42 @@ fragment GenericProduct on Product {
   }
 }
 
+fragment PreviewProduct on Product {
+  id
+  name
+  slug
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+
+      stop {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+
+    discount {
+      gross {
+        amount
+        currency
+      }
+    }
+  }
+  media {
+    id
+    url
+    sortOrder
+    alt
+  }
+}
+
 query GetProducts(
   $first: Int!
   $after: String
@@ -89,7 +125,7 @@ query GetProducts(
   products(first: $first, after: $after, filter: $filters, sortBy: $sortBy) {
     edges {
       node {
-        ...GenericProduct
+        id
       }
     }
     pageInfo {
@@ -97,5 +133,17 @@ query GetProducts(
       startCursor
       endCursor
     }
+  }
+}
+
+query GetSingleProduct($id: ID!) {
+  product(id: $id) {
+    ...GenericProduct
+  }
+}
+
+query GetPreviewProduct($id: ID!) {
+  product(id: $id) {
+    ...PreviewProduct
   }
 }

@@ -4,6 +4,7 @@ import {
   GenericProductVariantFragmentDoc,
   GetProductsQueryVariables,
   OrderDirection,
+  PreviewProductFragmentDoc,
   ProductOrderField,
 } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
@@ -68,6 +69,20 @@ export type Product = {
   };
   defaultVariant: ProductVariant | null;
   variants: Array<ProductVariant>;
+};
+
+/**
+ *
+ */
+export type PreviewProduct = {
+  id: string;
+  slug: string;
+  name: string;
+  images: Array<ProductImage>;
+  prices: {
+    from: ProductPrice | null;
+    to: ProductPrice | null;
+  };
 };
 
 /**
@@ -164,6 +179,45 @@ export function parseProduct(
     },
     defaultVariant: defaultVariant ? parseVariant(defaultVariant) : null,
     variants: variants?.map(parseVariant) ?? [],
+  };
+}
+
+/**
+ *
+ */
+export function parsePreviewProduct(
+  input: FragmentType<typeof PreviewProductFragmentDoc>
+): PreviewProduct {
+  const { id, name, slug, media, pricing } = getFragmentData(
+    PreviewProductFragmentDoc,
+    input
+  );
+
+  return {
+    id,
+    name,
+    slug,
+    images: media
+      ? media?.map((media) => ({
+          id: media.id,
+          url: media.url,
+          alt: media.alt,
+        }))
+      : [],
+    prices: {
+      from: pricing?.priceRange?.start?.gross
+        ? {
+            amount: pricing.priceRange.start.gross.amount,
+            currency: pricing.priceRange.start.gross.currency,
+          }
+        : null,
+      to: pricing?.priceRange?.stop?.gross
+        ? {
+            amount: pricing.priceRange.stop.gross.amount,
+            currency: pricing.priceRange.stop.gross.currency,
+          }
+        : null,
+    },
   };
 }
 
