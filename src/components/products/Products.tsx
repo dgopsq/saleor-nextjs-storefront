@@ -13,6 +13,7 @@ import {
   parseProduct,
 } from "@/queries/products/data";
 import { useLazyQuery, useQuery } from "@apollo/client";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 
@@ -28,7 +29,7 @@ type Props = {};
  * the server to actually handle the first rendering.
  */
 export const Products: React.FC<Props> = () => {
-  const { data } = useQuery(GetProductsDocument, {
+  const { data } = useSuspenseQuery(GetProductsDocument, {
     variables: baseVariables,
   });
 
