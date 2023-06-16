@@ -6,6 +6,7 @@ import {
   OrderDirection,
   ProductOrderField,
 } from "@/__generated__/graphql";
+import { publicConfig } from "@/misc/config";
 
 /**
  *
@@ -170,7 +171,7 @@ export function parseProduct(
  *
  */
 export const getAllProductsVariables = (): GetProductsQueryVariables => ({
-  first: 20,
+  first: publicConfig.productsPageSize,
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });
 
@@ -180,7 +181,7 @@ export const getAllProductsVariables = (): GetProductsQueryVariables => ({
 export const getCategoryProductsVariables = (
   categorySlug: string
 ): GetProductsQueryVariables => ({
-  first: 20,
+  first: publicConfig.productsPageSize,
   filters: { categories: [categorySlug] },
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });

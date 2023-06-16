@@ -82,14 +82,20 @@ fragment GenericProduct on Product {
 
 query GetProducts(
   $first: Int!
+  $after: String
   $filters: ProductFilterInput
   $sortBy: ProductOrder
 ) {
-  products(first: $first, filter: $filters, sortBy: $sortBy) {
+  products(first: $first, after: $after, filter: $filters, sortBy: $sortBy) {
     edges {
       node {
         ...GenericProduct
       }
+    }
+    pageInfo {
+      hasNextPage
+      startCursor
+      endCursor
     }
   }
 }

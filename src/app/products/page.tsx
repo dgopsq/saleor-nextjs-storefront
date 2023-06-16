@@ -5,16 +5,26 @@ import { getApolloClient } from "@/misc/apollo";
 
 export default async function ProductsPage() {
   const client = getApolloClient();
+  const variables = getAllProductsVariables();
 
-  const res = await client.query({
+  const { data } = await client.query({
     query: GetProductsDocument,
-    variables: getAllProductsVariables(),
+    variables,
   });
 
   const parsedProducts =
-    res.data?.products?.edges?.map(({ node }) => {
+    data?.products?.edges?.map(({ node }) => {
       return parseProduct(node);
     }) ?? [];
 
-  return <Products products={parsedProducts} />;
+  const hasMoreItems = data.products?.pageInfo?.hasNextPage ?? false;
+  const cursor = data.products?.pageInfo?.endCursor ?? null;
+
+  return (
+    <Products
+      products={parsedProducts}
+      initialVariables={variables}
+      initialCursor={hasMoreItems ? cursor : null}
+    />
+  );
 }

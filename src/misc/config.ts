@@ -7,4 +7,7 @@ export const publicConfig = {
     process.env.NEXT_PUBLIC_DEFAULT_CHECKOUT_CHANNEL || "default-channel",
   defaultCheckoutEmail:
     process.env.NEXT_PUBLIC_DEFAULT_CHECKOUT_EMAIL || "customer@example.com",
+  productsPageSize: parseInt(
+    process.env.NEXT_PUBLIC_PRODUCTS_PAGE_SIZE || "12"
+  ),
 };
