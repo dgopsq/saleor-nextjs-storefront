@@ -6,7 +6,6 @@ import {
   getCategoryProductsVariables,
   parseAllCategoryProducts,
 } from "@/queries/categories/data";
-import { parseAllProducts } from "@/queries/products/data";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { useMemo } from "react";
 

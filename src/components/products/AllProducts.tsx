@@ -3,7 +3,6 @@
 import { GetProductsDocument } from "@/__generated__/graphql";
 import { Products } from "@/components/products/Products";
 import {
-  ProductListItem,
   getAllProductsVariables,
   parseAllProducts,
 } from "@/queries/products/data";

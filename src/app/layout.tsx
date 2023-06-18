@@ -36,7 +36,7 @@ export default async function RootLayout({
         <ApolloWrapper>
           <Navbar categories={parsedCategories} />
 
-          <main className="flex min-h-screen flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">
+          <main className="flex flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">
             {children}
           </main>
         </ApolloWrapper>

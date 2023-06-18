@@ -1,18 +1,6 @@
-"use client";
-
-import { GetProductsDocument } from "@/__generated__/graphql";
 import { SingleProduct } from "@/components/products/SingleProduct";
-import {
-  ProductListItem,
-  generateProductUrl,
-  getAllProductsVariables,
-  parseAllProducts,
-} from "@/queries/products/data";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { ProductListItem, generateProductUrl } from "@/queries/products/data";
 import Link from "next/link";
-import { useMemo } from "react";
-
-const baseVariables = getAllProductsVariables();
 
 type Props = {
   products: Array<ProductListItem>;
