@@ -1,5 +1,15 @@
-import { ProductCountableConnection } from "@/__generated__/graphql";
+import { getFragmentData } from "@/__generated__";
+import {
+  GetCategoryProductsQuery,
+  GetCategoryProductsQueryVariables,
+  OrderDirection,
+  PreviewProductFragmentDoc,
+  ProductCountableConnection,
+  ProductOrderField,
+} from "@/__generated__/graphql";
 import { Category as BaseCategory } from "@/__generated__/graphql";
+import { publicConfig } from "@/misc/config";
+import { ProductListItem } from "@/queries/products/data";
 import { Maybe } from "graphql/jsutils/Maybe";
 
 type CategoryQueryBase = Pick<BaseCategory, "name" | "slug">;
@@ -46,6 +56,24 @@ export function parseCategory({
 /**
  *
  */
+export function parseAllCategoryProducts(
+  input: GetCategoryProductsQuery
+): Array<ProductListItem> {
+  const products = input.category?.products?.edges ?? [];
+
+  return products.map((edge) => {
+    const { id, slug } = getFragmentData(PreviewProductFragmentDoc, edge.node);
+
+    return {
+      id: id,
+      slug: slug,
+    };
+  });
+}
+
+/**
+ *
+ */
 export function parsePopulatedCategories(
   categories: Array<CategoryQueryResult>
 ): Array<Category> {
@@ -65,3 +93,14 @@ export function parsePopulatedCategories(
 export function generateCategoryUrl(category: Category): string {
   return `/categories/${category.slug}`;
 }
+
+/**
+ *
+ */
+export const getCategoryProductsVariables = (
+  categorySlug: string
+): GetCategoryProductsQueryVariables => ({
+  slug: categorySlug,
+  first: publicConfig.productsPageSize,
+  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
+});

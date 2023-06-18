@@ -93,7 +93,6 @@ query GetProducts(
     edges {
       node {
         ...PreviewProduct
-        ...DetailedProduct
       }
     }
     pageInfo {
@@ -101,5 +100,12 @@ query GetProducts(
       startCursor
       endCursor
     }
+  }
+}
+
+query GetProduct($slug: String!) {
+  product(slug: $slug) {
+    ...PreviewProduct
+    ...DetailedProduct
   }
 }

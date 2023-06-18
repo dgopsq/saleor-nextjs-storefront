@@ -3,6 +3,7 @@ import {
   DetailedProductFragment,
   DetailedProductFragmentDoc,
   GenericProductVariantFragmentDoc,
+  GetCategoriesQueryVariables,
   GetProductsQuery,
   GetProductsQueryVariables,
   OrderDirection,
@@ -229,19 +230,16 @@ export function parsePreviewProduct(
 export function parseAllProducts(
   input: GetProductsQuery
 ): Array<ProductListItem> {
-  return input.products?.edges
-    ? input.products.edges.map((edge) => {
-        const { id, slug } = getFragmentData(
-          PreviewProductFragmentDoc,
-          edge.node
-        );
+  const products = input.products?.edges ?? [];
 
-        return {
-          id: id,
-          slug: slug,
-        };
-      })
-    : [];
+  return products.map((edge) => {
+    const { id, slug } = getFragmentData(PreviewProductFragmentDoc, edge.node);
+
+    return {
+      id: id,
+      slug: slug,
+    };
+  });
 }
 
 /**
@@ -249,17 +247,6 @@ export function parseAllProducts(
  */
 export const getAllProductsVariables = (): GetProductsQueryVariables => ({
   first: publicConfig.productsPageSize,
-  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
-});
-
-/**
- *
- */
-export const getCategoryProductsVariables = (
-  categorySlug: string
-): GetProductsQueryVariables => ({
-  first: publicConfig.productsPageSize,
-  filters: { categories: [categorySlug] },
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });
 

@@ -1,5 +1,5 @@
-import { Products } from "@/components/products/Products";
+import { AllProducts } from "@/components/products/AllProducts";
 
 export default async function ProductsPage() {
-  return <Products />;
+  return <AllProducts />;
 }

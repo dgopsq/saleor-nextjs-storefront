@@ -2,8 +2,8 @@ import { classNames } from "@/misc/styles";
 import { match } from "ts-pattern";
 
 type Props = {
-  size: "button";
-  variant: "white";
+  size: "button" | "medium";
+  variant: "white" | "main";
 };
 
 /**
@@ -12,10 +12,12 @@ type Props = {
 export const Spinner: React.FC<Props> = ({ size, variant }) => {
   const computedSize = match(size)
     .with("button", () => "1.2rem")
+    .with("medium", () => "1.5rem")
     .exhaustive();
 
   const computedVariant = match(variant)
     .with("white", () => "text-transparent fill-white")
+    .with("main", () => "text-transparent fill-indigo-500")
     .exhaustive();
 
   return (

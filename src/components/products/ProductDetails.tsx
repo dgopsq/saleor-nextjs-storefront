@@ -10,10 +10,14 @@ import { useQuery } from "@apollo/client";
 import {
   DetailedProductFragment,
   DetailedProductFragmentDoc,
+  GetProductDocument,
   PreviewProductFragment,
   PreviewProductFragmentDoc,
 } from "@/__generated__/graphql";
-import { useFragment } from "@apollo/experimental-nextjs-app-support/ssr";
+import {
+  useFragment,
+  useSuspenseQuery,
+} from "@apollo/experimental-nextjs-app-support/ssr";
 
 type Props = {
   slug: string;
@@ -23,6 +27,8 @@ type Props = {
  *
  */
 export const ProductDetails: React.FC<Props> = ({ slug }) => {
+  useSuspenseQuery(GetProductDocument, { variables: { slug } });
+
   const { data: detailedData } = useFragment({
     fragment: DetailedProductFragmentDoc,
     fragmentName: "DetailedProduct",

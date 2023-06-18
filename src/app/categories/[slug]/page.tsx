@@ -1,7 +1,5 @@
-import { GetCategoryProductsDocument } from "@/__generated__/graphql";
-import { getApolloClient } from "@/misc/apollo";
+import { CategoryProducts } from "@/components/products/CategoryProducts";
 import { Products } from "@/components/products/Products";
-import { parseProduct } from "@/queries/products/data";
 
 export async function generateStaticParams() {
   return [];
@@ -16,5 +14,5 @@ export default async function SingleProductPage({
 }: {
   params: Params;
 }) {
-  return <Products />;
+  return <CategoryProducts slug={params.slug} />;
 }

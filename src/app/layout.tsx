@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { getApolloClient } from "@/misc/apollo";
 import { GetCategoriesDocument } from "@/__generated__/graphql";
 import { parsePopulatedCategories } from "@/queries/categories/data";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
