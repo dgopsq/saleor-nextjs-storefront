@@ -1,5 +1,3 @@
-"use client";
-
 import { Product } from "@/queries/products/data";
 import { classNames } from "@/misc/styles";
 import { Tab } from "@headlessui/react";

@@ -1,5 +1,6 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
+  AttributeTypeEnum,
   DetailedProductFragment,
   DetailedProductFragmentDoc,
   GenericProductVariantFragmentDoc,
@@ -36,6 +37,7 @@ type ProductPrice = {
 type ProductAttribute = {
   attribute: {
     id: string;
+    type: AttributeTypeEnum | null;
     name: string | null;
   };
 
@@ -73,6 +75,7 @@ export type Product = {
   };
   defaultVariant: ProductVariant | null;
   variants: Array<ProductVariant>;
+  attributes: Array<ProductAttribute>;
 };
 
 /**
@@ -135,6 +138,7 @@ export function parseVariant(
       attributes?.map((attribute) => ({
         attribute: {
           id: attribute.attribute.id,
+          type: attribute.attribute.type ?? null,
           name: attribute.attribute.name ?? null,
         },
 
@@ -155,7 +159,8 @@ export function parseProduct(
 ): Product {
   const { id, name, slug, media, pricing } = previewProductFragment;
 
-  const { description, defaultVariant, variants } = detailedProductFragment;
+  const { description, defaultVariant, variants, attributes } =
+    detailedProductFragment;
 
   return {
     id,
@@ -185,6 +190,19 @@ export function parseProduct(
     },
     defaultVariant: defaultVariant ? parseVariant(defaultVariant) : null,
     variants: variants?.map(parseVariant) ?? [],
+    attributes:
+      attributes?.map((attribute) => ({
+        attribute: {
+          id: attribute.attribute.id,
+          type: attribute.attribute.type ?? null,
+          name: attribute.attribute.name ?? null,
+        },
+
+        values: attribute.values.map((value) => ({
+          id: value.id,
+          name: value.name ?? null,
+        })),
+      })) ?? [],
   };
 }
 

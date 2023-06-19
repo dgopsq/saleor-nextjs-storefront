@@ -28,6 +28,7 @@ fragment GenericProductVariant on ProductVariant {
   attributes {
     attribute {
       id
+      type
       name
     }
     values {
@@ -44,6 +45,17 @@ fragment DetailedProduct on Product {
   }
   variants {
     ...GenericProductVariant
+  }
+  attributes {
+    attribute {
+      id
+      type
+      name
+    }
+    values {
+      id
+      name
+    }
   }
 }
 

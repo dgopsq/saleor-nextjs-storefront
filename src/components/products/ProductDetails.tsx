@@ -96,6 +96,10 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
               ) : null}
             </div>
 
+            <div>
+              <pre>{JSON.stringify(product.variants, null, 2)}</pre>
+            </div>
+
             <form className="mt-6">
               <div className="mt-10 flex">
                 {variantId ? (
