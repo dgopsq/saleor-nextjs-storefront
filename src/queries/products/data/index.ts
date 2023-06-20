@@ -11,6 +11,10 @@ import {
   ProductOrderField,
 } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
+import {
+  ProductAttribute,
+  parseAttributes,
+} from "@/queries/products/data/attributes";
 
 export * from "./attributes";
 
@@ -29,22 +33,6 @@ type ProductImage = {
 type ProductPrice = {
   amount: number;
   currency: string;
-};
-
-/**
- *
- */
-type ProductAttribute = {
-  attribute: {
-    id: string;
-    type: AttributeInputTypeEnum | null;
-    name: string | null;
-  };
-
-  values: Array<{
-    id: string;
-    name: string | null;
-  }>;
 };
 
 /**
@@ -134,19 +122,7 @@ export function parseVariant(
           currency: pricing.discount.gross.currency,
         }
       : null,
-    attributes:
-      attributes?.map((attribute) => ({
-        attribute: {
-          id: attribute.attribute.id,
-          type: attribute.attribute.inputType ?? null,
-          name: attribute.attribute.name ?? null,
-        },
-
-        values: attribute.values.map((value) => ({
-          id: value.id,
-          name: value.name ?? null,
-        })),
-      })) ?? [],
+    attributes: parseAttributes(attributes),
   };
 }
 
@@ -190,19 +166,7 @@ export function parseProduct(
     },
     defaultVariant: defaultVariant ? parseVariant(defaultVariant) : null,
     variants: variants?.map(parseVariant) ?? [],
-    attributes:
-      attributes?.map((attribute) => ({
-        attribute: {
-          id: attribute.attribute.id,
-          type: attribute.attribute.inputType ?? null,
-          name: attribute.attribute.name ?? null,
-        },
-
-        values: attribute.values.map((value) => ({
-          id: value.id,
-          name: value.name ?? null,
-        })),
-      })) ?? [],
+    attributes: parseAttributes(attributes),
   };
 }
 
