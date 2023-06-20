@@ -149,9 +149,18 @@ export const Cart: React.FC = () => {
                               </h3>
                             </div>
 
-                            <p className="mt-1 text-xs font-medium text-gray-400">
-                              {line.variant.name}
-                            </p>
+                            {line.variant.attributes.map(
+                              ({ attribute, values }) => (
+                                <p
+                                  key={attribute.id}
+                                  className="mt-1 text-xs font-medium text-gray-400"
+                                >
+                                  {`${attribute.name}: ${values
+                                    .map((value) => value.name)
+                                    .join(", ")}`}
+                                </p>
+                              )
+                            )}
                           </Link>
 
                           {line.variant.price ? (
