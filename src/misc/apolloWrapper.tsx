@@ -12,14 +12,22 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { BatchHttpLink } from "@apollo/client/link/batch-http";
 
 function makeClient() {
-  const httpLink = new HttpLink({
+  const httpLink = new BatchHttpLink({
     uri: publicConfig.graphqlUrl,
+    includeUnusedVariables: true,
   });
 
   return new ApolloClient({
-    cache: new NextSSRInMemoryCache(),
+    cache: new NextSSRInMemoryCache({
+      typePolicies: {
+        Product: {
+          keyFields: ["slug"],
+        },
+      },
+    }),
     link:
       typeof window === "undefined"
         ? ApolloLink.from([

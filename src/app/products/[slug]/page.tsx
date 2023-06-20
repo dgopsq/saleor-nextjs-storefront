@@ -1,14 +1,5 @@
-import { GetProductsDocument } from "@/__generated__/graphql";
 import { ProductDetails } from "@/components/products/ProductDetails";
-import {
-  getSingleProductVariables,
-  parseProduct,
-} from "@/queries/products/data";
-import { getApolloClient } from "@/misc/apollo";
-
-export async function generateStaticParams() {
-  return [];
-}
+import { publicConfig } from "@/misc/config";
 
 type Params = {
   slug: string;
@@ -16,20 +7,17 @@ type Params = {
 
 export default async function SingleProductPage({
   params,
+  searchParams,
 }: {
   params: Params;
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const client = getApolloClient();
+  const rawVariantId = searchParams[publicConfig.variantIdQueryParam];
+  const parsedVariantId = Array.isArray(rawVariantId)
+    ? rawVariantId[0]
+    : rawVariantId;
 
-  const res = await client.query({
-    query: GetProductsDocument,
-    variables: getSingleProductVariables(params.slug),
-  });
-
-  const retrievedProduct = res.data.products?.edges?.[0]?.node ?? null;
-  const parsedProduct = retrievedProduct
-    ? parseProduct(retrievedProduct)
-    : null;
-
-  return parsedProduct ? <ProductDetails product={parsedProduct} /> : null;
+  return (
+    <ProductDetails slug={params.slug} selectedVariant={parsedVariantId} />
+  );
 }

@@ -28,6 +28,7 @@ fragment GenericProductVariant on ProductVariant {
   attributes {
     attribute {
       id
+      inputType
       name
     }
     values {
@@ -37,10 +38,30 @@ fragment GenericProductVariant on ProductVariant {
   }
 }
 
-fragment GenericProduct on Product {
+fragment DetailedProduct on Product {
+  description
+  defaultVariant {
+    ...GenericProductVariant
+  }
+  variants {
+    ...GenericProductVariant
+  }
+  attributes {
+    attribute {
+      id
+      inputType
+      name
+    }
+    values {
+      id
+      name
+    }
+  }
+}
+
+fragment PreviewProduct on Product {
   id
   name
-  description
   slug
   pricing {
     priceRange {
@@ -72,12 +93,6 @@ fragment GenericProduct on Product {
     sortOrder
     alt
   }
-  defaultVariant {
-    ...GenericProductVariant
-  }
-  variants {
-    ...GenericProductVariant
-  }
 }
 
 query GetProducts(
@@ -89,7 +104,7 @@ query GetProducts(
   products(first: $first, after: $after, filter: $filters, sortBy: $sortBy) {
     edges {
       node {
-        ...GenericProduct
+        ...PreviewProduct
       }
     }
     pageInfo {
@@ -97,5 +112,12 @@ query GetProducts(
       startCursor
       endCursor
     }
+  }
+}
+
+query GetProduct($slug: String!) {
+  product(slug: $slug) {
+    ...PreviewProduct
+    ...DetailedProduct
   }
 }

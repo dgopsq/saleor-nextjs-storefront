@@ -1,12 +1,22 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
-  GenericProductFragmentDoc,
+  AttributeInputTypeEnum,
+  DetailedProductFragment,
   GenericProductVariantFragmentDoc,
+  GetProductsQuery,
   GetProductsQueryVariables,
   OrderDirection,
+  PreviewProductFragment,
+  PreviewProductFragmentDoc,
   ProductOrderField,
 } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
+import {
+  ProductAttribute,
+  parseAttributes,
+} from "@/queries/products/data/attributes";
+
+export * from "./attributes";
 
 /**
  *
@@ -28,22 +38,7 @@ type ProductPrice = {
 /**
  *
  */
-type ProductAttribute = {
-  attribute: {
-    id: string;
-    name: string | null;
-  };
-
-  values: Array<{
-    id: string;
-    name: string | null;
-  }>;
-};
-
-/**
- *
- */
-type ProductVariant = {
+export type ProductVariant = {
   id: string;
   sku: string | null;
   name: string;
@@ -68,6 +63,29 @@ export type Product = {
   };
   defaultVariant: ProductVariant | null;
   variants: Array<ProductVariant>;
+  attributes: Array<ProductAttribute>;
+};
+
+/**
+ *
+ */
+export type PreviewProduct = {
+  id: string;
+  slug: string;
+  name: string;
+  images: Array<ProductImage>;
+  prices: {
+    from: ProductPrice | null;
+    to: ProductPrice | null;
+  };
+};
+
+/**
+ *
+ */
+export type ProductListItem = {
+  id: string;
+  slug: string;
 };
 
 /**
@@ -104,18 +122,7 @@ export function parseVariant(
           currency: pricing.discount.gross.currency,
         }
       : null,
-    attributes:
-      attributes?.map((attribute) => ({
-        attribute: {
-          id: attribute.attribute.id,
-          name: attribute.attribute.name ?? null,
-        },
-
-        values: attribute.values.map((value) => ({
-          id: value.id,
-          name: value.name ?? null,
-        })),
-      })) ?? [],
+    attributes: parseAttributes(attributes),
   };
 }
 
@@ -123,18 +130,13 @@ export function parseVariant(
  *
  */
 export function parseProduct(
-  input: FragmentType<typeof GenericProductFragmentDoc>
+  detailedProductFragment: DetailedProductFragment,
+  previewProductFragment: PreviewProductFragment
 ): Product {
-  const {
-    id,
-    name,
-    description,
-    slug,
-    media,
-    pricing,
-    defaultVariant,
-    variants,
-  } = getFragmentData(GenericProductFragmentDoc, input);
+  const { id, name, slug, media, pricing } = previewProductFragment;
+
+  const { description, defaultVariant, variants, attributes } =
+    detailedProductFragment;
 
   return {
     id,
@@ -164,7 +166,62 @@ export function parseProduct(
     },
     defaultVariant: defaultVariant ? parseVariant(defaultVariant) : null,
     variants: variants?.map(parseVariant) ?? [],
+    attributes: parseAttributes(attributes),
   };
+}
+
+/**
+ *
+ */
+export function parsePreviewProduct(
+  input: PreviewProductFragment
+): PreviewProduct {
+  const { id, name, slug, media, pricing } = input;
+
+  return {
+    id,
+    name,
+    slug,
+    images: media
+      ? media?.map((media) => ({
+          id: media.id,
+          url: media.url,
+          alt: media.alt,
+        }))
+      : [],
+    prices: {
+      from: pricing?.priceRange?.start?.gross
+        ? {
+            amount: pricing.priceRange.start.gross.amount,
+            currency: pricing.priceRange.start.gross.currency,
+          }
+        : null,
+      to: pricing?.priceRange?.stop?.gross
+        ? {
+            amount: pricing.priceRange.stop.gross.amount,
+            currency: pricing.priceRange.stop.gross.currency,
+          }
+        : null,
+    },
+  };
+}
+
+/**
+ *
+ */
+export function parseAllProducts(
+  input: GetProductsQuery
+): Array<ProductListItem> {
+  const products = input.products?.edges ?? [];
+
+  return products.map((edge) => {
+    const { id, slug } = getFragmentData(PreviewProductFragmentDoc, edge.node);
+
+    return {
+      id: id,
+      slug: slug,
+    };
+  });
 }
 
 /**
@@ -172,17 +229,6 @@ export function parseProduct(
  */
 export const getAllProductsVariables = (): GetProductsQueryVariables => ({
   first: publicConfig.productsPageSize,
-  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
-});
-
-/**
- *
- */
-export const getCategoryProductsVariables = (
-  categorySlug: string
-): GetProductsQueryVariables => ({
-  first: publicConfig.productsPageSize,
-  filters: { categories: [categorySlug] },
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });
 
@@ -200,6 +246,18 @@ export const getSingleProductVariables = (
 /**
  *
  */
-export function generateProductUrl(product: Pick<Product, "slug">): string {
-  return `/products/${product.slug}`;
+export function generateProductUrl(params: {
+  product: Pick<Product, "slug">;
+  variantId?: string;
+}): string {
+  const baseProductUrl = `/products/${params.product.slug}`;
+  const queryParams = new URLSearchParams();
+
+  if (params.variantId)
+    queryParams.set(publicConfig.variantIdQueryParam, params.variantId);
+
+  const queryString = queryParams.toString();
+  const computedQs = queryString ? `?${queryString}` : "";
+
+  return `${baseProductUrl}${computedQs}`;
 }

@@ -1,22 +1,40 @@
-import { Product } from "@/queries/products/data";
-import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
+import { parsePreviewProduct } from "@/queries/products/data";
+import { formatSingleProductPrice } from "@/misc/currencies";
 import Image from "next/image";
 import React, { useMemo } from "react";
+import {
+  PreviewProductFragment,
+  PreviewProductFragmentDoc,
+} from "@/__generated__/graphql";
+import { useApolloClient, useFragment } from "@apollo/client";
 
 type Props = {
-  product: Product;
+  slug: string;
 };
 
 /**
  *
  */
-export const SingleProduct: React.FC<Props> = ({ product }) => {
-  const imageSrc = product.images[0]?.url ?? null;
-  const imageAlt = product.images[0]?.alt ?? null;
-  const name = product.name;
+export const SingleProduct: React.FC<Props> = ({ slug }) => {
+  const { data } = useFragment({
+    fragment: PreviewProductFragmentDoc,
+    from: {
+      __typename: "Product",
+      slug,
+    },
+  });
+
+  const product = useMemo(
+    () => (data ? parsePreviewProduct(data as PreviewProductFragment) : null),
+    [data]
+  );
+
+  const imageSrc = product?.images[0]?.url ?? null;
+  const imageAlt = product?.images[0]?.alt ?? null;
+  const name = product?.name;
 
   const formattedPrice = useMemo(
-    () => formatSingleProductPrice(product.prices),
+    () => (product ? formatSingleProductPrice(product?.prices) : null),
     [product]
   );
 

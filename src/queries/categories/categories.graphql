@@ -23,12 +23,13 @@ query GetCategories($first: Int!) {
   }
 }
 
-query GetCategoryProducts($slug: String!, $first: Int!) {
+query GetCategoryProducts($slug: String!, $first: Int!, $sortBy: ProductOrder) {
   category(slug: $slug) {
-    products(first: $first) {
+    products(first: $first, sortBy: $sortBy) {
       edges {
         node {
-          ...GenericProduct
+          ...PreviewProduct
+          ...DetailedProduct
         }
       }
     }

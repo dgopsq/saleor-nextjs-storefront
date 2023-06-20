@@ -10,4 +10,5 @@ export const publicConfig = {
   productsPageSize: parseInt(
     process.env.NEXT_PUBLIC_PRODUCTS_PAGE_SIZE || "12"
   ),
+  variantIdQueryParam: process.env.NEXT_PUBLIC_VARIANT_ID_QUERY_PARAM || "v",
 };

@@ -1,31 +1,135 @@
+"use client";
+
 import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
-import { Product } from "@/queries/products/data";
-import { formatSingleProductPrice } from "@/misc/currencies";
-import { useMemo } from "react";
+import { parseProduct, parseVariantsAttributes } from "@/queries/products/data";
+import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
+import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
+import {
+  DetailedProductFragment,
+  DetailedProductFragmentDoc,
+  GetProductDocument,
+  PreviewProductFragment,
+  PreviewProductFragmentDoc,
+} from "@/__generated__/graphql";
+import {
+  useFragment,
+  useSuspenseQuery,
+} from "@apollo/experimental-nextjs-app-support/ssr";
+import { ProductVariants } from "@/components/products/ProductVariants";
+import { useRouter } from "next/navigation";
+import { publicConfig } from "@/misc/config";
+
+/**
+ *
+ */
+function appendVariantToUrl(params: {
+  variantId: string;
+  url: string;
+  defaultVariantId?: string;
+}): string {
+  const parsedUrl = new URL(params.url);
+  const isDefaultVariant = params.variantId === params.defaultVariantId;
+
+  if (isDefaultVariant)
+    parsedUrl.searchParams.delete(publicConfig.variantIdQueryParam);
+  else
+    parsedUrl.searchParams.set(
+      publicConfig.variantIdQueryParam,
+      params.variantId
+    );
+
+  return parsedUrl.toString();
+}
 
 type Props = {
-  product: Product;
+  slug: string;
+  selectedVariant?: string;
 };
 
 /**
  *
  */
-export const ProductDetails: React.FC<Props> = ({ product }) => {
-  const formattedPrice = useMemo(
-    () => formatSingleProductPrice(product.prices),
+export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
+  useSuspenseQuery(GetProductDocument, { variables: { slug } });
+  const router = useRouter();
+
+  const { data: detailedData } = useFragment({
+    fragment: DetailedProductFragmentDoc,
+    fragmentName: "DetailedProduct",
+    from: {
+      __typename: "Product",
+      slug,
+    },
+  });
+
+  const { data: previewData } = useFragment({
+    fragment: PreviewProductFragmentDoc,
+    fragmentName: "PreviewProduct",
+    from: {
+      __typename: "Product",
+      slug,
+    },
+  });
+
+  const product = useMemo(
+    () =>
+      detailedData && previewData
+        ? parseProduct(
+            detailedData as DetailedProductFragment,
+            previewData as PreviewProductFragment
+          )
+        : null,
+    [detailedData, previewData]
+  );
+
+  const defaultVariantId = useMemo(
+    () => product?.defaultVariant?.id ?? null,
     [product]
   );
 
-  const variantId = product.variants[0]?.id ?? null;
+  const [currentVariantId, setCurrentVariantId] = useState(
+    selectedVariant ?? defaultVariantId ?? null
+  );
+
+  const productVariant = useMemo(() => {
+    if (!product || !currentVariantId) return null;
+
+    return product.variants.find((variant) => variant.id === currentVariantId);
+  }, [product, currentVariantId]);
+
+  const formattedPrice = useMemo(() => {
+    if (productVariant?.price)
+      return formatPrice(
+        productVariant.price.amount,
+        productVariant.price.currency
+      );
+    else if (product?.prices) return formatSingleProductPrice(product.prices);
+    else return null;
+  }, [productVariant, product]);
+
+  // Append the variant id to the URL.
+  useEffect(() => {
+    if (!currentVariantId) return;
+
+    const newUrl = appendVariantToUrl({
+      variantId: currentVariantId,
+      url: window.location.href,
+      defaultVariantId: defaultVariantId ?? undefined,
+    });
+
+    router.replace(newUrl);
+  }, [currentVariantId, router, defaultVariantId]);
+
+  if (!product || !currentVariantId) return null;
 
   return (
     <div className="bg-white w-screen max-w-full">
       <div>
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           <div>
-            <ProductImages images={product.images} />
+            <ProductImages images={productVariant?.images || product.images} />
           </div>
 
           {/* Product info */}
@@ -49,10 +153,20 @@ export const ProductDetails: React.FC<Props> = ({ product }) => {
               ) : null}
             </div>
 
+            {product.variants.length > 0 && currentVariantId ? (
+              <div className="mt-6">
+                <ProductVariants
+                  variants={product.variants}
+                  value={currentVariantId}
+                  onChange={setCurrentVariantId}
+                />
+              </div>
+            ) : undefined}
+
             <form className="mt-6">
               <div className="mt-10 flex">
-                {variantId ? (
-                  <AddToCartButton variantId={variantId} />
+                {currentVariantId ? (
+                  <AddToCartButton variantId={currentVariantId} />
                 ) : undefined}
               </div>
             </form>

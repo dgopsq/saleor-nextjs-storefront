@@ -112,7 +112,12 @@ export const Cart: React.FC = () => {
                   <li key={line.id} className="flex py-6 sm:py-10">
                     <div className="flex-shrink-0">
                       {imageUrl ? (
-                        <Link href={generateProductUrl(line.product)}>
+                        <Link
+                          href={generateProductUrl({
+                            product: line.product,
+                            variantId: line.variant.id,
+                          })}
+                        >
                           <Image
                             src={imageUrl}
                             alt={imageAlt}
@@ -127,7 +132,12 @@ export const Cart: React.FC = () => {
                     <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
                       <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                         <div>
-                          <Link href={generateProductUrl(line.product)}>
+                          <Link
+                            href={generateProductUrl({
+                              product: line.product,
+                              variantId: line.variant.id,
+                            })}
+                          >
                             <div className="flex justify-between">
                               <h3 className="text-sm">
                                 <a
