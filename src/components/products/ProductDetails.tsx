@@ -3,7 +3,7 @@
 import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
 import { parseProduct, parseVariantsAttributes } from "@/queries/products/data";
-import { formatSingleProductPrice } from "@/misc/currencies";
+import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
 import { useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 import { useQuery } from "@apollo/client";
@@ -59,14 +59,25 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
     [detailedData, previewData]
   );
 
-  const formattedPrice = useMemo(
-    () => (product ? formatSingleProductPrice(product?.prices) : null),
-    [product]
-  );
-
   const [currentVariantId, setCurrentVariantId] = useState(
     product?.defaultVariant?.id ?? null
   );
+
+  const productVariant = useMemo(() => {
+    if (!product || !currentVariantId) return null;
+
+    return product.variants.find((variant) => variant.id === currentVariantId);
+  }, [product, currentVariantId]);
+
+  const formattedPrice = useMemo(() => {
+    if (productVariant?.price)
+      return formatPrice(
+        productVariant.price.amount,
+        productVariant.price.currency
+      );
+    else if (product?.prices) return formatSingleProductPrice(product.prices);
+    else return null;
+  }, [productVariant, product]);
 
   if (!product) return null;
 
@@ -75,7 +86,7 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
       <div>
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           <div>
-            <ProductImages images={product.images} />
+            <ProductImages images={productVariant?.images || product.images} />
           </div>
 
           {/* Product info */}
