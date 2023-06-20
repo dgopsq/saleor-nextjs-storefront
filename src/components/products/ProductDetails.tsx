@@ -4,7 +4,7 @@ import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
 import { parseProduct, parseVariantsAttributes } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 import { useQuery } from "@apollo/client";
 import {
@@ -64,7 +64,9 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
     [product]
   );
 
-  const variantId = product?.variants[0]?.id ?? null;
+  const [currentVariantId, setCurrentVariantId] = useState(
+    product?.defaultVariant?.id ?? null
+  );
 
   if (!product) return null;
 
@@ -97,14 +99,20 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
               ) : null}
             </div>
 
-            <div className="mt-6">
-              <ProductVariants variants={product.variants} />
-            </div>
+            {product.variants.length > 0 && currentVariantId ? (
+              <div className="mt-6">
+                <ProductVariants
+                  variants={product.variants}
+                  value={currentVariantId}
+                  onChange={setCurrentVariantId}
+                />
+              </div>
+            ) : undefined}
 
             <form className="mt-6">
               <div className="mt-10 flex">
-                {variantId ? (
-                  <AddToCartButton variantId={variantId} />
+                {currentVariantId ? (
+                  <AddToCartButton variantId={currentVariantId} />
                 ) : undefined}
               </div>
             </form>
