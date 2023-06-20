@@ -246,6 +246,18 @@ export const getSingleProductVariables = (
 /**
  *
  */
-export function generateProductUrl(product: Pick<Product, "slug">): string {
-  return `/products/${product.slug}`;
+export function generateProductUrl(params: {
+  product: Pick<Product, "slug">;
+  variantId?: string;
+}): string {
+  const baseProductUrl = `/products/${params.product.slug}`;
+  const queryParams = new URLSearchParams();
+
+  if (params.variantId)
+    queryParams.set(publicConfig.variantIdQueryParam, params.variantId);
+
+  const queryString = queryParams.toString();
+  const computedQs = queryString ? `?${queryString}` : "";
+
+  return `${baseProductUrl}${computedQs}`;
 }

@@ -4,9 +4,8 @@ import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
 import { parseProduct, parseVariantsAttributes } from "@/queries/products/data";
 import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
-import { useQuery } from "@apollo/client";
 import {
   DetailedProductFragment,
   DetailedProductFragmentDoc,
@@ -19,16 +18,42 @@ import {
   useSuspenseQuery,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { ProductVariants } from "@/components/products/ProductVariants";
+import { useRouter } from "next/navigation";
+import { publicConfig } from "@/misc/config";
+
+/**
+ *
+ */
+function appendVariantToUrl(params: {
+  variantId: string;
+  url: string;
+  defaultVariantId?: string;
+}): string {
+  const parsedUrl = new URL(params.url);
+  const isDefaultVariant = params.variantId === params.defaultVariantId;
+
+  if (isDefaultVariant)
+    parsedUrl.searchParams.delete(publicConfig.variantIdQueryParam);
+  else
+    parsedUrl.searchParams.set(
+      publicConfig.variantIdQueryParam,
+      params.variantId
+    );
+
+  return parsedUrl.toString();
+}
 
 type Props = {
   slug: string;
+  selectedVariant?: string;
 };
 
 /**
  *
  */
-export const ProductDetails: React.FC<Props> = ({ slug }) => {
+export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
   useSuspenseQuery(GetProductDocument, { variables: { slug } });
+  const router = useRouter();
 
   const { data: detailedData } = useFragment({
     fragment: DetailedProductFragmentDoc,
@@ -59,8 +84,13 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
     [detailedData, previewData]
   );
 
+  const defaultVariantId = useMemo(
+    () => product?.defaultVariant?.id ?? null,
+    [product]
+  );
+
   const [currentVariantId, setCurrentVariantId] = useState(
-    product?.defaultVariant?.id ?? null
+    selectedVariant ?? defaultVariantId ?? null
   );
 
   const productVariant = useMemo(() => {
@@ -79,7 +109,20 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
     else return null;
   }, [productVariant, product]);
 
-  if (!product) return null;
+  // Append the variant id to the URL.
+  useEffect(() => {
+    if (!currentVariantId) return;
+
+    const newUrl = appendVariantToUrl({
+      variantId: currentVariantId,
+      url: window.location.href,
+      defaultVariantId: defaultVariantId ?? undefined,
+    });
+
+    router.replace(newUrl);
+  }, [currentVariantId, router, defaultVariantId]);
+
+  if (!product || !currentVariantId) return null;
 
   return (
     <div className="bg-white w-screen max-w-full">

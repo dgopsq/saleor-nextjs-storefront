@@ -1,8 +1,5 @@
 import { ProductDetails } from "@/components/products/ProductDetails";
-
-export async function generateStaticParams() {
-  return [];
-}
+import { publicConfig } from "@/misc/config";
 
 type Params = {
   slug: string;
@@ -10,8 +7,17 @@ type Params = {
 
 export default async function SingleProductPage({
   params,
+  searchParams,
 }: {
   params: Params;
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  return <ProductDetails slug={params.slug} />;
+  const rawVariantId = searchParams[publicConfig.variantIdQueryParam];
+  const parsedVariantId = Array.isArray(rawVariantId)
+    ? rawVariantId[0]
+    : rawVariantId;
+
+  return (
+    <ProductDetails slug={params.slug} selectedVariant={parsedVariantId} />
+  );
 }

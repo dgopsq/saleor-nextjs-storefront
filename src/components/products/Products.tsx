@@ -13,7 +13,7 @@ export const Products: React.FC<Props> = ({ products }) => {
   return (
     <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:gap-x-8">
       {products.map(({ id, slug }) => {
-        const productUrl = generateProductUrl({ slug });
+        const productUrl = generateProductUrl({ product: { slug: slug } });
 
         return (
           <Link key={id} href={productUrl}>
