@@ -2,7 +2,7 @@
 
 import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
-import { parseProduct } from "@/queries/products/data";
+import { parseProduct, parseVariantsAttributes } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import { useMemo } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
@@ -18,6 +18,7 @@ import {
   useFragment,
   useSuspenseQuery,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { ProductVariants } from "@/components/products/ProductVariants";
 
 type Props = {
   slug: string;
@@ -96,8 +97,8 @@ export const ProductDetails: React.FC<Props> = ({ slug }) => {
               ) : null}
             </div>
 
-            <div>
-              <pre>{JSON.stringify(product.variants, null, 2)}</pre>
+            <div className="mt-6">
+              <ProductVariants variants={product.variants} />
             </div>
 
             <form className="mt-6">

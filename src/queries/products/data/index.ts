@@ -1,10 +1,8 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
-  AttributeTypeEnum,
+  AttributeInputTypeEnum,
   DetailedProductFragment,
-  DetailedProductFragmentDoc,
   GenericProductVariantFragmentDoc,
-  GetCategoriesQueryVariables,
   GetProductsQuery,
   GetProductsQueryVariables,
   OrderDirection,
@@ -13,6 +11,8 @@ import {
   ProductOrderField,
 } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
+
+export * from "./attributes";
 
 /**
  *
@@ -37,7 +37,7 @@ type ProductPrice = {
 type ProductAttribute = {
   attribute: {
     id: string;
-    type: AttributeTypeEnum | null;
+    type: AttributeInputTypeEnum | null;
     name: string | null;
   };
 
@@ -50,7 +50,7 @@ type ProductAttribute = {
 /**
  *
  */
-type ProductVariant = {
+export type ProductVariant = {
   id: string;
   sku: string | null;
   name: string;
@@ -138,7 +138,7 @@ export function parseVariant(
       attributes?.map((attribute) => ({
         attribute: {
           id: attribute.attribute.id,
-          type: attribute.attribute.type ?? null,
+          type: attribute.attribute.inputType ?? null,
           name: attribute.attribute.name ?? null,
         },
 
@@ -194,7 +194,7 @@ export function parseProduct(
       attributes?.map((attribute) => ({
         attribute: {
           id: attribute.attribute.id,
-          type: attribute.attribute.type ?? null,
+          type: attribute.attribute.inputType ?? null,
           name: attribute.attribute.name ?? null,
         },
 

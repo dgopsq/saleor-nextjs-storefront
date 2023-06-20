@@ -28,7 +28,7 @@ fragment GenericProductVariant on ProductVariant {
   attributes {
     attribute {
       id
-      type
+      inputType
       name
     }
     values {
@@ -49,7 +49,7 @@ fragment DetailedProduct on Product {
   attributes {
     attribute {
       id
-      type
+      inputType
       name
     }
     values {
