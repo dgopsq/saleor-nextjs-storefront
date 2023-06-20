@@ -1,0 +1,11 @@
+mutation CreateAccount($account: AccountRegisterInput!) {
+  accountRegister(input: $account) {
+    requiresConfirmation
+    user {
+      id
+    }
+    errors {
+      message
+    }
+  }
+}
