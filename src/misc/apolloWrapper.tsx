@@ -55,8 +55,6 @@ export function ApolloWrapper({ children }: React.PropsWithChildren) {
   const tokens = useUserTokens();
   const makeClient = useMemo(() => makeClientGen(tokens), [tokens]);
 
-  console.log("TOKENS", tokens);
-
   return (
     <ApolloNextAppProvider
       makeClient={makeClient}
