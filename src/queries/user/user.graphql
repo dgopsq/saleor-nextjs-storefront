@@ -15,6 +15,7 @@ fragment AddressVariant on Address {
   countryArea
   phone
   isDefaultShippingAddress
+  isDefaultBillingAddress
 }
 
 fragment UserVariant on User {
