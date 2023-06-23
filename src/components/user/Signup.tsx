@@ -27,7 +27,7 @@ export const Signup: React.FC = () => {
     [createAccount]
   );
 
-  const signupErrors = data?.accountRegister?.errors;
+  const signupErrors = data?.accountRegister?.errors ?? [];
 
   return (
     <div>
