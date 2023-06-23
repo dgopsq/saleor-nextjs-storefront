@@ -121,16 +121,16 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
-                    <a
-                      href="#"
+                    <Link
+                      href="/signup"
                       className="-m-2 block p-2 font-medium text-gray-900"
                     >
                       Create an account
-                    </a>
+                    </Link>
                   </div>
                   <div className="flow-root">
                     <Link
-                      href="#"
+                      href="/login"
                       className="-m-2 block p-2 font-medium text-gray-900"
                     >
                       Sign in
@@ -296,13 +296,13 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                         </div>
 
                         <div className="flex">
-                          <a
-                            href="#"
+                          <Link
+                            href="/login"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">Account</span>
                             <UserIcon className="h-6 w-6" aria-hidden="true" />
-                          </a>
+                          </Link>
                         </div>
                       </div>
 

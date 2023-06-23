@@ -11,3 +11,14 @@ mutation CreateAccount($account: AccountRegisterInput!) {
     }
   }
 }
+
+mutation CreateToken($email: String!, $password: String!) {
+  tokenCreate(email: $email, password: $password) {
+    token
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
