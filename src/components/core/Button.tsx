@@ -5,7 +5,7 @@ import { match } from "ts-pattern";
 
 type BaseButtonProps = {
   text: string;
-  size: "large";
+  size: "large" | "medium";
   variant: "primary";
   isLoading?: boolean;
 } & Omit<
@@ -25,6 +25,7 @@ export const Button: React.FC<BaseButtonProps> = ({
 }) => {
   const computedSize = match(size)
     .with("large", () => "h-12 w-full")
+    .with("medium", () => "h-10 w-full")
     .exhaustive();
 
   const computedVariant = match(variant)

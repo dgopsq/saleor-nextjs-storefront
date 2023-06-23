@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "@/components/core/Field";
+import { Button } from "@/components/core/Button";
 
 /**
  *
@@ -20,21 +21,24 @@ const SignupFormSchema = z.object({
  */
 export type SignupForm = z.infer<typeof SignupFormSchema>;
 
-type Props = {};
+type Props = {
+  onSubmit: (data: SignupForm) => void;
+  isLoading?: boolean;
+};
 
 /**
  *
  */
-export const SignupForm: React.FC<Props> = () => {
+export const SignupForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(SignupFormSchema) });
+  } = useForm<SignupForm>({ resolver: zodResolver(SignupFormSchema) });
 
   return (
-    <form onSubmit={handleSubmit(console.log)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6">
         <div>
           <Field
@@ -77,12 +81,13 @@ export const SignupForm: React.FC<Props> = () => {
       </div>
 
       <div className="mt-12">
-        <button
+        <Button
+          variant="primary"
+          size="medium"
+          text="Signup"
           type="submit"
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Sign up
-        </button>
+          isLoading={isLoading}
+        />
       </div>
     </form>
   );

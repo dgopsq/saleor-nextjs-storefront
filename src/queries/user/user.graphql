@@ -5,7 +5,9 @@ mutation CreateAccount($account: AccountRegisterInput!) {
       id
     }
     errors {
+      code
       message
+      field
     }
   }
 }
