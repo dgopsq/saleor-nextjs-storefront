@@ -1,6 +1,6 @@
 import { CreateCheckoutDocument } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
