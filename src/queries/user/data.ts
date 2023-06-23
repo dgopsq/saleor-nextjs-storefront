@@ -1,7 +1,8 @@
-import { FragmentType, getFragmentData } from "@/__generated__";
+import { getFragmentData } from "@/__generated__";
 import {
+  GenericAddressFragment,
   GenericAddressFragmentDoc,
-  GenericUserFragmentDoc,
+  GenericUserFragment,
 } from "@/__generated__/graphql";
 
 /**
@@ -30,20 +31,19 @@ type Address = {
 /**
  *
  */
-type User = {
+export type User = {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
+  checkoutIds: Array<string>;
   addresses: Array<Address>;
 };
 
 /**
  *
  */
-export function parseAddress(
-  input: FragmentType<typeof GenericAddressFragmentDoc>
-): Address {
+export function parseAddress(input: GenericAddressFragment): Address {
   const {
     id,
     firstName,
@@ -59,7 +59,7 @@ export function parseAddress(
     phone,
     isDefaultShippingAddress,
     isDefaultBillingAddress,
-  } = getFragmentData(GenericAddressFragmentDoc, input);
+  } = input;
 
   return {
     id,
@@ -85,19 +85,19 @@ export function parseAddress(
 /**
  *
  */
-export function parseUser(
-  input: FragmentType<typeof GenericUserFragmentDoc>
-): User {
-  const { id, email, firstName, lastName, addresses } = getFragmentData(
-    GenericUserFragmentDoc,
-    input
-  );
+export function parseUser(input: GenericUserFragment): User {
+  const { id, email, firstName, lastName, checkoutIds } = input;
+  const addresses =
+    getFragmentData(GenericAddressFragmentDoc, input.addresses) ?? [];
+
+  console.log(addresses);
 
   return {
     id,
     email,
     firstName,
     lastName,
+    checkoutIds: checkoutIds || [],
     addresses: addresses.map(parseAddress),
   };
 }
