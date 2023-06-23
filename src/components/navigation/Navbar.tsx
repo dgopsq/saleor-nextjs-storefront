@@ -14,6 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Category, generateCategoryUrl } from "@/queries/categories/data";
 import { CartButton } from "@/components/checkout/CartButton";
+import { UserButton } from "@/components/user/UserButton";
 
 type Props = {
   categories: Array<Category>;
@@ -261,7 +262,6 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
                   {/* Logo (lg-) */}
                   <a href="#" className="lg:hidden">
-                    <span className="sr-only">Your Company</span>
                     <Image
                       src="https://tailwindui.com/img/logos/mark.svg"
                       alt=""
@@ -274,28 +274,9 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
                       <div className="flex space-x-8">
-                        <div className="hidden lg:flex">
-                          <a
-                            href="#"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="sr-only">Search</span>
-                            <MagnifyingGlassIcon
-                              className="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </div>
-
-                        <div className="flex">
-                          <Link
-                            href="/account"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="sr-only">Account</span>
-                            <UserIcon className="h-6 w-6" aria-hidden="true" />
-                          </Link>
-                        </div>
+                        <Link href="/account">
+                          <UserButton />
+                        </Link>
                       </div>
 
                       <span

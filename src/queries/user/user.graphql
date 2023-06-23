@@ -1,4 +1,4 @@
-fragment AddressVariant on Address {
+fragment GenericAddress on Address {
   id
   firstName
   lastName
@@ -18,14 +18,14 @@ fragment AddressVariant on Address {
   isDefaultBillingAddress
 }
 
-fragment UserVariant on User {
+fragment GenericUser on User {
   id
   email
   firstName
   lastName
   isActive
   addresses {
-    ...AddressVariant
+    ...GenericAddress
   }
 }
 
@@ -46,7 +46,7 @@ mutation CreateToken($email: String!, $password: String!) {
     refreshToken
     csrfToken
     user {
-      ...UserVariant
+      ...GenericUser
     }
     errors {
       code
@@ -58,6 +58,6 @@ mutation CreateToken($email: String!, $password: String!) {
 
 query GetMe {
   me {
-    ...UserVariant
+    ...GenericUser
   }
 }

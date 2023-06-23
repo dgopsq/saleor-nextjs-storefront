@@ -9,23 +9,31 @@ import {
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
+import { UserTokens, useUserTokens } from "@/misc/token";
+import { useMemo } from "react";
 
-function makeClient() {
+const makeClientGen = (tokens: UserTokens | null) => () => {
+  const token = tokens?.token ?? null;
+
   const httpLink = new BatchHttpLink({
     uri: publicConfig.graphqlUrl,
     includeUnusedVariables: true,
+    headers: token
+      ? {
+          authorization: `Bearer ${token}`,
+        }
+      : undefined,
   });
 
-  const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem(publicConfig.userTokenStorageKey);
-
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : "",
-      },
-    };
-  });
+  const mainLink =
+    typeof window === "undefined"
+      ? ApolloLink.from([
+          new SSRMultipartLink({
+            stripDefer: true,
+          }),
+          httpLink,
+        ])
+      : httpLink;
 
   return new ApolloClient({
     cache: new NextSSRInMemoryCache({
@@ -35,23 +43,20 @@ function makeClient() {
         },
       },
     }),
-    link:
-      typeof window === "undefined"
-        ? ApolloLink.from([
-            new SSRMultipartLink({
-              stripDefer: true,
-            }),
-            httpLink,
-          ])
-        : httpLink,
+    link: mainLink,
   });
-}
+};
 
 function makeSuspenseCache() {
   return new SuspenseCache();
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
+  const tokens = useUserTokens();
+  const makeClient = useMemo(() => makeClientGen(tokens), [tokens]);
+
+  console.log("TOKENS", tokens);
+
   return (
     <ApolloNextAppProvider
       makeClient={makeClient}

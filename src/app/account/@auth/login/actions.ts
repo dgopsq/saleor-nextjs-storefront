@@ -11,9 +11,8 @@ export async function setUserTokensCookies(
   token: string,
   refreshToken: string
 ) {
-  cookies()
-    .set(publicConfig.userTokenStorageKey, token)
-    .set(publicConfig.userRefreshTokenStorageKey, refreshToken);
+  cookies().set(publicConfig.userTokenStorageKey, token);
+  cookies().set(publicConfig.userRefreshTokenStorageKey, refreshToken);
 }
 
 /**
