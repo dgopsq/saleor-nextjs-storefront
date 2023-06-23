@@ -1,15 +1,12 @@
 "use client";
 
-import {
-  CreateAccountDocument,
-  CreateTokenDocument,
-} from "@/__generated__/graphql";
+import { CreateTokenDocument } from "@/__generated__/graphql";
 import { ErrorAlert, SuccessAlert } from "@/components/core/Alert";
 import { LoginForm } from "@/components/core/LoginForm";
-import { SignupForm } from "@/components/core/SignupForm";
-import { publicConfig } from "@/misc/config";
+import { useUserToken } from "@/misc/hooks/useUserToken";
+import { useUserRefreshToken } from "@/misc/hooks/userRefreshToken";
 import { useMutation } from "@apollo/client";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { P, match } from "ts-pattern";
 
 /**
@@ -19,6 +16,9 @@ export const Login: React.FC = () => {
   const [createAccount, { loading, error, data }] =
     useMutation(CreateTokenDocument);
 
+  const [_userToken, setUserToken] = useUserToken();
+  const [_userRefreshToken, setUserRefreshToken] = useUserRefreshToken();
+
   const handleSubmit = useCallback(
     (values: LoginForm) => {
       createAccount({
@@ -26,9 +26,16 @@ export const Login: React.FC = () => {
           email: values.email,
           password: values.password,
         },
+        onCompleted: (data) => {
+          const maybeToken = data.tokenCreate?.token ?? null;
+          const maybeRefreshToken = data.tokenCreate?.refreshToken ?? null;
+
+          setUserToken(maybeToken);
+          setUserRefreshToken(maybeRefreshToken);
+        },
       });
     },
-    [createAccount]
+    [createAccount, setUserToken, setUserRefreshToken]
   );
 
   const signupErrors = data?.tokenCreate?.errors ?? [];

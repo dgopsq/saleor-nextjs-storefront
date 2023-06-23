@@ -55,3 +55,9 @@ mutation CreateToken($email: String!, $password: String!) {
     }
   }
 }
+
+query GetMe {
+  me {
+    ...UserVariant
+  }
+}

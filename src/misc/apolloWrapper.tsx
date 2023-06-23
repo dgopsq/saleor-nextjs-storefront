@@ -1,12 +1,8 @@
 "use client";
 
 import { publicConfig } from "@/misc/config";
-import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  SuspenseCache,
-} from "@apollo/client";
+import { ApolloClient, ApolloLink, SuspenseCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
@@ -18,6 +14,17 @@ function makeClient() {
   const httpLink = new BatchHttpLink({
     uri: publicConfig.graphqlUrl,
     includeUnusedVariables: true,
+  });
+
+  const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem(publicConfig.userTokenStorageKey);
+
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
   });
 
   return new ApolloClient({

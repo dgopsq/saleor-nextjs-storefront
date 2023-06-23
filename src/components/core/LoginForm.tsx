@@ -31,7 +31,6 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<LoginForm>({ resolver: zodResolver(LoginFormSchema) });
 

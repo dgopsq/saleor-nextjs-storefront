@@ -33,7 +33,6 @@ export const SignupForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<SignupForm>({ resolver: zodResolver(SignupFormSchema) });
 

@@ -44,4 +44,17 @@ export const publicConfig = {
    */
   signupRedirectUrl:
     process.env.NEXT_PUBLIC_SIGNUP_REDIRECT_URL || "http://localhost:3000",
+
+  /**
+   *
+   */
+  userTokenStorageKey:
+    process.env.NEXT_PUBLIC_USER_TOKEN_STORAGE_KEY || "user-token",
+
+  /**
+   *
+   */
+  userRefreshTokenStorageKey:
+    process.env.NEXT_PUBLIC_USER_REFRESH_TOKEN_STORAGE_KEY ||
+    "user-refresh-token",
 };
