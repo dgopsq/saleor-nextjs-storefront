@@ -5,7 +5,8 @@ import { Inter } from "next/font/google";
 import { getApolloClient } from "@/misc/apollo";
 import { GetCategoriesDocument } from "@/__generated__/graphql";
 import { parsePopulatedCategories } from "@/queries/categories/data";
-import { Suspense } from "react";
+import { getUserTokensCookies } from "@/app/account/@auth/login/actions";
+import { UserTokenProvider } from "@/misc/token";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,16 +31,20 @@ export default async function RootLayout({
     data.categories?.edges ?? []
   );
 
+  const tokens = await getUserTokensCookies();
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ApolloWrapper>
-          <Navbar categories={parsedCategories} />
+        <UserTokenProvider tokens={tokens ?? undefined}>
+          <ApolloWrapper>
+            <Navbar categories={parsedCategories} />
 
-          <main className="flex flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">
-            {children}
-          </main>
-        </ApolloWrapper>
+            <main className="flex flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">
+              {children}
+            </main>
+          </ApolloWrapper>
+        </UserTokenProvider>
       </body>
     </html>
   );
