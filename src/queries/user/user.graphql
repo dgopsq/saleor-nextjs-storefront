@@ -1,9 +1,36 @@
+fragment AddressVariant on Address {
+  id
+  firstName
+  lastName
+  companyName
+  streetAddress1
+  streetAddress2
+  city
+  cityArea
+  postalCode
+  country {
+    code
+    country
+  }
+  countryArea
+  phone
+  isDefaultShippingAddress
+}
+
+fragment UserVariant on User {
+  id
+  email
+  firstName
+  lastName
+  isActive
+  addresses {
+    ...AddressVariant
+  }
+}
+
 mutation CreateAccount($account: AccountRegisterInput!) {
   accountRegister(input: $account) {
     requiresConfirmation
-    user {
-      id
-    }
     errors {
       code
       message
@@ -15,6 +42,11 @@ mutation CreateAccount($account: AccountRegisterInput!) {
 mutation CreateToken($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
     token
+    refreshToken
+    csrfToken
+    user {
+      ...UserVariant
+    }
     errors {
       code
       message
