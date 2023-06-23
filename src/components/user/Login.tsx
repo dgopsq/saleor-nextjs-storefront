@@ -1,23 +1,23 @@
 "use client";
 
 import { CreateTokenDocument } from "@/__generated__/graphql";
+import { setUserTokensCookies } from "@/app/account/@auth/login/actions";
 import { ErrorAlert, SuccessAlert } from "@/components/core/Alert";
 import { LoginForm } from "@/components/core/LoginForm";
-import { useUserToken } from "@/misc/hooks/useUserToken";
-import { useUserRefreshToken } from "@/misc/hooks/userRefreshToken";
 import { useMutation } from "@apollo/client";
-import { useCallback, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useTransition } from "react";
 import { P, match } from "ts-pattern";
 
 /**
  *
  */
 export const Login: React.FC = () => {
+  const [_isPending, startTransition] = useTransition();
   const [createAccount, { loading, error, data }] =
     useMutation(CreateTokenDocument);
-
-  const [_userToken, setUserToken] = useUserToken();
-  const [_userRefreshToken, setUserRefreshToken] = useUserRefreshToken();
+  const router = useRouter();
 
   const handleSubmit = useCallback(
     (values: LoginForm) => {
@@ -30,18 +30,25 @@ export const Login: React.FC = () => {
           const maybeToken = data.tokenCreate?.token ?? null;
           const maybeRefreshToken = data.tokenCreate?.refreshToken ?? null;
 
-          setUserToken(maybeToken);
-          setUserRefreshToken(maybeRefreshToken);
+          if (maybeToken && maybeRefreshToken) {
+            startTransition(() =>
+              setUserTokensCookies(maybeToken, maybeRefreshToken)
+            );
+
+            // FIXME: This is probably subject to
+            // race conditions.
+            router.push("/account");
+          }
         },
       });
     },
-    [createAccount, setUserToken, setUserRefreshToken]
+    [createAccount, router, startTransition]
   );
 
   const signupErrors = data?.tokenCreate?.errors ?? [];
 
   return (
-    <div>
+    <div className="w-full">
       {match([signupErrors, error, data])
         .with(
           P.union([P.not([]), P._, P._], [P._, P.not(P.nullish), P._]),
@@ -62,6 +69,10 @@ export const Login: React.FC = () => {
 
       <div>
         <LoginForm onSubmit={handleSubmit} isLoading={loading} />
+      </div>
+
+      <div className="mt-2">
+        <Link href="/account/signup">Signup</Link>
       </div>
     </div>
   );

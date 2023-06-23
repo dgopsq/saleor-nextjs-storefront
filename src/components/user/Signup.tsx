@@ -5,6 +5,7 @@ import { ErrorAlert, SuccessAlert } from "@/components/core/Alert";
 import { SignupForm } from "@/components/core/SignupForm";
 import { publicConfig } from "@/misc/config";
 import { useMutation } from "@apollo/client";
+import Link from "next/link";
 import { useCallback } from "react";
 import { P, match } from "ts-pattern";
 
@@ -30,7 +31,7 @@ export const Signup: React.FC = () => {
   const signupErrors = data?.accountRegister?.errors ?? [];
 
   return (
-    <div>
+    <div className="w-full">
       {match([signupErrors, error, data])
         .with(
           P.union([P.not([]), P._, P._], [P._, P.not(P.nullish), P._]),
@@ -51,6 +52,10 @@ export const Signup: React.FC = () => {
 
       <div>
         <SignupForm onSubmit={handleSubmit} isLoading={loading} />
+      </div>
+
+      <div className="mt-2">
+        <Link href="/account/login">Login</Link>
       </div>
     </div>
   );
