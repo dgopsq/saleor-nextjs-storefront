@@ -24,7 +24,13 @@ fragment GenericUser on User {
   firstName
   lastName
   isActive
-  checkoutIds
+  checkouts(first: 1) {
+    edges {
+      node {
+        token
+      }
+    }
+  }
   addresses {
     ...GenericAddress
   }

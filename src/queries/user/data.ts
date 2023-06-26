@@ -36,7 +36,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
-  checkoutIds: Array<string>;
+  checkoutTokens: Array<string>;
   addresses: Array<Address>;
 };
 
@@ -86,7 +86,7 @@ export function parseAddress(input: GenericAddressFragment): Address {
  *
  */
 export function parseUser(input: GenericUserFragment): User {
-  const { id, email, firstName, lastName, checkoutIds } = input;
+  const { id, email, firstName, lastName, checkouts } = input;
   const addresses =
     getFragmentData(GenericAddressFragmentDoc, input.addresses) ?? [];
 
@@ -97,7 +97,7 @@ export function parseUser(input: GenericUserFragment): User {
     email,
     firstName,
     lastName,
-    checkoutIds: checkoutIds || [],
+    checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
     addresses: addresses.map(parseAddress),
   };
 }

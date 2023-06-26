@@ -9,12 +9,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useTransition } from "react";
 import { P, match } from "ts-pattern";
+import { useIsFirstRender, useUpdateEffect } from "usehooks-ts";
 
 /**
  *
  */
 export const Login: React.FC = () => {
-  const [_isPending, startTransition] = useTransition();
+  const [transitionPending, startTransition] = useTransition();
   const [createAccount, { loading, error, data }] =
     useMutation(CreateTokenDocument);
   const router = useRouter();
@@ -34,16 +35,16 @@ export const Login: React.FC = () => {
             startTransition(() =>
               setUserTokensCookies(maybeToken, maybeRefreshToken)
             );
-
-            // FIXME: This is probably subject to
-            // race conditions.
-            router.push("/account");
           }
         },
       });
     },
-    [createAccount, router, startTransition]
+    [createAccount, startTransition]
   );
+
+  useUpdateEffect(() => {
+    if (!transitionPending) router.push("/account");
+  }, [transitionPending, router]);
 
   const signupErrors = data?.tokenCreate?.errors ?? [];
 
