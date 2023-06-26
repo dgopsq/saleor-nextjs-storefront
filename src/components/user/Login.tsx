@@ -43,7 +43,7 @@ export const Login: React.FC = () => {
   );
 
   useUpdateEffect(() => {
-    if (!transitionPending) router.push("/account");
+    if (!transitionPending) window.location.href = "/account";
   }, [transitionPending, router]);
 
   const signupErrors = data?.tokenCreate?.errors ?? [];
