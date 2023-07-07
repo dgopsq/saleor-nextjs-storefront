@@ -24,7 +24,7 @@ export function useUserInfo(): User | null {
     fragmentName: "GenericUser",
     from: {
       __typename: "User",
-      id: decodedToken?.user_id,
+      id: decodedToken?.user_id ?? Symbol(),
     },
   });
 
@@ -32,7 +32,8 @@ export function useUserInfo(): User | null {
 
   // FIXME: This is potentially a bottleneck, as it will be called on every
   // render. Consider using a context to store the parsed user data.
-  const parsedData = data ? parseUser(data as GenericUserFragment) : null;
+  const parsedData =
+    data && complete ? parseUser(data as GenericUserFragment) : null;
 
   return parsedData;
 }

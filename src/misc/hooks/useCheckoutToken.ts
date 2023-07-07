@@ -10,10 +10,6 @@ import { useLocalStorage } from "usehooks-ts";
  *
  */
 export function useCheckoutToken() {
-  const [tempUserCheckoutToken, setTempUserCheckoutToken] = useState<
-    string | null
-  >(null);
-
   const userTokens = useUserTokens();
   const userInfo = useUserInfo();
   const [createCheckout, { loading: createCheckoutLoading }] = useMutation(
@@ -29,7 +25,7 @@ export function useCheckoutToken() {
   }, [userInfo]);
 
   // This generates a new "guest" checkout token
-  // whether the user is logged in or not.
+  // only if the user is not logged in.
   useEffect(() => {
     if (userTokens || storedToken || createCheckoutLoading) return;
 
@@ -53,6 +49,6 @@ export function useCheckoutToken() {
     createCheckoutLoading,
   ]);
 
-  if (userTokens) return latestUserCheckout ?? tempUserCheckoutToken;
+  if (userTokens) return latestUserCheckout;
   else return storedToken;
 }
