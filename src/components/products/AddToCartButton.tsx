@@ -2,7 +2,7 @@
 
 import { AddProductToCartDocument } from "@/__generated__/graphql";
 import { Button } from "@/components/core/Button";
-import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
+import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
 import { useMutation } from "@apollo/client";
 import { useCallback } from "react";
 

@@ -1,7 +1,14 @@
-import { GetMeDocument, RefreshTokenDocument } from "@/__generated__/graphql";
+import {
+  CreateCheckoutDocument,
+  GetCheckoutInfoDocument,
+  GetMeDocument,
+  RefreshTokenDocument,
+} from "@/__generated__/graphql";
 import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
+import { CheckoutToken } from "@/queries/checkout/data";
+import { AuthToken, decodeUserToken } from "@/queries/user/data";
 import Cookies from "js-cookie";
 
 /**
@@ -9,7 +16,7 @@ import Cookies from "js-cookie";
  */
 export async function retrieveAuthToken(
   client: ClientApolloInstance
-): Promise<string | null> {
+): Promise<AuthToken | null> {
   const maybeStoredAuthToken =
     Cookies.get(publicConfig.userTokenStorageKey) ?? null;
 
@@ -66,6 +73,82 @@ export async function retrieveAuthToken(
   }
 
   logger.debug("Refresh Token is not valid or non-existent.");
+
+  return null;
+}
+
+/**
+ *
+ */
+export async function retrieveCheckoutToken(
+  client: ClientApolloInstance
+): Promise<CheckoutToken | null> {
+  const maybeStoredAuthToken =
+    Cookies.get(publicConfig.userTokenStorageKey) ?? null;
+
+  const localCheckoutToken =
+    Cookies.get(publicConfig.checkoutTokenStorageKey) ?? null;
+
+  if (localCheckoutToken) {
+    logger.debug("Checkout Token found, checking if it's valid.");
+
+    const checkoutInfoRes = await client.query({
+      query: GetCheckoutInfoDocument,
+      variables: { checkoutToken: localCheckoutToken },
+      errorPolicy: "ignore",
+      context: {
+        headers: {
+          Authorization: maybeStoredAuthToken
+            ? `Bearer ${maybeStoredAuthToken}`
+            : "",
+        },
+      },
+    });
+
+    if (checkoutInfoRes.data.checkout) {
+      logger.debug("Local Checkout Token is valid:", localCheckoutToken);
+      return localCheckoutToken;
+    }
+  }
+
+  logger.debug("Creating a new Checkout Token.");
+
+  const maybeUser = maybeStoredAuthToken
+    ? decodeUserToken(maybeStoredAuthToken)
+    : null;
+
+  if (maybeUser)
+    logger.debug("Creating the Checkout Token for the user:", maybeUser.email);
+  else logger.debug("Creating the Checkout Token for a guest user.");
+
+  const email = maybeUser?.email ?? publicConfig.defaultCheckoutEmail;
+  const channel = publicConfig.defaultCheckoutChannel;
+
+  const createCheckoutRes = await client.mutate({
+    mutation: CreateCheckoutDocument,
+    variables: {
+      channel,
+      email,
+    },
+    context: {
+      headers: {
+        Authorization: maybeStoredAuthToken
+          ? `Bearer ${maybeStoredAuthToken}`
+          : "",
+      },
+    },
+  });
+
+  const newCheckoutToken: string | null =
+    createCheckoutRes.data?.checkoutCreate?.checkout?.token ?? null;
+
+  if (newCheckoutToken) {
+    logger.debug("Checkout Token created:", newCheckoutToken);
+
+    Cookies.set(publicConfig.checkoutTokenStorageKey, newCheckoutToken);
+
+    return newCheckoutToken;
+  }
 
   return null;
 }
