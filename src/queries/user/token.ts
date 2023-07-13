@@ -2,7 +2,6 @@ import { GetMeDocument, RefreshTokenDocument } from "@/__generated__/graphql";
 import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
-import { ApolloClient } from "@apollo/client";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import * as z from "zod";

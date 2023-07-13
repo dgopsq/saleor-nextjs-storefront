@@ -2,7 +2,7 @@
 
 import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
-import { parseProduct, parseVariantsAttributes } from "@/queries/products/data";
+import { parseProduct } from "@/queries/products/data";
 import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
 import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";

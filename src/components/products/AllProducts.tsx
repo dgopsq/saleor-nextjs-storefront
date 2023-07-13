@@ -11,7 +11,7 @@ import { useMemo } from "react";
 
 const baseVariables = getAllProductsVariables();
 
-type Props = {};
+type Props = Record<string, never>;
 
 /**
  *

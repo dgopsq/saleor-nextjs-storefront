@@ -2,7 +2,7 @@ import { CreateCheckoutDocument } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { useAuthToken } from "@/misc/states/tokensStore";
-import { useApolloClient, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useEffect, useMemo } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -19,7 +19,6 @@ export function useCheckoutToken() {
     publicConfig.checkoutTokenStorageKey,
     null
   );
-  const cli = useApolloClient();
 
   const latestUserCheckout = useMemo(() => {
     return userInfo?.checkoutTokens?.[0] || null;

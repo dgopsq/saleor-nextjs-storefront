@@ -1,12 +1,7 @@
 "use client";
 
 import { publicConfig } from "@/misc/config";
-import {
-  ApolloClient,
-  ApolloLink,
-  NormalizedCacheObject,
-  SuspenseCache,
-} from "@apollo/client";
+import { ApolloClient, ApolloLink, SuspenseCache } from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,

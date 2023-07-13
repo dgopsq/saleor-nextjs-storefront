@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useTransition } from "react";
 import { P, match } from "ts-pattern";
-import { useIsFirstRender, useUpdateEffect } from "usehooks-ts";
+import { useUpdateEffect } from "usehooks-ts";
 
 /**
  *

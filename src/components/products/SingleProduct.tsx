@@ -6,7 +6,7 @@ import {
   PreviewProductFragment,
   PreviewProductFragmentDoc,
 } from "@/__generated__/graphql";
-import { useApolloClient, useFragment } from "@apollo/client";
+import { useFragment } from "@apollo/client";
 
 type Props = {
   slug: string;

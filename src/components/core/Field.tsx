@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
+import { HTMLInputTypeAttribute } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 type Props<T extends string> = {
