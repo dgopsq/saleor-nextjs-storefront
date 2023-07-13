@@ -1,7 +1,7 @@
 "use server";
 
 import { publicConfig } from "@/misc/config";
-import { UserTokens } from "@/misc/token";
+import { AuthToken, RefreshToken } from "@/queries/user/token";
 import { cookies } from "next/headers";
 
 /**
@@ -18,12 +18,16 @@ export async function setUserTokensCookies(
 /**
  *
  */
-export async function getUserTokensCookies(): Promise<UserTokens | null> {
+export async function getUserTokensCookies(): Promise<{
+  authToken: AuthToken;
+  refreshToken: RefreshToken;
+} | null> {
   const token = cookies().get(publicConfig.userTokenStorageKey) ?? null;
+
   const refreshToken =
     cookies().get(publicConfig.userRefreshTokenStorageKey) ?? null;
 
   return token && refreshToken
-    ? { token: token.value, refreshToken: refreshToken.value }
+    ? { authToken: token.value, refreshToken: refreshToken.value }
     : null;
 }

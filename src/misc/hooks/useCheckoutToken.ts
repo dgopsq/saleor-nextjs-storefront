@@ -1,16 +1,16 @@
 import { CreateCheckoutDocument } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
-import { useUserTokens } from "@/misc/token";
-import { useMutation } from "@apollo/client";
-import { useEffect, useMemo, useState } from "react";
+import { useAuthToken } from "@/misc/states/tokensStore";
+import { useApolloClient, useMutation } from "@apollo/client";
+import { useEffect, useMemo } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 /**
  *
  */
 export function useCheckoutToken() {
-  const userTokens = useUserTokens();
+  const authToken = useAuthToken();
   const userInfo = useUserInfo();
   const [createCheckout, { loading: createCheckoutLoading }] = useMutation(
     CreateCheckoutDocument
@@ -19,6 +19,7 @@ export function useCheckoutToken() {
     publicConfig.checkoutTokenStorageKey,
     null
   );
+  const cli = useApolloClient();
 
   const latestUserCheckout = useMemo(() => {
     return userInfo?.checkoutTokens?.[0] || null;
@@ -27,7 +28,7 @@ export function useCheckoutToken() {
   // This generates a new "guest" checkout token
   // only if the user is not logged in.
   useEffect(() => {
-    if (userTokens || storedToken || createCheckoutLoading) return;
+    if (authToken || storedToken || createCheckoutLoading) return;
 
     const email = publicConfig.defaultCheckoutEmail;
     const channel = publicConfig.defaultCheckoutChannel;
@@ -45,10 +46,10 @@ export function useCheckoutToken() {
     storedToken,
     createCheckout,
     setStoredToken,
-    userTokens,
+    authToken,
     createCheckoutLoading,
   ]);
 
-  if (userTokens) return latestUserCheckout;
+  if (authToken) return latestUserCheckout;
   else return storedToken;
 }

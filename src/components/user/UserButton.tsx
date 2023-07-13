@@ -1,9 +1,6 @@
 "use client";
 
-import { GenericUserFragmentDoc, GetMeDocument } from "@/__generated__/graphql";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
-import { decodeUserToken, useUserTokens } from "@/misc/token";
-import { useFragment, useQuery } from "@apollo/client";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";
 

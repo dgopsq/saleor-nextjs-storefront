@@ -1,19 +1,29 @@
 "use client";
 
 import { publicConfig } from "@/misc/config";
-import { ApolloClient, ApolloLink, SuspenseCache } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import {
+  ApolloClient,
+  ApolloLink,
+  NormalizedCacheObject,
+  SuspenseCache,
+} from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
-import { UserTokens, useUserTokens } from "@/misc/token";
 import { useMemo } from "react";
+import { useAuthToken } from "@/misc/states/tokensStore";
+import { AuthToken } from "@/queries/user/token";
 
-const makeClientGen = (tokens: UserTokens | null) => () => {
-  const token = tokens?.token ?? null;
+/**
+ *
+ */
+export type ClientApolloInstance = ApolloClient<unknown>;
+
+const makeClientGen = (authToken: AuthToken | null) => () => {
+  const token = authToken ?? null;
 
   const httpLink = new BatchHttpLink({
     uri: publicConfig.graphqlUrl,
@@ -52,8 +62,8 @@ function makeSuspenseCache() {
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
-  const tokens = useUserTokens();
-  const makeClient = useMemo(() => makeClientGen(tokens), [tokens]);
+  const authToken = useAuthToken();
+  const makeClient = useMemo(() => makeClientGen(authToken), [authToken]);
 
   return (
     <ApolloNextAppProvider

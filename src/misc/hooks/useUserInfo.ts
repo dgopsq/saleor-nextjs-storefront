@@ -3,8 +3,9 @@ import {
   GenericUserFragmentDoc,
   GetMeDocument,
 } from "@/__generated__/graphql";
-import { decodeUserToken, useUserTokens } from "@/misc/token";
+import { useAuthToken } from "@/misc/states/tokensStore";
 import { User, parseUser } from "@/queries/user/data";
+import { decodeUserToken } from "@/queries/user/token";
 import { useFragment, useQuery } from "@apollo/client";
 import { useMemo } from "react";
 
@@ -12,11 +13,11 @@ import { useMemo } from "react";
  *
  */
 export function useUserInfo(): User | null {
-  const tokens = useUserTokens();
+  const authToken = useAuthToken();
 
   const decodedToken = useMemo(
-    () => (tokens ? decodeUserToken(tokens.token) : null),
-    [tokens]
+    () => (authToken ? decodeUserToken(authToken) : null),
+    [authToken]
   );
 
   const { data, complete } = useFragment({
@@ -28,7 +29,7 @@ export function useUserInfo(): User | null {
     },
   });
 
-  useQuery(GetMeDocument, { skip: complete || !tokens });
+  useQuery(GetMeDocument, { skip: complete || !authToken });
 
   // FIXME: This is potentially a bottleneck, as it will be called on every
   // render. Consider using a context to store the parsed user data.

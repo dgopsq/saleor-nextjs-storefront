@@ -63,6 +63,20 @@ mutation CreateToken($email: String!, $password: String!) {
   }
 }
 
+mutation RefreshToken($refreshToken: String!) {
+  tokenRefresh(refreshToken: $refreshToken) {
+    token
+    user {
+      ...GenericUser
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
 query GetMe {
   me {
     ...GenericUser
