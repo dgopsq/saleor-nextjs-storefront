@@ -90,13 +90,6 @@ export async function retrieveCheckoutToken(
   const localCheckoutToken =
     Cookies.get(publicConfig.checkoutTokenStorageKey) ?? null;
 
-  // We are going to feed the Auth Header manually because
-  // this job could be executed before the Auth Token is
-  // actually bootstrapped in the application.
-  const commonAuthHeader = {
-    Authorization: maybeStoredAuthToken ? `Bearer ${maybeStoredAuthToken}` : "",
-  };
-
   if (localCheckoutToken) {
     logger.debug("Checkout Token found, checking if it's valid.");
 
@@ -104,9 +97,6 @@ export async function retrieveCheckoutToken(
       query: GetCheckoutInfoDocument,
       variables: { checkoutToken: localCheckoutToken },
       errorPolicy: "ignore",
-      context: {
-        headers: commonAuthHeader,
-      },
     });
 
     if (checkoutInfoRes.data.checkout) {
@@ -133,9 +123,6 @@ export async function retrieveCheckoutToken(
     variables: {
       channel,
       email,
-    },
-    context: {
-      headers: commonAuthHeader,
     },
   });
 

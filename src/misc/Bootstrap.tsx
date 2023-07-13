@@ -10,6 +10,7 @@ import { useEffect } from "react";
  */
 export const Bootstrap: React.FC = () => {
   const apolloClient = useApolloClient();
+  const authToken = useAuthTokenStore((state) => state.value);
   const initializeAuthToken = useAuthTokenStore((state) => state.initialize);
   const initializeCheckoutToken = useCheckoutTokenStore(
     (state) => state.initialize
@@ -17,8 +18,11 @@ export const Bootstrap: React.FC = () => {
 
   useEffect(() => {
     initializeAuthToken(apolloClient);
-    initializeCheckoutToken(apolloClient);
   }, [apolloClient, initializeAuthToken, initializeCheckoutToken]);
+
+  useEffect(() => {
+    if (authToken.kind === "Success") initializeCheckoutToken(apolloClient);
+  }, [apolloClient, authToken, initializeCheckoutToken]);
 
   return null;
 };
