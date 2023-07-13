@@ -8,26 +8,42 @@ import {
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
-import { useMemo } from "react";
-import { useAuthToken } from "@/misc/states/tokensStore";
-import { AuthToken } from "@/queries/user/data";
+import { useAuthTokenStore } from "@/misc/states/authTokenStore";
+import { setContext } from "@apollo/client/link/context";
+import { match } from "ts-pattern";
 
 /**
  *
  */
 export type ClientApolloInstance = ApolloClient<unknown>;
 
-const makeClientGen = (authToken: AuthToken | null) => () => {
-  const token = authToken ?? null;
+const makeClient = () => {
+  // This Link will add the Authorization header to all requests
+  // retrieving it from the authTokenStore.
+  const asyncAuthLink = setContext(() => {
+    const tokensStore = useAuthTokenStore.getState();
+    const maybeAuthToken = match(tokensStore.value)
+      .with(
+        {
+          kind: "Success",
+        },
+        ({ data }) => data
+      )
+      .otherwise(() => null);
 
+    if (!maybeAuthToken) return {};
+
+    return {
+      headers: {
+        authorization: `Bearer ${maybeAuthToken}`,
+      },
+    };
+  });
+
+  //
   const httpLink = new BatchHttpLink({
     uri: publicConfig.graphqlUrl,
     includeUnusedVariables: true,
-    headers: token
-      ? {
-          authorization: `Bearer ${token}`,
-        }
-      : undefined,
   });
 
   const mainLink =
@@ -36,9 +52,10 @@ const makeClientGen = (authToken: AuthToken | null) => () => {
           new SSRMultipartLink({
             stripDefer: true,
           }),
+          asyncAuthLink,
           httpLink,
         ])
-      : httpLink;
+      : ApolloLink.from([asyncAuthLink, httpLink]);
 
   return new ApolloClient({
     cache: new NextSSRInMemoryCache({
@@ -57,9 +74,6 @@ function makeSuspenseCache() {
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
-  const authToken = useAuthToken();
-  const makeClient = useMemo(() => makeClientGen(authToken), [authToken]);
-
   return (
     <ApolloNextAppProvider
       makeClient={makeClient}

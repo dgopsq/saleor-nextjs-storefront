@@ -10,6 +10,7 @@ import { logger } from "@/misc/logger";
 import { CheckoutToken } from "@/queries/checkout/data";
 import { AuthToken, decodeUserToken } from "@/queries/user/data";
 import Cookies from "js-cookie";
+import { setContext } from "@apollo/client/link/context";
 
 /**
  *
@@ -89,6 +90,13 @@ export async function retrieveCheckoutToken(
   const localCheckoutToken =
     Cookies.get(publicConfig.checkoutTokenStorageKey) ?? null;
 
+  // We are going to feed the Auth Header manually because
+  // this job could be executed before the Auth Token is
+  // actually bootstrapped in the application.
+  const commonAuthHeader = {
+    Authorization: maybeStoredAuthToken ? `Bearer ${maybeStoredAuthToken}` : "",
+  };
+
   if (localCheckoutToken) {
     logger.debug("Checkout Token found, checking if it's valid.");
 
@@ -97,11 +105,7 @@ export async function retrieveCheckoutToken(
       variables: { checkoutToken: localCheckoutToken },
       errorPolicy: "ignore",
       context: {
-        headers: {
-          Authorization: maybeStoredAuthToken
-            ? `Bearer ${maybeStoredAuthToken}`
-            : "",
-        },
+        headers: commonAuthHeader,
       },
     });
 
@@ -131,11 +135,7 @@ export async function retrieveCheckoutToken(
       email,
     },
     context: {
-      headers: {
-        Authorization: maybeStoredAuthToken
-          ? `Bearer ${maybeStoredAuthToken}`
-          : "",
-      },
+      headers: commonAuthHeader,
     },
   });
 
@@ -146,6 +146,10 @@ export async function retrieveCheckoutToken(
     logger.debug("Checkout Token created:", newCheckoutToken);
 
     Cookies.set(publicConfig.checkoutTokenStorageKey, newCheckoutToken);
+
+    setContext(() => ({
+      headers: {},
+    }));
 
     return newCheckoutToken;
   }

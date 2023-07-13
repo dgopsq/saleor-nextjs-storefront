@@ -1,7 +1,7 @@
 "use client";
 
 import { useCheckoutTokenStore } from "@/misc/states/checkoutTokenStore";
-import { useAuthTokenStore } from "@/misc/states/tokensStore";
+import { useAuthTokenStore } from "@/misc/states/authTokenStore";
 import { useApolloClient } from "@apollo/client";
 import { useEffect } from "react";
 
@@ -10,7 +10,6 @@ import { useEffect } from "react";
  */
 export const Bootstrap: React.FC = () => {
   const apolloClient = useApolloClient();
-  const authToken = useAuthTokenStore((state) => state.value);
   const initializeAuthToken = useAuthTokenStore((state) => state.initialize);
   const initializeCheckoutToken = useCheckoutTokenStore(
     (state) => state.initialize
@@ -18,11 +17,8 @@ export const Bootstrap: React.FC = () => {
 
   useEffect(() => {
     initializeAuthToken(apolloClient);
-  }, [apolloClient, initializeAuthToken]);
-
-  useEffect(() => {
-    if (authToken.kind === "Success") initializeCheckoutToken(apolloClient);
-  }, [authToken, initializeCheckoutToken, apolloClient]);
+    initializeCheckoutToken(apolloClient);
+  }, [apolloClient, initializeAuthToken, initializeCheckoutToken]);
 
   return null;
 };

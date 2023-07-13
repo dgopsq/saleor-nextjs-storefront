@@ -3,7 +3,7 @@ import {
   GenericUserFragmentDoc,
   GetMeDocument,
 } from "@/__generated__/graphql";
-import { useAuthToken } from "@/misc/states/tokensStore";
+import { useAuthToken } from "@/misc/states/authTokenStore";
 import { User, decodeUserToken, parseUser } from "@/queries/user/data";
 import { useFragment, useQuery } from "@apollo/client";
 import { useMemo } from "react";
