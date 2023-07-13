@@ -29,7 +29,12 @@ export async function retrieveAuthToken(
 
     const getMeRes = await client.query({
       query: GetMeDocument,
+
+      // Here we need to be sure to include the access token.
       context: { headers: { Authorization: `Bearer ${maybeStoredAuthToken}` } },
+
+      // And we must ignore the errors, otherwile Apollo will throw.
+      errorPolicy: "ignore",
     });
 
     if (getMeRes.data.me) {
@@ -47,12 +52,17 @@ export async function retrieveAuthToken(
     const mutareRefreshTokenRes = await client.mutate({
       mutation: RefreshTokenDocument,
       variables: { refreshToken: maybeStoredRefreshToken },
+      context: { headers: { Authorization: "" } },
     });
 
     const maybeNewAuthToken = mutareRefreshTokenRes.data?.tokenRefresh?.token;
 
     if (maybeNewAuthToken) {
       logger.debug("Refresh Token is valid, save the new Auth Token.");
+
+      // Overwrite the old token with the new one.
+      Cookies.set(publicConfig.userTokenStorageKey, maybeNewAuthToken);
+
       return maybeNewAuthToken;
     }
   }
