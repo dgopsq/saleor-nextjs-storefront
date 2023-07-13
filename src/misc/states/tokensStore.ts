@@ -1,8 +1,8 @@
 import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { AsyncData } from "@/misc/asyncData";
+import { logger } from "@/misc/logger";
 import { GenericAuthTokenError } from "@/queries/user/errors";
 import { AuthToken, retrieveAuthToken } from "@/queries/user/token";
-import { ApolloClient } from "@apollo/client";
 import { match } from "ts-pattern";
 import { create } from "zustand";
 
@@ -16,13 +16,27 @@ type AutoTokenStore = {
 /**
  *
  */
-export const useAuthTokenStore = create<AutoTokenStore>((set, get) => ({
+export const useAuthTokenStore = create<AutoTokenStore>((set) => ({
+  /**
+   *
+   */
   value: { kind: "NotAsked" },
+
+  /**
+   *
+   */
   initialize: async (client) => {
     try {
+      logger.debug("Start the Auth Token bootstrap");
+
       set({ value: { kind: "Loading" } });
 
       const authToken = await retrieveAuthToken(client);
+
+      logger.debug(
+        "Auth Token retrieval job ended with result:",
+        authToken ?? "No Token"
+      );
 
       set({ value: { kind: "Success", data: authToken } });
     } catch (error) {
@@ -33,7 +47,7 @@ export const useAuthTokenStore = create<AutoTokenStore>((set, get) => ({
         },
       });
 
-      console.error("Error while retrieving the Auth Token", error);
+      logger.error("Error while retrieving the Auth Token", error);
     }
   },
 }));
