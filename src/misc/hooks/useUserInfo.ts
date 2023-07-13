@@ -4,8 +4,7 @@ import {
   GetMeDocument,
 } from "@/__generated__/graphql";
 import { useAuthToken } from "@/misc/states/tokensStore";
-import { User, parseUser } from "@/queries/user/data";
-import { decodeUserToken } from "@/queries/user/token";
+import { User, decodeUserToken, parseUser } from "@/queries/user/data";
 import { useFragment, useQuery } from "@apollo/client";
 import { useMemo } from "react";
 

@@ -10,7 +10,7 @@ import {
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
 import { useMemo } from "react";
 import { useAuthToken } from "@/misc/states/tokensStore";
-import { AuthToken } from "@/queries/user/token";
+import { AuthToken } from "@/queries/user/data";
 
 /**
  *

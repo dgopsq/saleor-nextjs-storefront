@@ -3,8 +3,6 @@ import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
 import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
-import * as z from "zod";
 
 /**
  *
@@ -70,34 +68,4 @@ export async function retrieveAuthToken(
   logger.debug("Refresh Token is not valid or non-existent.");
 
   return null;
-}
-
-/**
- *
- */
-const userTokenPayloadSchema = z.object({
-  user_id: z.string(),
-  email: z.string().email(),
-});
-
-type UserTokenPayload = z.infer<typeof userTokenPayloadSchema>;
-
-/**
- *
- */
-export type AuthToken = string;
-
-/**
- *
- */
-export type RefreshToken = string;
-
-/**
- *
- */
-export function decodeUserToken(token: string): UserTokenPayload | null {
-  const decoded = jwt_decode(token);
-  const parsed = userTokenPayloadSchema.safeParse(decoded);
-
-  return parsed.success ? parsed.data : null;
 }

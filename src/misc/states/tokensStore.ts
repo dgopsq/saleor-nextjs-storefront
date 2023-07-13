@@ -1,8 +1,9 @@
 import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { AsyncData } from "@/misc/asyncData";
 import { logger } from "@/misc/logger";
+import { AuthToken } from "@/queries/user/data";
 import { GenericAuthTokenError } from "@/queries/user/errors";
-import { AuthToken, retrieveAuthToken } from "@/queries/user/token";
+import { retrieveAuthToken } from "@/queries/user/token";
 import { match } from "ts-pattern";
 import { create } from "zustand";
 

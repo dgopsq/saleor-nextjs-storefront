@@ -4,6 +4,18 @@ import {
   GenericAddressFragmentDoc,
   GenericUserFragment,
 } from "@/__generated__/graphql";
+import jwt_decode from "jwt-decode";
+import * as z from "zod";
+
+/**
+ *
+ */
+export type AuthToken = string;
+
+/**
+ *
+ */
+export type RefreshToken = string;
 
 /**
  *
@@ -100,4 +112,24 @@ export function parseUser(input: GenericUserFragment): User {
     checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
     addresses: addresses.map(parseAddress),
   };
+}
+
+/**
+ *
+ */
+const userTokenPayloadSchema = z.object({
+  user_id: z.string(),
+  email: z.string().email(),
+});
+
+type UserTokenPayload = z.infer<typeof userTokenPayloadSchema>;
+
+/**
+ *
+ */
+export function decodeUserToken(token: string): UserTokenPayload | null {
+  const decoded = jwt_decode(token);
+  const parsed = userTokenPayloadSchema.safeParse(decoded);
+
+  return parsed.success ? parsed.data : null;
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { publicConfig } from "@/misc/config";
-import { AuthToken, RefreshToken } from "@/queries/user/token";
+import { AuthToken, RefreshToken } from "@/queries/user/data";
 import { cookies } from "next/headers";
 
 /**
