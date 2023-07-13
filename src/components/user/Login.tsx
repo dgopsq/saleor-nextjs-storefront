@@ -1,50 +1,72 @@
 "use client";
 
-import { CreateTokenDocument } from "@/__generated__/graphql";
-import { setUserTokensCookies } from "@/app/account/@auth/login/actions";
+import { getFragmentData } from "@/__generated__";
+import {
+  CreateTokenDocument,
+  GenericUserFragmentDoc,
+} from "@/__generated__/graphql";
 import { ErrorAlert, SuccessAlert } from "@/components/core/Alert";
 import { LoginForm } from "@/components/core/LoginForm";
+import { publicConfig } from "@/misc/config";
+import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
+import Cookies from "js-cookie";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useTransition } from "react";
+import { useCallback } from "react";
 import { P, match } from "ts-pattern";
-import { useUpdateEffect } from "usehooks-ts";
 
 /**
  *
  */
 export const Login: React.FC = () => {
-  const [transitionPending, startTransition] = useTransition();
   const [createAccount, { loading, error, data }] =
     useMutation(CreateTokenDocument);
-  const router = useRouter();
 
   const handleSubmit = useCallback(
     (values: LoginForm) => {
+      logger.debug("Executing user authentication.");
+
       createAccount({
         variables: {
           email: values.email,
           password: values.password,
         },
         onCompleted: (data) => {
+          logger.debug("Token creaded successfully, user authenticated.");
+
           const maybeToken = data.tokenCreate?.token ?? null;
           const maybeRefreshToken = data.tokenCreate?.refreshToken ?? null;
+          const maybeUserFragment =
+            getFragmentData(GenericUserFragmentDoc, data.tokenCreate?.user) ??
+            null;
+          const maybeCheckoutToken: string | null =
+            maybeUserFragment?.checkouts?.edges[0]?.node.token ?? null;
 
           if (maybeToken && maybeRefreshToken) {
-            startTransition(() =>
-              setUserTokensCookies(maybeToken, maybeRefreshToken)
+            logger.debug("Auth and Refresh Token found, creating cookies.");
+
+            Cookies.set(publicConfig.userTokenStorageKey, maybeToken);
+            Cookies.set(
+              publicConfig.userRefreshTokenStorageKey,
+              maybeRefreshToken
             );
           }
+
+          if (maybeCheckoutToken) {
+            logger.debug("Checkout Token found, creating the cookie.");
+
+            Cookies.set(
+              publicConfig.checkoutTokenStorageKey,
+              maybeCheckoutToken
+            );
+          }
+
+          window.location.href = "/account";
         },
       });
     },
-    [createAccount, startTransition]
+    [createAccount]
   );
-
-  useUpdateEffect(() => {
-    if (!transitionPending) window.location.href = "/account";
-  }, [transitionPending, router]);
 
   const signupErrors = data?.tokenCreate?.errors ?? [];
 
