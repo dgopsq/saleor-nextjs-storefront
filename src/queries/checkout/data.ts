@@ -7,6 +7,11 @@ import {
 /**
  *
  */
+export type CheckoutToken = string;
+
+/**
+ *
+ */
 type CheckoutItem = {
   id: string;
 };

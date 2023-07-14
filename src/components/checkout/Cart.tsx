@@ -7,7 +7,7 @@ import {
 } from "@/__generated__/graphql";
 import { Button } from "@/components/core/Button";
 import { formatPrice } from "@/misc/currencies";
-import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
+import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
 import { classNames } from "@/misc/styles";
 import {
   parseCheckoutInfo,

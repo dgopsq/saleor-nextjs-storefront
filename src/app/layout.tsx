@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { getApolloClient } from "@/misc/apollo";
 import { GetCategoriesDocument } from "@/__generated__/graphql";
 import { parsePopulatedCategories } from "@/queries/categories/data";
-import { Suspense } from "react";
+import { Bootstrap } from "@/misc/Bootstrap";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +34,8 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ApolloWrapper>
+          <Bootstrap />
+
           <Navbar categories={parsedCategories} />
 
           <main className="flex flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">

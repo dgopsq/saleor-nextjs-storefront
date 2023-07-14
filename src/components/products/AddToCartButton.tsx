@@ -2,9 +2,7 @@
 
 import { AddProductToCartDocument } from "@/__generated__/graphql";
 import { Button } from "@/components/core/Button";
-import { Spinner } from "@/components/core/Spinner";
-import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
-import { classNames } from "@/misc/styles";
+import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
 import { useMutation } from "@apollo/client";
 import { useCallback } from "react";
 

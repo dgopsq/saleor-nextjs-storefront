@@ -1,6 +1,5 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
-  AttributeInputTypeEnum,
   DetailedProductFragment,
   GenericProductVariantFragmentDoc,
   GetProductsQuery,

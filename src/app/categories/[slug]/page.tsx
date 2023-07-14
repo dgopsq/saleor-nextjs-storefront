@@ -1,9 +1,4 @@
 import { CategoryProducts } from "@/components/products/CategoryProducts";
-import { Products } from "@/components/products/Products";
-
-export async function generateStaticParams() {
-  return [];
-}
 
 type Params = {
   slug: string;

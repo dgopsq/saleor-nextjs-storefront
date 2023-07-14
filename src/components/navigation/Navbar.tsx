@@ -5,8 +5,6 @@ import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
-  ShoppingCartIcon,
-  UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/misc/styles";
@@ -14,6 +12,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Category, generateCategoryUrl } from "@/queries/categories/data";
 import { CartButton } from "@/components/checkout/CartButton";
+import { UserButton } from "@/components/user/UserButton";
+import { useAuthTokenStore } from "@/misc/states/authTokenStore";
+import { useCheckoutTokenStore } from "@/misc/states/checkoutTokenStore";
+import { Spinner } from "@/components/core/Spinner";
 
 type Props = {
   categories: Array<Category>;
@@ -24,6 +26,16 @@ type Props = {
  */
 export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
+  const authToken = useAuthTokenStore((state) => state.value);
+  const checkoutToken = useCheckoutTokenStore((state) => state.value);
+
+  const isAuthTokenLoading =
+    authToken.kind === "Loading" || authToken.kind === "NotAsked";
+
+  const isCheckoutTokenLoading =
+    checkoutToken.kind === "Loading" || checkoutToken.kind === "NotAsked";
+
+  const isUserLoading = isAuthTokenLoading || isCheckoutTokenLoading;
 
   return (
     <div className="bg-white">
@@ -121,19 +133,11 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
-                    <a
-                      href="#"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Create an account
-                    </a>
-                  </div>
-                  <div className="flow-root">
                     <Link
-                      href="#"
+                      href="/account"
                       className="-m-2 block p-2 font-medium text-gray-900"
                     >
-                      Sign in
+                      Profile
                     </Link>
                   </div>
                 </div>
@@ -269,7 +273,6 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
                   {/* Logo (lg-) */}
                   <a href="#" className="lg:hidden">
-                    <span className="sr-only">Your Company</span>
                     <Image
                       src="https://tailwindui.com/img/logos/mark.svg"
                       alt=""
@@ -281,41 +284,30 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
-                      <div className="flex space-x-8">
-                        <div className="hidden lg:flex">
-                          <a
-                            href="#"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="sr-only">Search</span>
-                            <MagnifyingGlassIcon
-                              className="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </a>
+                      {isUserLoading ? (
+                        <div>
+                          <Spinner variant="main" size="button" />
                         </div>
+                      ) : (
+                        <>
+                          <div className="flex space-x-8">
+                            <Link href="/account">
+                              <UserButton />
+                            </Link>
+                          </div>
 
-                        <div className="flex">
-                          <a
-                            href="#"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="sr-only">Account</span>
-                            <UserIcon className="h-6 w-6" aria-hidden="true" />
-                          </a>
-                        </div>
-                      </div>
+                          <span
+                            className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
+                            aria-hidden="true"
+                          />
 
-                      <span
-                        className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
-                        aria-hidden="true"
-                      />
-
-                      <div className="flow-root">
-                        <Link href="/cart">
-                          <CartButton />
-                        </Link>
-                      </div>
+                          <div className="flow-root">
+                            <Link href="/cart">
+                              <CartButton />
+                            </Link>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

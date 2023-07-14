@@ -1,7 +1,7 @@
 "use client";
 
 import { GetCheckoutInfoDocument } from "@/__generated__/graphql";
-import { useCheckoutToken } from "@/misc/hooks/useCheckoutToken";
+import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
 import { parseCheckoutInfo } from "@/queries/checkout/data";
 import { useQuery } from "@apollo/client";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";

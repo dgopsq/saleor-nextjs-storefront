@@ -1,6 +1,5 @@
 import { publicConfig } from "@/misc/config";
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import { __DEV__ } from "@apollo/client/utilities/globals";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
 
