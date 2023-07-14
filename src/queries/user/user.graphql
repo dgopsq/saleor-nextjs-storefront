@@ -77,6 +77,19 @@ mutation RefreshToken($refreshToken: String!) {
   }
 }
 
+mutation UserUpdate($userInfo: AccountInput!) {
+  accountUpdate(input: $userInfo) {
+    user {
+      ...GenericUser
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
 query GetMe {
   me {
     ...GenericUser

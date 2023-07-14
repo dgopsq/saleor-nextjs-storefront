@@ -1,8 +1,10 @@
 "use client";
 
+import { CountryCode } from "@/__generated__/graphql";
+import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 /**
@@ -16,7 +18,7 @@ const AddressFormSchema = z.object({
   streetAddress2: z.string().min(1).optional(),
   city: z.string().min(1),
   postalCode: z.string().min(1),
-  country: z.string().min(1),
+  country: z.nativeEnum(CountryCode),
   phone: z.string().min(1).optional(),
 });
 
@@ -37,6 +39,7 @@ export const AddressForm: React.FC<Props> = () => {
   const {
     register,
     formState: { errors },
+    control,
   } = useForm<AddressForm>({ resolver: zodResolver(AddressFormSchema) });
 
   return (
@@ -96,11 +99,16 @@ export const AddressForm: React.FC<Props> = () => {
       </div>
 
       <div className="sm:col-span-2">
-        <Field
-          id="country"
-          label="Country"
-          register={register("country")}
-          error={errors.country?.message}
+        <Controller
+          name="country"
+          control={control}
+          render={({ field }) => (
+            <CountrySelect
+              label="Country"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
       </div>
 

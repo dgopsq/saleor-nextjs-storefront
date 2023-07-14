@@ -10,12 +10,7 @@ type Props = {
 /**
  *
  */
-export const CheckboxField: React.FC<Props> = ({
-  label,
-  id,
-  value,
-  onChange,
-}) => {
+export const Checkbox: React.FC<Props> = ({ label, id, value, onChange }) => {
   const handleChange = useCallback(() => {
     onChange(!value);
   }, [value, onChange]);

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AddressForm } from "@/components/core/AddressForm";
-import { CheckboxField } from "@/components/core/CheckboxField";
+import { Checkbox } from "@/components/core/Checkbox";
 import { Button } from "@/components/core/Button";
 
 export const Profile = () => {
@@ -20,7 +20,7 @@ export const Profile = () => {
       <div className="mt-16 border-b border-gray-100 pb-16">
         <h3 className="text-xl font-semibold">Billing Address</h3>
         <div className="mt-8">
-          <CheckboxField
+          <Checkbox
             id="billingSameAsShipping"
             label="Same as shipping address."
             value={billingSameAsShipping}

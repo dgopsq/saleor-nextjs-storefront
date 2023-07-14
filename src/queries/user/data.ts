@@ -1,9 +1,11 @@
 import { getFragmentData } from "@/__generated__";
 import {
+  AddressInput,
   GenericAddressFragment,
   GenericAddressFragmentDoc,
   GenericUserFragment,
 } from "@/__generated__/graphql";
+import { AddressForm } from "@/components/core/AddressForm";
 import jwt_decode from "jwt-decode";
 import * as z from "zod";
 
@@ -132,4 +134,23 @@ export function decodeUserToken(token: string): UserTokenPayload | null {
   const parsed = userTokenPayloadSchema.safeParse(decoded);
 
   return parsed.success ? parsed.data : null;
+}
+
+/**
+ *
+ */
+export function addressFormToAddressInput(
+  addressForm: AddressForm
+): AddressInput {
+  return {
+    firstName: addressForm.firstName,
+    lastName: addressForm.lastName,
+    companyName: addressForm.companyName,
+    streetAddress1: addressForm.streetAddress1,
+    streetAddress2: addressForm.streetAddress2,
+    city: addressForm.city,
+    postalCode: addressForm.postalCode,
+    country: addressForm.country,
+    phone: addressForm.phone,
+  };
 }
