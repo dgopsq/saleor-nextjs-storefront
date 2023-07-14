@@ -10,5 +10,5 @@ export default async function Layout(props: {
   if (!isLoggedIn)
     return <div className="max-w-lg w-full mx-a mt-10">{props.auth}</div>;
 
-  return <>{props.profile}</>;
+  return <div className="w-full">{props.profile}</div>;
 }
