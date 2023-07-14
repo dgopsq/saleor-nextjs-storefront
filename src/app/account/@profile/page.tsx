@@ -1,9 +1,9 @@
-import { AddressForm } from "@/components/core/AddressForm";
+import { Profile } from "@/components/user/Profile";
 
 export default async function Page() {
   return (
-    <div>
-      <AddressForm />
-    </div>
+    <>
+      <Profile />
+    </>
   );
 }
