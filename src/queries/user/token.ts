@@ -18,11 +18,8 @@ import { setContext } from "@apollo/client/link/context";
 export async function retrieveAuthToken(
   client: ClientApolloInstance
 ): Promise<AuthToken | null> {
-  const maybeStoredAuthToken =
-    Cookies.get(publicConfig.userTokenStorageKey) ?? null;
-
-  const maybeStoredRefreshToken =
-    Cookies.get(publicConfig.userRefreshTokenStorageKey) ?? null;
+  const maybeStoredAuthToken = getStoredAuthToken();
+  const maybeStoredRefreshToken = getStoredRefreshToken();
 
   if (!maybeStoredAuthToken && !maybeStoredRefreshToken) {
     logger.debug("Auth Token and Refresh Token are not in the cookies.");
@@ -84,11 +81,8 @@ export async function retrieveAuthToken(
 export async function retrieveCheckoutToken(
   client: ClientApolloInstance
 ): Promise<CheckoutToken | null> {
-  const maybeStoredAuthToken =
-    Cookies.get(publicConfig.userTokenStorageKey) ?? null;
-
-  const localCheckoutToken =
-    Cookies.get(publicConfig.checkoutTokenStorageKey) ?? null;
+  const maybeStoredAuthToken = getStoredAuthToken();
+  const localCheckoutToken = getStoredCheckoutToken();
 
   if (localCheckoutToken) {
     logger.debug("Checkout Token found, checking if it's valid.");
@@ -142,4 +136,25 @@ export async function retrieveCheckoutToken(
   }
 
   return null;
+}
+
+/**
+ *
+ */
+export function getStoredAuthToken(): AuthToken | null {
+  return Cookies.get(publicConfig.userTokenStorageKey) ?? null;
+}
+
+/**
+ *
+ */
+export function getStoredRefreshToken(): AuthToken | null {
+  return Cookies.get(publicConfig.userRefreshTokenStorageKey) ?? null;
+}
+
+/**
+ *
+ */
+export function getStoredCheckoutToken(): CheckoutToken | null {
+  return Cookies.get(publicConfig.checkoutTokenStorageKey) ?? null;
 }
