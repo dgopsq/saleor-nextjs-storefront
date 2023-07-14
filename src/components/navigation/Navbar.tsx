@@ -13,6 +13,9 @@ import Image from "next/image";
 import { Category, generateCategoryUrl } from "@/queries/categories/data";
 import { CartButton } from "@/components/checkout/CartButton";
 import { UserButton } from "@/components/user/UserButton";
+import { useAuthTokenStore } from "@/misc/states/authTokenStore";
+import { useCheckoutTokenStore } from "@/misc/states/checkoutTokenStore";
+import { Spinner } from "@/components/core/Spinner";
 
 type Props = {
   categories: Array<Category>;
@@ -23,6 +26,16 @@ type Props = {
  */
 export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
+  const authToken = useAuthTokenStore((state) => state.value);
+  const checkoutToken = useCheckoutTokenStore((state) => state.value);
+
+  const isAuthTokenLoading =
+    authToken.kind === "Loading" || authToken.kind === "NotAsked";
+
+  const isCheckoutTokenLoading =
+    checkoutToken.kind === "Loading" || checkoutToken.kind === "NotAsked";
+
+  const isUserLoading = isAuthTokenLoading || isCheckoutTokenLoading;
 
   return (
     <div className="bg-white">
@@ -271,22 +284,30 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
-                      <div className="flex space-x-8">
-                        <Link href="/account">
-                          <UserButton />
-                        </Link>
-                      </div>
+                      {isUserLoading ? (
+                        <div>
+                          <Spinner variant="main" size="button" />
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex space-x-8">
+                            <Link href="/account">
+                              <UserButton />
+                            </Link>
+                          </div>
 
-                      <span
-                        className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
-                        aria-hidden="true"
-                      />
+                          <span
+                            className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
+                            aria-hidden="true"
+                          />
 
-                      <div className="flow-root">
-                        <Link href="/cart">
-                          <CartButton />
-                        </Link>
-                      </div>
+                          <div className="flow-root">
+                            <Link href="/cart">
+                              <CartButton />
+                            </Link>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
