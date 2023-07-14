@@ -18,12 +18,18 @@ type Props = {
   label: string;
   value?: CountryCode;
   onChange?: (value: CountryCode) => void;
+  error?: string;
 };
 
 /**
  *
  */
-export const CountrySelect: React.FC<Props> = ({ value, onChange, label }) => {
+export const CountrySelect: React.FC<Props> = ({
+  value,
+  onChange,
+  label,
+  error,
+}) => {
   return (
     <Listbox value={value} onChange={onChange}>
       {({ open }) => (
@@ -46,6 +52,10 @@ export const CountrySelect: React.FC<Props> = ({ value, onChange, label }) => {
                 />
               </span>
             </Listbox.Button>
+
+            {error ? (
+              <p className="text-xs text-red-600 mt-1">{error}</p>
+            ) : undefined}
 
             <Transition
               show={open}

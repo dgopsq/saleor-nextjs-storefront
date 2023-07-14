@@ -4,6 +4,7 @@ import { CountryCode } from "@/__generated__/graphql";
 import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -27,20 +28,37 @@ const AddressFormSchema = z.object({
  */
 export type AddressForm = z.infer<typeof AddressFormSchema>;
 
-type Props = {
-  value?: AddressForm;
-  onSubmit?: (data: AddressForm) => void;
+export type AddressFormRef = {
+  getValues: () => Promise<AddressForm | null>;
 };
+
+type Props = NonNullable<unknown>;
 
 /**
  *
  */
-export const AddressForm: React.FC<Props> = () => {
+export const AddressForm = forwardRef<AddressFormRef, Props>((_, ref) => {
   const {
     register,
     formState: { errors },
     control,
-  } = useForm<AddressForm>({ resolver: zodResolver(AddressFormSchema) });
+    getValues,
+    trigger,
+  } = useForm<AddressForm>({
+    resolver: zodResolver(AddressFormSchema),
+    mode: "onChange",
+  });
+
+  useImperativeHandle<AddressFormRef, Pick<AddressFormRef, "getValues">>(
+    ref,
+    () => ({
+      getValues: async () => {
+        const isValid = await trigger();
+        return isValid ? getValues() : null;
+      },
+    }),
+    [getValues, trigger]
+  );
 
   return (
     <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 max-w-3xl">
@@ -102,11 +120,12 @@ export const AddressForm: React.FC<Props> = () => {
         <Controller
           name="country"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <CountrySelect
               label="Country"
               value={field.value}
               onChange={field.onChange}
+              error={fieldState.error?.message}
             />
           )}
         />
@@ -122,4 +141,4 @@ export const AddressForm: React.FC<Props> = () => {
       </div>
     </div>
   );
-};
+});
