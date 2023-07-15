@@ -1,11 +1,26 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { Checkbox } from "@/components/core/Checkbox";
 import { Button } from "@/components/core/Button";
+import { useMutation } from "@apollo/client";
+import { UserUpdateDocument } from "@/__generated__/graphql";
+import { addressToAddressForm } from "@/queries/user/data";
+import { useUserInfo } from "@/misc/hooks/useUserInfo";
 
-export const Profile = () => {
+export const Profile: React.FC = () => {
+  const [updateUser, { loading: updateUserLoading }] =
+    useMutation(UserUpdateDocument);
+
+  const user = useUserInfo();
+
   const shippingAddressRef = useRef<AddressFormRef>(null);
   const billingAddressRef = useRef<AddressFormRef>(null);
 
@@ -17,15 +32,48 @@ export const Profile = () => {
 
     const billingData = (await billingAddressRef.current?.getValues()) ?? null;
 
-    console.log({ shippingData, billingData, billingSameAsShipping });
-  }, [billingSameAsShipping]);
+    if (!shippingData) return;
+    if (!billingData && !billingSameAsShipping) return;
+
+    updateUser({
+      variables: {
+        userInfo: {
+          defaultShippingAddress: shippingData,
+          defaultBillingAddress: billingData ? billingData : shippingData,
+        },
+      },
+    });
+  }, [billingSameAsShipping, updateUser]);
+
+  const shippingInitialValues = useMemo(
+    () =>
+      user?.defaultShippingAddress
+        ? addressToAddressForm(user?.defaultShippingAddress)
+        : undefined,
+    [user?.defaultShippingAddress]
+  );
+
+  const billingInitialValues = useMemo(
+    () =>
+      user?.defaultBillingAddress
+        ? addressToAddressForm(user.defaultBillingAddress)
+        : undefined,
+    [user?.defaultBillingAddress]
+  );
+
+  useEffect(() => {
+    if (billingInitialValues) setBillingSameAsShipping(false);
+  }, [billingInitialValues, setBillingSameAsShipping]);
 
   return (
     <>
       <div className="border-b border-gray-100 pb-16">
         <h3 className="text-xl font-semibold">Shipping Address</h3>
         <div className="mt-8">
-          <AddressForm ref={shippingAddressRef} />
+          <AddressForm
+            ref={shippingAddressRef}
+            initialValues={shippingInitialValues}
+          />
         </div>
       </div>
 
@@ -41,7 +89,10 @@ export const Profile = () => {
 
           {!billingSameAsShipping ? (
             <div className="mt-8">
-              <AddressForm ref={billingAddressRef} />
+              <AddressForm
+                ref={billingAddressRef}
+                initialValues={billingInitialValues}
+              />
             </div>
           ) : undefined}
         </div>
@@ -54,6 +105,7 @@ export const Profile = () => {
             variant="primary"
             text="Save"
             onClick={handleSubmit}
+            isLoading={updateUserLoading}
           />
         </div>
       </div>

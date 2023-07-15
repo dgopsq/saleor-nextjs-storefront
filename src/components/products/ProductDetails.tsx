@@ -7,10 +7,8 @@ import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
 import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 import {
-  DetailedProductFragment,
   DetailedProductFragmentDoc,
   GetProductDocument,
-  PreviewProductFragment,
   PreviewProductFragmentDoc,
 } from "@/__generated__/graphql";
 import {
@@ -55,7 +53,7 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
   useSuspenseQuery(GetProductDocument, { variables: { slug } });
   const router = useRouter();
 
-  const { data: detailedData } = useFragment({
+  const { data: detailedData, complete: detailedComplete } = useFragment({
     fragment: DetailedProductFragmentDoc,
     fragmentName: "DetailedProduct",
     from: {
@@ -64,7 +62,7 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
     },
   });
 
-  const { data: previewData } = useFragment({
+  const { data: previewData, complete: previewComplete } = useFragment({
     fragment: PreviewProductFragmentDoc,
     fragmentName: "PreviewProduct",
     from: {
@@ -75,13 +73,10 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
 
   const product = useMemo(
     () =>
-      detailedData && previewData
-        ? parseProduct(
-            detailedData as DetailedProductFragment,
-            previewData as PreviewProductFragment
-          )
+      detailedData && previewData && detailedComplete && previewComplete
+        ? parseProduct(detailedData, previewData)
         : null,
-    [detailedData, previewData]
+    [detailedData, previewData, detailedComplete, previewComplete]
   );
 
   const defaultVariantId = useMemo(

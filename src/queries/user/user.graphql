@@ -31,7 +31,10 @@ fragment GenericUser on User {
       }
     }
   }
-  addresses {
+  defaultShippingAddress {
+    ...GenericAddress
+  }
+  defaultBillingAddress {
     ...GenericAddress
   }
 }
