@@ -1,9 +1,5 @@
-import { Profile } from "@/components/user/Profile";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
-  return (
-    <>
-      <Profile />
-    </>
-  );
+  redirect("/account/info");
 }

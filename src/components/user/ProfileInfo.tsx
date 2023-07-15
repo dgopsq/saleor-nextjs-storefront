@@ -16,7 +16,7 @@ import { addressToAddressForm } from "@/queries/user/data";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { errorToast, successToast } from "@/components/core/Notifications";
 
-export const Profile: React.FC = () => {
+export const ProfileInfo: React.FC = () => {
   const [updateUser, { loading, data: updateData }] =
     useMutation(UserUpdateDocument);
 
