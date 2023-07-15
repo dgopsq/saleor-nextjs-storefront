@@ -28,7 +28,10 @@ export function useUserInfo(): User | null {
 
   // FIXME: This is potentially a bottleneck, as it will be called on every
   // render. Consider using a context to store the parsed user data.
-  const parsedData = data && complete ? parseUser(data) : null;
+  const parsedData = useMemo(
+    () => (data && complete ? parseUser(data) : null),
+    [data, complete]
+  );
 
   return parsedData;
 }

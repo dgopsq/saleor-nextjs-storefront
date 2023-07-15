@@ -4,7 +4,7 @@ import { CountryCode } from "@/__generated__/graphql";
 import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -44,6 +44,23 @@ type Props = {
  */
 export const AddressForm = forwardRef<AddressFormRef, Props>(
   ({ initialValues }, ref) => {
+    const stableInitialValues = useMemo<AddressForm>(
+      () => ({
+        firstName: "",
+        lastName: "",
+        companyName: "",
+        streetAddress1: "",
+        streetAddress2: "",
+        city: "",
+        postalCode: "",
+        country: defaultCountry,
+        countryArea: "",
+        phone: "",
+        ...initialValues,
+      }),
+      [initialValues]
+    );
+
     const {
       register,
       formState: { errors },
@@ -57,20 +74,12 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
       // We want this form to initialize values
       // even after the first render due to async
       // issues in the `Profile` component.
-      values: {
-        firstName: "",
-        lastName: "",
-        companyName: "",
-        streetAddress1: "",
-        streetAddress2: "",
-        city: "",
-        postalCode: "",
-        country: defaultCountry,
-        countryArea: "",
-        phone: "",
-        ...initialValues,
-      },
+      values: stableInitialValues,
     });
+
+    useEffect(() => {
+      console.log("REINITIALIZED");
+    }, [initialValues]);
 
     useImperativeHandle<AddressFormRef, Pick<AddressFormRef, "getValues">>(
       ref,

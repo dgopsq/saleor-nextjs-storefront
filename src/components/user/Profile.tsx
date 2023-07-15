@@ -39,7 +39,7 @@ export const Profile: React.FC = () => {
       variables: {
         userInfo: {
           defaultShippingAddress: shippingData,
-          defaultBillingAddress: billingData ? billingData : shippingData,
+          defaultBillingAddress: billingData,
         },
       },
     });
@@ -50,7 +50,7 @@ export const Profile: React.FC = () => {
       user?.defaultShippingAddress
         ? addressToAddressForm(user?.defaultShippingAddress)
         : undefined,
-    [user?.defaultShippingAddress]
+    [user]
   );
 
   const billingInitialValues = useMemo(
@@ -58,12 +58,12 @@ export const Profile: React.FC = () => {
       user?.defaultBillingAddress
         ? addressToAddressForm(user.defaultBillingAddress)
         : undefined,
-    [user?.defaultBillingAddress]
+    [user]
   );
 
   useEffect(() => {
     if (billingInitialValues) setBillingSameAsShipping(false);
-  }, [billingInitialValues, setBillingSameAsShipping]);
+  }, [billingInitialValues]);
 
   return (
     <>
@@ -84,7 +84,7 @@ export const Profile: React.FC = () => {
             id="billingSameAsShipping"
             label="Same as shipping address."
             value={billingSameAsShipping}
-            onChange={setBillingSameAsShipping}
+            onClick={() => setBillingSameAsShipping((value) => !value)}
           />
 
           {!billingSameAsShipping ? (
