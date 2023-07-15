@@ -6,6 +6,7 @@ import { getApolloClient } from "@/misc/apollo";
 import { GetCategoriesDocument } from "@/__generated__/graphql";
 import { parsePopulatedCategories } from "@/queries/categories/data";
 import { Bootstrap } from "@/misc/Bootstrap";
+import { Notifications } from "@/components/core/Notifications";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,8 @@ export default async function RootLayout({
           <main className="flex flex-col items-center justify-between mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-32">
             {children}
           </main>
+
+          <Notifications />
         </ApolloWrapper>
       </body>
     </html>

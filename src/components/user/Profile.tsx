@@ -14,9 +14,10 @@ import { useMutation } from "@apollo/client";
 import { UserUpdateDocument } from "@/__generated__/graphql";
 import { addressToAddressForm } from "@/queries/user/data";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
+import { errorToast, successToast } from "@/components/core/Notifications";
 
 export const Profile: React.FC = () => {
-  const [updateUser, { loading: updateUserLoading }] =
+  const [updateUser, { loading, data: updateData }] =
     useMutation(UserUpdateDocument);
 
   const user = useUserInfo();
@@ -65,6 +66,13 @@ export const Profile: React.FC = () => {
     if (billingInitialValues) setBillingSameAsShipping(false);
   }, [billingInitialValues]);
 
+  useEffect(() => {
+    if (updateData?.accountUpdate?.user)
+      successToast("Your profile has been updated.");
+    else if (updateData?.accountUpdate?.errors)
+      errorToast("There was an error updating your profile.");
+  }, [updateData]);
+
   return (
     <>
       <div className="border-b border-gray-100 pb-16">
@@ -105,7 +113,7 @@ export const Profile: React.FC = () => {
             variant="primary"
             text="Save"
             onClick={handleSubmit}
-            isLoading={updateUserLoading}
+            isLoading={loading}
           />
         </div>
       </div>
