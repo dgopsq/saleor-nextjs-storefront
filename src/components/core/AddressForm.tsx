@@ -4,7 +4,7 @@ import { CountryCode } from "@/__generated__/graphql";
 import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -76,10 +76,6 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
       // issues in the `Profile` component.
       values: stableInitialValues,
     });
-
-    useEffect(() => {
-      console.log("REINITIALIZED");
-    }, [initialValues]);
 
     useImperativeHandle<AddressFormRef, Pick<AddressFormRef, "getValues">>(
       ref,
