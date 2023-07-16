@@ -111,3 +111,37 @@ mutation UserPasswordChange($oldPassword: String!, $newPassword: String!) {
     }
   }
 }
+
+mutation UserEmailChange(
+  $newEmail: String!
+  $password: String!
+  $redirectUrl: String!
+) {
+  requestEmailChange(
+    newEmail: $newEmail
+    password: $password
+    redirectUrl: $redirectUrl
+  ) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
+
+mutation UserConfirmEmailChange($token: String!) {
+  confirmEmailChange(token: $token) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
