@@ -9,7 +9,7 @@ export default async function Page() {
         <ChangePassword />
       </div>
 
-      <div className="pt-16 border-b border-gray-100 pb-16">
+      <div className="pt-16">
         <ChangeEmail />
       </div>
 
