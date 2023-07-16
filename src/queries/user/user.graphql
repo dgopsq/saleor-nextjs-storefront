@@ -39,6 +39,12 @@ fragment GenericUser on User {
   }
 }
 
+query GetMe {
+  me {
+    ...GenericUser
+  }
+}
+
 mutation CreateAccount($account: AccountRegisterInput!) {
   accountRegister(input: $account) {
     requiresConfirmation
@@ -93,8 +99,15 @@ mutation UserUpdate($userInfo: AccountInput!) {
   }
 }
 
-query GetMe {
-  me {
-    ...GenericUser
+mutation UserPasswordChange($oldPassword: String!, $newPassword: String!) {
+  passwordChange(oldPassword: $oldPassword, newPassword: $newPassword) {
+    user {
+      ...GenericUser
+    }
+    errors {
+      code
+      message
+      field
+    }
   }
 }

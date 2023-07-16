@@ -15,6 +15,7 @@ import { UserUpdateDocument } from "@/__generated__/graphql";
 import { addressToAddressForm } from "@/queries/user/data";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { errorToast, successToast } from "@/components/core/Notifications";
+import { logger } from "@/misc/logger";
 
 export const ProfileInfo: React.FC = () => {
   const [updateUser, { loading, data: updateData }] =
@@ -69,8 +70,10 @@ export const ProfileInfo: React.FC = () => {
   useEffect(() => {
     if (updateData?.accountUpdate?.user)
       successToast("Your profile has been updated.");
-    else if (updateData?.accountUpdate?.errors)
+    else if (updateData?.accountUpdate?.errors.length) {
+      logger.error("Profile update errors", updateData.accountUpdate.errors);
       errorToast("There was an error updating your profile.");
+    }
   }, [updateData]);
 
   return (
