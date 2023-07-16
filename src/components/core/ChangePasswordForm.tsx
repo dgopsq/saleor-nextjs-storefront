@@ -51,7 +51,7 @@ export const ChangePasswordForm: React.FC<Props> = ({
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-3">
             <Field
-              label="Old password"
+              label="Current password"
               id="oldPassword"
               register={register("oldPassword")}
               type="password"

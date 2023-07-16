@@ -22,6 +22,7 @@ export const ChangePassword: React.FC = () => {
           oldPassword: data.oldPassword,
           newPassword: data.newPassword,
         },
+        errorPolicy: "ignore",
       });
     },
     [changePassword]
@@ -37,7 +38,7 @@ export const ChangePassword: React.FC = () => {
   }, [data]);
 
   return (
-    <div className="w-full border-b border-gray-100 pb-16">
+    <div className="w-full">
       <h3 className="text-xl font-semibold">Change password</h3>
 
       <div className="mt-8">
