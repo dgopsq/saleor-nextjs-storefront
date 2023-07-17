@@ -36,6 +36,7 @@ export const Cart: React.FC = () => {
     GetCheckoutInfoDocument,
     {
       variables: { checkoutToken },
+      skip: !checkoutToken,
     }
   );
 
@@ -296,13 +297,15 @@ export const Cart: React.FC = () => {
             </dl>
 
             <div className="mt-6">
-              <Button
-                type="button"
-                variant="primary"
-                size="large"
-                text="Checkout"
-                isLoading={checkoutRefreshing}
-              />
+              <Link href="/checkout">
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="large"
+                  text="Checkout"
+                  isLoading={checkoutRefreshing}
+                />
+              </Link>
             </div>
           </section>
         </form>
