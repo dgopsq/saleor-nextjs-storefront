@@ -10,7 +10,9 @@ import {
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
 import { useAuthTokenStore } from "@/misc/states/authTokenStore";
 import { setContext } from "@apollo/client/link/context";
+import { onError } from "@apollo/client/link/error";
 import { match } from "ts-pattern";
+import { refreshAuthToken } from "@/queries/user/token";
 
 /**
  *
@@ -18,6 +20,24 @@ import { match } from "ts-pattern";
 export type ClientApolloInstance = ApolloClient<unknown>;
 
 const makeClient = () => {
+  // This link is going to manage the authentication error and actually
+  // refresh the token on every request when needed.
+  const expiredSignatureErrorLink = onError(
+    ({ graphQLErrors, forward, operation }) => {
+      if (graphQLErrors) {
+        const isExpiredSignature = graphQLErrors.some(
+          (err) => err.extensions?.code === "ExpiredSignatureError"
+        );
+
+        if (!isExpiredSignature) return;
+
+        refreshAuthToken().then(() => {
+          forward(operation);
+        });
+      }
+    }
+  );
+
   // This Link will add the Authorization header to all requests
   // retrieving it from the authTokenStore.
   const asyncAuthLink = setContext(() => {
@@ -46,16 +66,19 @@ const makeClient = () => {
     includeUnusedVariables: true,
   });
 
-  const mainLink =
-    typeof window === "undefined"
-      ? ApolloLink.from([
+  const mainLink = ApolloLink.from([
+    ...(typeof window === "undefined"
+      ? [
           new SSRMultipartLink({
             stripDefer: true,
           }),
-          asyncAuthLink,
-          httpLink,
-        ])
-      : ApolloLink.from([asyncAuthLink, httpLink]);
+        ]
+      : []),
+
+    asyncAuthLink,
+    httpLink,
+    expiredSignatureErrorLink,
+  ]);
 
   return new ApolloClient({
     cache: new NextSSRInMemoryCache({
@@ -66,6 +89,7 @@ const makeClient = () => {
       },
     }),
     link: mainLink,
+    defaultOptions: {},
   });
 };
 

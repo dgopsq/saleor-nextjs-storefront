@@ -2,7 +2,6 @@ import {
   CreateCheckoutDocument,
   GetCheckoutInfoDocument,
   GetMeDocument,
-  RefreshTokenDocument,
 } from "@/__generated__/graphql";
 import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { publicConfig } from "@/misc/config";
@@ -11,6 +10,52 @@ import { CheckoutToken } from "@/queries/checkout/data";
 import { AuthToken, decodeUserToken } from "@/queries/user/data";
 import Cookies from "js-cookie";
 import { setContext } from "@apollo/client/link/context";
+
+/**
+ * Execute the refresh token mutation and save the new token in the cookies.
+ * N.B. This functions won't use the GraphQL client but just the `fetch` API.
+ */
+export async function refreshAuthToken(): Promise<AuthToken | null> {
+  const maybeStoredRefreshToken = getStoredRefreshToken();
+
+  if (maybeStoredRefreshToken) {
+    logger.debug("Refresh Token is in the cookies, try to refresh the token.");
+
+    const mutareRefreshTokenRes = await fetch(publicConfig.graphqlUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `mutation {
+          tokenRefresh(refreshToken: "${maybeStoredRefreshToken}") {
+            token
+          }
+        }`,
+        variables: {
+          refreshToken: maybeStoredRefreshToken,
+        },
+      }),
+    }).then((res) => res.json());
+
+    // FIXME: This is possibly unsafe.
+    const maybeNewAuthToken: string | undefined =
+      mutareRefreshTokenRes.data?.tokenRefresh?.token;
+
+    if (maybeNewAuthToken) {
+      logger.debug("Refresh Token is valid, save the new Auth Token.");
+
+      // Overwrite the old token with the new one.
+      Cookies.set(publicConfig.userTokenStorageKey, maybeNewAuthToken);
+
+      return maybeNewAuthToken;
+    }
+  }
+
+  logger.debug("Refresh Token is not valid or non-existent.");
+
+  return null;
+}
 
 /**
  *
@@ -48,31 +93,7 @@ export async function retrieveAuthToken(
 
   logger.debug("Auth Token is not valid, try to refresh it.");
 
-  // Here the access token is invalid, so we try to refresh it.
-  if (maybeStoredRefreshToken) {
-    logger.debug("Refresh Token is in the cookies, try to refresh the token.");
-
-    const mutareRefreshTokenRes = await client.mutate({
-      mutation: RefreshTokenDocument,
-      variables: { refreshToken: maybeStoredRefreshToken },
-      context: { headers: { Authorization: "" } },
-    });
-
-    const maybeNewAuthToken = mutareRefreshTokenRes.data?.tokenRefresh?.token;
-
-    if (maybeNewAuthToken) {
-      logger.debug("Refresh Token is valid, save the new Auth Token.");
-
-      // Overwrite the old token with the new one.
-      Cookies.set(publicConfig.userTokenStorageKey, maybeNewAuthToken);
-
-      return maybeNewAuthToken;
-    }
-  }
-
-  logger.debug("Refresh Token is not valid or non-existent.");
-
-  return null;
+  return refreshAuthToken();
 }
 
 /**
