@@ -72,20 +72,6 @@ mutation CreateToken($email: String!, $password: String!) {
   }
 }
 
-mutation RefreshToken($refreshToken: String!) {
-  tokenRefresh(refreshToken: $refreshToken) {
-    token
-    user {
-      ...GenericUser
-    }
-    errors {
-      code
-      message
-      field
-    }
-  }
-}
-
 mutation UserUpdate($userInfo: AccountInput!) {
   accountUpdate(input: $userInfo) {
     user {
