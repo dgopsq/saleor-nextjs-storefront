@@ -19,7 +19,7 @@ type CheckoutItem = {
 /**
  *
  */
-type CheckoutProduct = {
+export type CheckoutProduct = {
   id: string;
   name: string;
   slug: string;
