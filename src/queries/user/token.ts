@@ -1,7 +1,6 @@
 import {
   CreateCheckoutDocument,
   GetCheckoutInfoDocument,
-  GetMeDocument,
 } from "@/__generated__/graphql";
 import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { publicConfig } from "@/misc/config";
@@ -55,45 +54,6 @@ export async function refreshAuthToken(): Promise<AuthToken | null> {
   logger.debug("Refresh Token is not valid or non-existent.");
 
   return null;
-}
-
-/**
- *
- */
-export async function retrieveAuthToken(
-  client: ClientApolloInstance
-): Promise<AuthToken | null> {
-  const maybeStoredAuthToken = getStoredAuthToken();
-  const maybeStoredRefreshToken = getStoredRefreshToken();
-
-  if (!maybeStoredAuthToken && !maybeStoredRefreshToken) {
-    logger.debug("Auth Token and Refresh Token are not in the cookies.");
-    return null;
-  }
-
-  // Check if the stored token is valid.
-  if (maybeStoredAuthToken) {
-    logger.debug("Auth Token is in the cookies, check if it's valid.");
-
-    const getMeRes = await client.query({
-      query: GetMeDocument,
-
-      // Here we need to be sure to include the access token.
-      context: { headers: { Authorization: `Bearer ${maybeStoredAuthToken}` } },
-
-      // And we must ignore the errors, otherwile Apollo will throw.
-      errorPolicy: "ignore",
-    });
-
-    if (getMeRes.data.me) {
-      logger.debug("Auth Token is valid", maybeStoredAuthToken);
-      return maybeStoredAuthToken;
-    }
-  }
-
-  logger.debug("Auth Token is not valid, try to refresh it.");
-
-  return refreshAuthToken();
 }
 
 /**

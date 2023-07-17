@@ -17,7 +17,7 @@ export const Bootstrap: React.FC = () => {
   );
 
   useEffect(() => {
-    initializeAuthToken(apolloClient);
+    initializeAuthToken();
   }, [apolloClient, initializeAuthToken, initializeCheckoutToken]);
 
   useEffect(() => {

@@ -1,9 +1,6 @@
-import { ClientApolloInstance } from "@/misc/apolloWrapper";
 import { AsyncData } from "@/misc/asyncData";
-import { logger } from "@/misc/logger";
 import { AuthToken } from "@/queries/user/data";
-import { GenericAuthTokenError } from "@/queries/user/errors";
-import { retrieveAuthToken } from "@/queries/user/token";
+import { getStoredAuthToken } from "@/queries/user/token";
 import { match } from "ts-pattern";
 import { create } from "zustand";
 
@@ -11,7 +8,7 @@ type TokensStoreData = AuthToken | null;
 
 type AutoTokenStore = {
   value: AsyncData<TokensStoreData>;
-  initialize: (client: ClientApolloInstance) => void;
+  initialize: () => void;
 };
 
 /**
@@ -26,30 +23,15 @@ export const useAuthTokenStore = create<AutoTokenStore>((set) => ({
   /**
    *
    */
-  initialize: async (client) => {
-    try {
-      logger.debug("Start the Auth Token bootstrap");
+  initialize: () => {
+    const storedAuthToken = getStoredAuthToken();
 
-      set({ value: { kind: "Loading" } });
-
-      const authToken = await retrieveAuthToken(client);
-
-      logger.debug(
-        "Auth Token retrieval job ended with result:",
-        authToken ?? "No Token"
-      );
-
-      set({ value: { kind: "Success", data: authToken } });
-    } catch (error) {
-      set({
-        value: {
-          kind: "Failure",
-          error: new GenericAuthTokenError(),
-        },
-      });
-
-      logger.error("Error while retrieving the Auth Token", error);
-    }
+    set({
+      value: {
+        kind: "Success",
+        data: storedAuthToken,
+      },
+    });
   },
 }));
 
