@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default async function Page() {
-  return <div>PROFILE.</div>;
+  redirect("/account/info");
 }

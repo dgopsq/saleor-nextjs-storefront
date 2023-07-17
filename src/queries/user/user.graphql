@@ -31,8 +31,17 @@ fragment GenericUser on User {
       }
     }
   }
-  addresses {
+  defaultShippingAddress {
     ...GenericAddress
+  }
+  defaultBillingAddress {
+    ...GenericAddress
+  }
+}
+
+query GetMe {
+  me {
+    ...GenericUser
   }
 }
 
@@ -77,8 +86,62 @@ mutation RefreshToken($refreshToken: String!) {
   }
 }
 
-query GetMe {
-  me {
-    ...GenericUser
+mutation UserUpdate($userInfo: AccountInput!) {
+  accountUpdate(input: $userInfo) {
+    user {
+      ...GenericUser
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UserPasswordChange($oldPassword: String!, $newPassword: String!) {
+  passwordChange(oldPassword: $oldPassword, newPassword: $newPassword) {
+    user {
+      ...GenericUser
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UserEmailChange(
+  $newEmail: String!
+  $password: String!
+  $redirectUrl: String!
+) {
+  requestEmailChange(
+    newEmail: $newEmail
+    password: $password
+    redirectUrl: $redirectUrl
+  ) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
+
+mutation UserConfirmEmailChange($token: String!) {
+  confirmEmailChange(token: $token) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
   }
 }

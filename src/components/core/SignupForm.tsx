@@ -10,8 +10,8 @@ import { Button } from "@/components/core/Button";
  *
  */
 const SignupFormSchema = z.object({
-  firstName: z.string().min(2).max(50),
-  lastName: z.string().min(2).max(50),
+  firstName: z.string().min(1).max(50),
+  lastName: z.string().min(1).max(50),
   email: z.string().email(),
   password: z.string().min(8).max(50),
 });

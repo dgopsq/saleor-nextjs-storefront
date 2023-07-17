@@ -1,8 +1,4 @@
-import {
-  GenericUserFragment,
-  GenericUserFragmentDoc,
-  GetMeDocument,
-} from "@/__generated__/graphql";
+import { GenericUserFragmentDoc, GetMeDocument } from "@/__generated__/graphql";
 import { useAuthToken } from "@/misc/states/authTokenStore";
 import { User, decodeUserToken, parseUser } from "@/queries/user/data";
 import { useFragment, useQuery } from "@apollo/client";
@@ -32,8 +28,10 @@ export function useUserInfo(): User | null {
 
   // FIXME: This is potentially a bottleneck, as it will be called on every
   // render. Consider using a context to store the parsed user data.
-  const parsedData =
-    data && complete ? parseUser(data as GenericUserFragment) : null;
+  const parsedData = useMemo(
+    () => (data && complete ? parseUser(data) : null),
+    [data, complete]
+  );
 
   return parsedData;
 }

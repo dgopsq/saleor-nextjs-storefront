@@ -1,9 +1,11 @@
 import { getFragmentData } from "@/__generated__";
 import {
+  CountryCode,
   GenericAddressFragment,
   GenericAddressFragmentDoc,
   GenericUserFragment,
 } from "@/__generated__/graphql";
+import { AddressForm } from "@/components/core/AddressForm";
 import jwt_decode from "jwt-decode";
 import * as z from "zod";
 
@@ -30,10 +32,7 @@ type Address = {
   city: string;
   cityArea: string;
   postalCode: string;
-  country: {
-    code: string;
-    country: string;
-  };
+  country: CountryCode;
   countryArea: string;
   phone: string | null;
   isDefaultShippingAddress: boolean | null;
@@ -49,7 +48,8 @@ export type User = {
   firstName: string;
   lastName: string;
   checkoutTokens: Array<string>;
-  addresses: Array<Address>;
+  defaultShippingAddress: Address | null;
+  defaultBillingAddress: Address | null;
 };
 
 /**
@@ -83,10 +83,10 @@ export function parseAddress(input: GenericAddressFragment): Address {
     city,
     cityArea,
     postalCode,
-    country: {
-      code: country.code,
-      country: country.country,
-    },
+
+    // FIXME: is this unsafe?
+    country: country.code as CountryCode,
+
     countryArea,
     phone: phone || null,
     isDefaultShippingAddress: isDefaultShippingAddress || null,
@@ -99,10 +99,12 @@ export function parseAddress(input: GenericAddressFragment): Address {
  */
 export function parseUser(input: GenericUserFragment): User {
   const { id, email, firstName, lastName, checkouts } = input;
-  const addresses =
-    getFragmentData(GenericAddressFragmentDoc, input.addresses) ?? [];
-
-  console.log(addresses);
+  const rawDefaultShippingAddress =
+    getFragmentData(GenericAddressFragmentDoc, input.defaultShippingAddress) ??
+    null;
+  const rawDefaultBillingAddress =
+    getFragmentData(GenericAddressFragmentDoc, input.defaultBillingAddress) ??
+    null;
 
   return {
     id,
@@ -110,7 +112,12 @@ export function parseUser(input: GenericUserFragment): User {
     firstName,
     lastName,
     checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
-    addresses: addresses.map(parseAddress),
+    defaultShippingAddress: rawDefaultShippingAddress
+      ? parseAddress(rawDefaultShippingAddress)
+      : null,
+    defaultBillingAddress: rawDefaultBillingAddress
+      ? parseAddress(rawDefaultBillingAddress)
+      : null,
   };
 }
 
@@ -132,4 +139,22 @@ export function decodeUserToken(token: string): UserTokenPayload | null {
   const parsed = userTokenPayloadSchema.safeParse(decoded);
 
   return parsed.success ? parsed.data : null;
+}
+
+/**
+ *
+ */
+export function addressToAddressForm(input: Address): Partial<AddressForm> {
+  return {
+    firstName: input.firstName ?? undefined,
+    lastName: input.lastName ?? undefined,
+    companyName: input.companyName ?? undefined,
+    streetAddress1: input.streetAddress1 ?? undefined,
+    streetAddress2: input.streetAddress2 ?? undefined,
+    city: input.city ?? undefined,
+    postalCode: input.postalCode ?? undefined,
+    country: input.country ?? undefined,
+    countryArea: input.countryArea ?? undefined,
+    phone: input.phone ?? undefined,
+  };
 }

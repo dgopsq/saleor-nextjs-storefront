@@ -57,4 +57,11 @@ export const publicConfig = {
   userRefreshTokenStorageKey:
     process.env.NEXT_PUBLIC_USER_REFRESH_TOKEN_STORAGE_KEY ||
     "user-refresh-token",
+
+  /**
+   *
+   */
+  emailChangeRedirectUrl:
+    process.env.NEXT_PUBLIC_EMAIL_CHANGE_REDIRECT_URL ||
+    "http://localhost:3000/account/authentication",
 };

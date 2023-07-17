@@ -2,10 +2,7 @@ import { parsePreviewProduct } from "@/queries/products/data";
 import { formatSingleProductPrice } from "@/misc/currencies";
 import Image from "next/image";
 import React, { useMemo } from "react";
-import {
-  PreviewProductFragment,
-  PreviewProductFragmentDoc,
-} from "@/__generated__/graphql";
+import { PreviewProductFragmentDoc } from "@/__generated__/graphql";
 import { useFragment } from "@apollo/client";
 
 type Props = {
@@ -16,7 +13,7 @@ type Props = {
  *
  */
 export const SingleProduct: React.FC<Props> = ({ slug }) => {
-  const { data } = useFragment({
+  const { data, complete } = useFragment({
     fragment: PreviewProductFragmentDoc,
     from: {
       __typename: "Product",
@@ -25,8 +22,8 @@ export const SingleProduct: React.FC<Props> = ({ slug }) => {
   });
 
   const product = useMemo(
-    () => (data ? parsePreviewProduct(data as PreviewProductFragment) : null),
-    [data]
+    () => (data && complete ? parsePreviewProduct(data) : null),
+    [data, complete]
   );
 
   const imageSrc = product?.images[0]?.url ?? null;
