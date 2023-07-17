@@ -16,6 +16,10 @@ import { addressToAddressForm } from "@/queries/user/data";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
+import {
+  ChangeInfoForm,
+  ChangeInfoFormRef,
+} from "@/components/core/ChangeInfoForm";
 
 export const ProfileInfo: React.FC = () => {
   const [updateUser, { loading, data: updateData }] =
@@ -23,12 +27,15 @@ export const ProfileInfo: React.FC = () => {
 
   const user = useUserInfo();
 
+  const changeInfoRef = useRef<ChangeInfoFormRef>(null);
   const shippingAddressRef = useRef<AddressFormRef>(null);
   const billingAddressRef = useRef<AddressFormRef>(null);
 
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
 
   const handleSubmit = useCallback(async () => {
+    const infoData = (await changeInfoRef.current?.getValues()) ?? null;
+
     const shippingData =
       (await shippingAddressRef.current?.getValues()) ?? null;
 
@@ -40,12 +47,20 @@ export const ProfileInfo: React.FC = () => {
     updateUser({
       variables: {
         userInfo: {
+          ...infoData,
           defaultShippingAddress: shippingData,
           defaultBillingAddress: billingData,
         },
       },
     });
   }, [billingSameAsShipping, updateUser]);
+
+  const userInfoInitialValues = useMemo<Partial<ChangeInfoForm>>(() => {
+    return {
+      firstName: user?.firstName ?? undefined,
+      lastName: user?.lastName ?? undefined,
+    };
+  }, [user]);
 
   const shippingInitialValues = useMemo(
     () =>
@@ -79,6 +94,16 @@ export const ProfileInfo: React.FC = () => {
   return (
     <>
       <div className="border-b border-gray-100 pb-16">
+        <h3 className="text-xl font-semibold">Personal informations</h3>
+        <div className="mt-8">
+          <ChangeInfoForm
+            ref={changeInfoRef}
+            initialValues={userInfoInitialValues}
+          />
+        </div>
+      </div>
+
+      <div className="mt-16 border-b border-gray-100 pb-16">
         <h3 className="text-xl font-semibold">Shipping Address</h3>
         <div className="mt-8">
           <AddressForm
