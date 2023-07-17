@@ -7,6 +7,7 @@ import {
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
+import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
 import { classNames } from "@/misc/styles";
@@ -57,7 +58,7 @@ export const Cart: React.FC = () => {
     [checkoutToken, removeProducts]
   );
 
-  if (!data) return null;
+  if (!data) return <LoadingSpinner />;
 
   // This will be `true` while re-fetching the checkout
   // after a change in a product.
