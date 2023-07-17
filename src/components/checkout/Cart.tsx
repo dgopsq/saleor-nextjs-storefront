@@ -1,23 +1,18 @@
 "use client";
 
 import {
-  GetCheckoutInfoDocument,
   RemoveProductFromCartDocument,
   UpdateProductInCartDocument,
 } from "@/__generated__/graphql";
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
+import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
 import { classNames } from "@/misc/styles";
-import {
-  parseCheckoutInfo,
-  parseCheckoutProductVariant,
-} from "@/queries/checkout/data";
-import { parseVariant } from "@/queries/products/data";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 
 /**
  *
@@ -31,44 +26,24 @@ export const Cart: React.FC = () => {
     RemoveProductFromCartDocument
   );
 
-  const { data, loading: checkoutInfoLoading } = useQuery(
-    GetCheckoutInfoDocument,
-    {
-      variables: { checkoutToken },
-      skip: !checkoutToken,
-    }
-  );
-
-  const parsedCheckout = useMemo(
-    () => (data ? parseCheckoutInfo(data) : null),
-    [data]
-  );
-
-  const parsedLines = useMemo(() => {
-    return (
-      data?.checkout?.lines.map(({ id, variant, quantity }) => ({
-        id,
-        variant: parseVariant(variant),
-        product: parseCheckoutProductVariant(variant),
-        quantity,
-      })) ?? []
-    );
-  }, [data]);
+  const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
 
   const handleUpdateProduct = useCallback(
     (variantId: string, quantity: number) => {
       updateProducts({
         variables: {
           checkoutToken,
-          lines: parsedLines.map((line) => ({
-            variantId: line.variant.id,
-            quantity: line.variant.id === variantId ? quantity : line.quantity,
-          })),
+          lines:
+            data?.lines.map((line) => ({
+              variantId: line.variant.id,
+              quantity:
+                line.variant.id === variantId ? quantity : line.quantity,
+            })) ?? [],
         },
         refetchQueries: ["GetCheckoutInfo"],
       });
     },
-    [parsedLines, checkoutToken, updateProducts]
+    [data, checkoutToken, updateProducts]
   );
 
   const handleRemoveProduct = useCallback(
@@ -84,7 +59,7 @@ export const Cart: React.FC = () => {
     [checkoutToken, removeProducts]
   );
 
-  if (!parsedCheckout) return null;
+  if (!data) return null;
 
   // This will be `true` while re-fetching the checkout
   // after a change in a product.
@@ -102,7 +77,7 @@ export const Cart: React.FC = () => {
 
             <div>
               <CartProducts
-                products={parsedLines}
+                products={data.lines}
                 onProductUpdate={handleUpdateProduct}
                 onProductRemove={handleRemoveProduct}
               />
@@ -124,7 +99,7 @@ export const Cart: React.FC = () => {
             </h2>
 
             <div>
-              <CartSummary checkout={parsedCheckout} />
+              <CartSummary checkout={data} />
             </div>
 
             <div className="mt-6">

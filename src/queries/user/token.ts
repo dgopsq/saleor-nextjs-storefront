@@ -1,14 +1,16 @@
 import {
   CreateCheckoutDocument,
+  GenericCheckoutInfoFragmentDoc,
   GetCheckoutInfoDocument,
 } from "@/__generated__/graphql";
-import { ClientApolloInstance } from "@/misc/apolloWrapper";
+import { ClientApolloInstance } from "@/misc/apollo/apolloWrapper";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
 import { CheckoutToken } from "@/queries/checkout/data";
 import { AuthToken, decodeUserToken } from "@/queries/user/data";
 import Cookies from "js-cookie";
 import { setContext } from "@apollo/client/link/context";
+import { getFragmentData } from "@/__generated__";
 
 /**
  * Execute the refresh token mutation and save the new token in the cookies.
@@ -101,8 +103,12 @@ export async function retrieveCheckoutToken(
     },
   });
 
-  const newCheckoutToken: string | null =
-    createCheckoutRes.data?.checkoutCreate?.checkout?.token ?? null;
+  const parsedFragmentData = getFragmentData(
+    GenericCheckoutInfoFragmentDoc,
+    createCheckoutRes.data?.checkoutCreate?.checkout
+  );
+
+  const newCheckoutToken: string | null = parsedFragmentData?.token ?? null;
 
   if (newCheckoutToken) {
     logger.debug("Checkout Token created:", newCheckoutToken);

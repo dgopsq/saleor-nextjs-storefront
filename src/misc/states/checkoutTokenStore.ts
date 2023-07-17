@@ -1,4 +1,4 @@
-import { ClientApolloInstance } from "@/misc/apolloWrapper";
+import { ClientApolloInstance } from "@/misc/apollo/apolloWrapper";
 import { AsyncData } from "@/misc/asyncData";
 import { logger } from "@/misc/logger";
 import { CheckoutToken } from "@/queries/checkout/data";

@@ -6,73 +6,79 @@ fragment CheckoutProduct on ProductVariant {
   }
 }
 
+fragment GenericCheckoutInfo on Checkout {
+  token
+
+  lines {
+    id
+    quantity
+    variant {
+      ...GenericProductVariant
+      ...CheckoutProduct
+    }
+  }
+
+  subtotalPrice {
+    gross {
+      amount
+      currency
+    }
+  }
+
+  shippingPrice {
+    gross {
+      amount
+      currency
+    }
+  }
+
+  totalPrice {
+    gross {
+      amount
+      currency
+    }
+  }
+
+  shippingAddress {
+    ...GenericAddress
+  }
+
+  billingAddress {
+    ...GenericAddress
+  }
+
+  shippingMethods {
+    id
+    name
+    description
+    active
+    minimumOrderPrice {
+      amount
+      currency
+    }
+    maximumOrderPrice {
+      amount
+      currency
+    }
+    price {
+      amount
+      currency
+    }
+    maximumDeliveryDays
+    minimumDeliveryDays
+  }
+}
+
 query GetCheckoutInfo($checkoutToken: UUID!) {
   checkout(token: $checkoutToken) {
-    lines {
-      id
-      quantity
-      variant {
-        ...GenericProductVariant
-        ...CheckoutProduct
-      }
-    }
-
-    subtotalPrice {
-      gross {
-        amount
-        currency
-      }
-    }
-
-    shippingPrice {
-      gross {
-        amount
-        currency
-      }
-    }
-
-    totalPrice {
-      gross {
-        amount
-        currency
-      }
-    }
-
-    shippingAddress {
-      ...GenericAddress
-    }
-
-    billingAddress {
-      ...GenericAddress
-    }
-
-    shippingMethods {
-      id
-      name
-      description
-      active
-      minimumOrderPrice {
-        amount
-        currency
-      }
-      maximumOrderPrice {
-        amount
-        currency
-      }
-      price {
-        amount
-        currency
-      }
-      maximumDeliveryDays
-      minimumDeliveryDays
-    }
+    ...GenericCheckoutInfo
   }
 }
 
 mutation CreateCheckout($channel: String!, $email: String!) {
   checkoutCreate(input: { channel: $channel, email: $email, lines: [] }) {
     checkout {
-      token
+      ...GenericCheckoutInfo
     }
     errors {
       field
@@ -87,7 +93,7 @@ mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
     lines: [{ quantity: 1, variantId: $variantId }]
   ) {
     checkout {
-      id
+      ...GenericCheckoutInfo
     }
     errors {
       message
@@ -101,7 +107,7 @@ mutation UpdateProductInCart(
 ) {
   checkoutLinesUpdate(token: $checkoutToken, lines: $lines) {
     checkout {
-      id
+      ...GenericCheckoutInfo
     }
     errors {
       message
@@ -112,7 +118,7 @@ mutation UpdateProductInCart(
 mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
   checkoutLinesDelete(token: $checkoutToken, linesIds: $linesIds) {
     checkout {
-      id
+      ...GenericCheckoutInfo
     }
     errors {
       message

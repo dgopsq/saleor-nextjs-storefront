@@ -2,11 +2,12 @@ import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
-  GetCheckoutInfoQuery,
   ShippingMethod as BaseShippingMethod,
+  GenericCheckoutInfoFragment,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
+import { ProductVariant, parseVariant } from "@/queries/products/data";
 import { Address, parseAddress } from "@/queries/user/data";
 
 /**
@@ -19,6 +20,9 @@ export type CheckoutToken = string;
  */
 type CheckoutItem = {
   id: string;
+  variant: ProductVariant;
+  product: CheckoutProduct;
+  quantity: number;
 };
 
 /**
@@ -72,21 +76,7 @@ export type Checkout = {
 /**
  *
  */
-export function parseCheckoutInfo({
-  checkout,
-}: GetCheckoutInfoQuery): Checkout {
-  if (!checkout) {
-    return {
-      lines: [],
-      subtotalPrice: null,
-      shippingPrice: null,
-      totalPrice: null,
-      shippingAddress: null,
-      billingAddress: null,
-      shippingMethods: [],
-    };
-  }
-
+export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
   const {
     lines,
     subtotalPrice,
@@ -95,7 +85,7 @@ export function parseCheckoutInfo({
     shippingAddress,
     billingAddress,
     shippingMethods,
-  } = checkout;
+  } = input;
 
   const rawShippingAddress =
     getFragmentData(GenericAddressFragmentDoc, shippingAddress) ?? null;
@@ -106,6 +96,9 @@ export function parseCheckoutInfo({
   return {
     lines: lines.map((line) => ({
       id: line.id,
+      variant: parseVariant(line.variant),
+      product: parseCheckoutProductVariant(line.variant),
+      quantity: line.quantity,
     })),
     subtotalPrice: subtotalPrice
       ? {
