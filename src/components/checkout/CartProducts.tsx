@@ -63,14 +63,7 @@ export const CartProducts: React.FC<Props> = ({
                     })}
                   >
                     <div className="flex justify-between">
-                      <h3 className="text-sm">
-                        <a
-                          href="#"
-                          className="font-medium text-gray-700 hover:text-gray-800"
-                        >
-                          {line.product.name}
-                        </a>
-                      </h3>
+                      <h3 className="text-sm">{line.product.name}</h3>
                     </div>
 
                     {line.variant.attributes.map(({ attribute, values }) => (
