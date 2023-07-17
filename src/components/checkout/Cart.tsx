@@ -40,7 +40,6 @@ export const Cart: React.FC = () => {
                 line.variant.id === variantId ? quantity : line.quantity,
             })) ?? [],
         },
-        refetchQueries: ["GetCheckoutInfo"],
       });
     },
     [data, checkoutToken, updateProducts]
@@ -53,7 +52,6 @@ export const Cart: React.FC = () => {
           checkoutToken,
           linesIds: [lineId],
         },
-        refetchQueries: ["GetCheckoutInfo"],
       });
     },
     [checkoutToken, removeProducts]
