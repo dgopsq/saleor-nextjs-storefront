@@ -22,7 +22,7 @@ export type RefreshToken = string;
 /**
  *
  */
-type Address = {
+export type Address = {
   id: string;
   firstName: string;
   lastName: string;

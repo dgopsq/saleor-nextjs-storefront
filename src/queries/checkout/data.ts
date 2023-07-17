@@ -1,8 +1,13 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   CheckoutProductFragmentDoc,
+  GenericAddressFragmentDoc,
   GetCheckoutInfoQuery,
+  ShippingMethod as BaseShippingMethod,
 } from "@/__generated__/graphql";
+import { Price, parsePrice } from "@/queries/common/data/price";
+import { Weight, parseWeight } from "@/queries/common/data/weight";
+import { Address, parseAddress } from "@/queries/user/data";
 
 /**
  *
@@ -14,6 +19,23 @@ export type CheckoutToken = string;
  */
 type CheckoutItem = {
   id: string;
+};
+
+/**
+ *
+ */
+type ShippingMethod = {
+  id: string;
+  name: string;
+  description: string | null;
+  active: boolean;
+  minimumOrderPrice: Price | null;
+  maximumOrderPrice: Price | null;
+  minimumOrderWeight: Weight | null;
+  maximumOrderWeight: Weight | null;
+  price: Price;
+  maximumDeliveryDays: number | null;
+  minimumDeliveryDays: number | null;
 };
 
 /**
@@ -42,6 +64,9 @@ export type Checkout = {
     amount: number;
     currency: string;
   } | null;
+  shippingAddress: Address | null;
+  billingAddress: Address | null;
+  shippingMethods: Array<ShippingMethod>;
 };
 
 /**
@@ -56,10 +81,27 @@ export function parseCheckoutInfo({
       subtotalPrice: null,
       shippingPrice: null,
       totalPrice: null,
+      shippingAddress: null,
+      billingAddress: null,
+      shippingMethods: [],
     };
   }
 
-  const { lines, subtotalPrice, shippingPrice, totalPrice } = checkout;
+  const {
+    lines,
+    subtotalPrice,
+    shippingPrice,
+    totalPrice,
+    shippingAddress,
+    billingAddress,
+    shippingMethods,
+  } = checkout;
+
+  const rawShippingAddress =
+    getFragmentData(GenericAddressFragmentDoc, shippingAddress) ?? null;
+
+  const rawBillingAddress =
+    getFragmentData(GenericAddressFragmentDoc, billingAddress) ?? null;
 
   return {
     lines: lines.map((line) => ({
@@ -83,6 +125,11 @@ export function parseCheckoutInfo({
           currency: totalPrice.gross.currency,
         }
       : null,
+    shippingAddress: rawShippingAddress
+      ? parseAddress(rawShippingAddress)
+      : null,
+    billingAddress: rawBillingAddress ? parseAddress(rawBillingAddress) : null,
+    shippingMethods: shippingMethods.map(parseShippingMethod),
   };
 }
 
@@ -100,5 +147,47 @@ export function parseCheckoutProductVariant(
     id,
     name,
     slug,
+  };
+}
+
+/**
+ *
+ */
+export function parseShippingMethod(
+  input: Pick<
+    BaseShippingMethod,
+    | "id"
+    | "name"
+    | "description"
+    | "active"
+    | "minimumOrderWeight"
+    | "minimumOrderPrice"
+    | "maximumOrderWeight"
+    | "maximumOrderPrice"
+    | "minimumDeliveryDays"
+    | "maximumDeliveryDays"
+    | "price"
+  >
+): ShippingMethod {
+  return {
+    id: input.id,
+    name: input.name,
+    description: input.description ?? null,
+    active: input.active,
+    minimumOrderPrice: input.minimumOrderPrice
+      ? parsePrice(input.minimumOrderPrice)
+      : null,
+    maximumOrderPrice: input.maximumOrderPrice
+      ? parsePrice(input.maximumOrderPrice)
+      : null,
+    minimumOrderWeight: input.minimumOrderWeight
+      ? parseWeight(input.minimumOrderWeight)
+      : null,
+    maximumOrderWeight: input.maximumOrderWeight
+      ? parseWeight(input.maximumOrderWeight)
+      : null,
+    price: parsePrice(input.price),
+    maximumDeliveryDays: input.maximumDeliveryDays ?? null,
+    minimumDeliveryDays: input.minimumDeliveryDays ?? null,
   };
 }

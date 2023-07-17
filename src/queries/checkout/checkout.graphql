@@ -37,6 +37,35 @@ query GetCheckoutInfo($checkoutToken: UUID!) {
         currency
       }
     }
+
+    shippingAddress {
+      ...GenericAddress
+    }
+
+    billingAddress {
+      ...GenericAddress
+    }
+
+    shippingMethods {
+      id
+      name
+      description
+      active
+      minimumOrderPrice {
+        amount
+        currency
+      }
+      maximumOrderPrice {
+        amount
+        currency
+      }
+      price {
+        amount
+        currency
+      }
+      maximumDeliveryDays
+      minimumDeliveryDays
+    }
   }
 }
 
