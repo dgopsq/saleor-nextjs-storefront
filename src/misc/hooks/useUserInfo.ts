@@ -1,6 +1,6 @@
 import { GenericUserFragmentDoc, GetMeDocument } from "@/__generated__/graphql";
-import { useAuthToken } from "@/misc/states/authTokenStore";
 import { User, decodeUserToken, parseUser } from "@/queries/user/data";
+import { getStoredAuthToken } from "@/queries/user/token";
 import { useFragment, useQuery } from "@apollo/client";
 import { useMemo } from "react";
 
@@ -8,7 +8,7 @@ import { useMemo } from "react";
  *
  */
 export function useUserInfo(): User | null {
-  const authToken = useAuthToken();
+  const authToken = useMemo(getStoredAuthToken, []);
 
   const decodedToken = useMemo(
     () => (authToken ? decodeUserToken(authToken) : null),

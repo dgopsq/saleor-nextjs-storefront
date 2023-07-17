@@ -3,16 +3,16 @@
 import { UserConfirmEmailChangeDocument } from "@/__generated__/graphql";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
-import { useAuthToken } from "@/misc/states/authTokenStore";
+import { getStoredAuthToken } from "@/queries/user/token";
 import { useMutation } from "@apollo/client";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 /**
  *
  */
 export const EmailConfirmation: React.FC = () => {
   const [confirmEmail, { data }] = useMutation(UserConfirmEmailChangeDocument);
-  const authToken = useAuthToken();
+  const authToken = useMemo(getStoredAuthToken, []);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);

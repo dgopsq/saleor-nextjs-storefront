@@ -1,16 +1,22 @@
 "use client";
 
 import { publicConfig } from "@/misc/config";
-import { ApolloClient, ApolloLink, SuspenseCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloLink,
+  Observable,
+  SuspenseCache,
+} from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
-import { useAuthTokenStore } from "@/misc/states/authTokenStore";
 import { setContext } from "@apollo/client/link/context";
-import { match } from "ts-pattern";
+import { onError } from "@apollo/client/link/error";
+import { getStoredAuthToken, refreshAuthToken } from "@/queries/user/token";
+import { logger } from "@/misc/logger";
 
 /**
  *
@@ -18,18 +24,40 @@ import { match } from "ts-pattern";
 export type ClientApolloInstance = ApolloClient<unknown>;
 
 const makeClient = () => {
+  // This link is going to manage the authentication error and actually
+  // refresh the token on every request when needed.
+  const expiredSignatureErrorLink = onError(
+    ({ graphQLErrors, forward, operation }) => {
+      console.log("ERR", graphQLErrors);
+      if (graphQLErrors) {
+        const isExpiredSignature = graphQLErrors.some((err) => {
+          const exceptions = err.extensions?.exception as { code?: string };
+          return exceptions?.code === "ExpiredSignatureError";
+        });
+
+        if (!isExpiredSignature) return;
+
+        logger.debug("ExpiredSignatureError detected, refreshing token.");
+
+        return new Observable((observer) => {
+          logger.debug("Token refreshed, retrying request.");
+
+          refreshAuthToken().then(() => {
+            forward(operation).subscribe({
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer),
+            });
+          });
+        });
+      }
+    }
+  );
+
   // This Link will add the Authorization header to all requests
   // retrieving it from the authTokenStore.
   const asyncAuthLink = setContext(() => {
-    const tokensStore = useAuthTokenStore.getState();
-    const maybeAuthToken = match(tokensStore.value)
-      .with(
-        {
-          kind: "Success",
-        },
-        ({ data }) => data
-      )
-      .otherwise(() => null);
+    const maybeAuthToken = getStoredAuthToken();
 
     if (!maybeAuthToken) return {};
 
@@ -46,16 +74,19 @@ const makeClient = () => {
     includeUnusedVariables: true,
   });
 
-  const mainLink =
-    typeof window === "undefined"
-      ? ApolloLink.from([
+  const mainLink = ApolloLink.from([
+    ...(typeof window === "undefined"
+      ? [
           new SSRMultipartLink({
             stripDefer: true,
           }),
-          asyncAuthLink,
-          httpLink,
-        ])
-      : ApolloLink.from([asyncAuthLink, httpLink]);
+        ]
+      : []),
+
+    expiredSignatureErrorLink,
+    asyncAuthLink,
+    httpLink,
+  ]);
 
   return new ApolloClient({
     cache: new NextSSRInMemoryCache({
@@ -66,6 +97,7 @@ const makeClient = () => {
       },
     }),
     link: mainLink,
+    defaultOptions: {},
   });
 };
 
