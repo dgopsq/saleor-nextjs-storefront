@@ -6,9 +6,8 @@ import {
   getAllProductsVariables,
   parseAllProducts,
 } from "@/queries/products/data";
-import { refreshAuthToken } from "@/queries/user/token";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 const baseVariables = getAllProductsVariables();
 
@@ -23,10 +22,6 @@ export const AllProducts: React.FC<Props> = () => {
   });
 
   const products = useMemo(() => (data ? parseAllProducts(data) : []), [data]);
-
-  useEffect(() => {
-    refreshAuthToken();
-  }, []);
 
   return <Products products={products} />;
 };
