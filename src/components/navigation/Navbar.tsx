@@ -13,7 +13,6 @@ import Image from "next/image";
 import { Category, generateCategoryUrl } from "@/queries/categories/data";
 import { CartButton } from "@/components/checkout/CartButton";
 import { UserButton } from "@/components/user/UserButton";
-import { useAuthTokenStore } from "@/misc/states/authTokenStore";
 import { useCheckoutTokenStore } from "@/misc/states/checkoutTokenStore";
 import { Spinner } from "@/components/core/Spinner";
 
@@ -26,16 +25,12 @@ type Props = {
  */
 export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
-  const authToken = useAuthTokenStore((state) => state.value);
   const checkoutToken = useCheckoutTokenStore((state) => state.value);
-
-  const isAuthTokenLoading =
-    authToken.kind === "Loading" || authToken.kind === "NotAsked";
 
   const isCheckoutTokenLoading =
     checkoutToken.kind === "Loading" || checkoutToken.kind === "NotAsked";
 
-  const isUserLoading = isAuthTokenLoading || isCheckoutTokenLoading;
+  const isUserLoading = isCheckoutTokenLoading;
 
   return (
     <div className="bg-white">

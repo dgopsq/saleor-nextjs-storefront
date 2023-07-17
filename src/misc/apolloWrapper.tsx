@@ -1,18 +1,22 @@
 "use client";
 
 import { publicConfig } from "@/misc/config";
-import { ApolloClient, ApolloLink, SuspenseCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloLink,
+  Observable,
+  SuspenseCache,
+} from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
-import { useAuthTokenStore } from "@/misc/states/authTokenStore";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
-import { match } from "ts-pattern";
-import { refreshAuthToken } from "@/queries/user/token";
+import { getStoredAuthToken, refreshAuthToken } from "@/queries/user/token";
+import { logger } from "@/misc/logger";
 
 /**
  *
@@ -24,15 +28,27 @@ const makeClient = () => {
   // refresh the token on every request when needed.
   const expiredSignatureErrorLink = onError(
     ({ graphQLErrors, forward, operation }) => {
+      console.log("ERR", graphQLErrors);
       if (graphQLErrors) {
-        const isExpiredSignature = graphQLErrors.some(
-          (err) => err.extensions?.code === "ExpiredSignatureError"
-        );
+        const isExpiredSignature = graphQLErrors.some((err) => {
+          const exceptions = err.extensions?.exception as { code?: string };
+          return exceptions?.code === "ExpiredSignatureError";
+        });
 
         if (!isExpiredSignature) return;
 
-        refreshAuthToken().then(() => {
-          forward(operation);
+        logger.debug("ExpiredSignatureError detected, refreshing token.");
+
+        return new Observable((observer) => {
+          logger.debug("Token refreshed, retrying request.");
+
+          refreshAuthToken().then(() => {
+            forward(operation).subscribe({
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer),
+            });
+          });
         });
       }
     }
@@ -41,15 +57,7 @@ const makeClient = () => {
   // This Link will add the Authorization header to all requests
   // retrieving it from the authTokenStore.
   const asyncAuthLink = setContext(() => {
-    const tokensStore = useAuthTokenStore.getState();
-    const maybeAuthToken = match(tokensStore.value)
-      .with(
-        {
-          kind: "Success",
-        },
-        ({ data }) => data
-      )
-      .otherwise(() => null);
+    const maybeAuthToken = getStoredAuthToken();
 
     if (!maybeAuthToken) return {};
 
@@ -75,9 +83,9 @@ const makeClient = () => {
         ]
       : []),
 
+    expiredSignatureErrorLink,
     asyncAuthLink,
     httpLink,
-    expiredSignatureErrorLink,
   ]);
 
   return new ApolloClient({
