@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default async function Page() {
-  redirect("/account/authentication");
+  redirect("/account/info");
 }
