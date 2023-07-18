@@ -1,5 +1,6 @@
 import { getFragmentData } from "@/__generated__";
 import {
+  AddressInput,
   CountryCode,
   GenericAddressFragment,
   GenericAddressFragmentDoc,
@@ -156,5 +157,23 @@ export function addressToAddressForm(input: Address): Partial<AddressForm> {
     country: input.country ?? undefined,
     countryArea: input.countryArea ?? undefined,
     phone: input.phone ?? undefined,
+  };
+}
+
+/**
+ *
+ */
+export function addressToAddressInput(input: Address): AddressInput {
+  return {
+    firstName: input.firstName,
+    lastName: input.lastName,
+    companyName: input.companyName,
+    streetAddress1: input.streetAddress1,
+    streetAddress2: input.streetAddress2,
+    city: input.city,
+    postalCode: input.postalCode,
+    country: input.country,
+    countryArea: input.countryArea,
+    phone: input.phone,
   };
 }

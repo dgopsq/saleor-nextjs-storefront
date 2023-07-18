@@ -125,3 +125,20 @@ mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
     }
   }
 }
+
+mutation UpdateCheckoutShippingAddress(
+  $checkoutToken: UUID!
+  $address: AddressInput!
+) {
+  checkoutShippingAddressUpdate(
+    token: $checkoutToken
+    shippingAddress: $address
+  ) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      message
+    }
+  }
+}
