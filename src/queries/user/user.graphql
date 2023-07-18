@@ -31,6 +31,11 @@ fragment GenericUser on User {
       }
     }
   }
+  addresses {
+    id
+    isDefaultShippingAddress
+    isDefaultBillingAddress
+  }
   defaultShippingAddress {
     ...GenericAddress
   }
@@ -121,6 +126,48 @@ mutation UserEmailChange(
 
 mutation UserConfirmEmailChange($token: String!) {
   confirmEmailChange(token: $token) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
+
+mutation UserCreateAddress($input: AddressInput!, $type: AddressTypeEnum!) {
+  accountAddressCreate(input: $input, type: $type) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
+
+mutation UserUpdateAddress($id: ID!, $input: AddressInput!) {
+  accountAddressUpdate(id: $id, input: $input) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
+
+mutation UserSetDefaultAddress(
+  $addressId: ID!
+  $addressType: AddressTypeEnum!
+) {
+  accountSetDefaultAddress(id: $addressId, type: $addressType) {
     errors {
       code
       message
