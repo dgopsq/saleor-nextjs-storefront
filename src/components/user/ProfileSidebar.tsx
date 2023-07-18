@@ -18,6 +18,11 @@ export const ProfileSidebar: React.FC = () => {
           label: "Email and password",
           href: "/account/authentication",
         },
+        {
+          id: "addresses",
+          label: "Addresses",
+          href: "/account/addresses",
+        },
       ]}
       active={selectedProfileSegment ?? undefined}
     />
