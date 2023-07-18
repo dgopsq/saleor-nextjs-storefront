@@ -32,9 +32,7 @@ fragment GenericUser on User {
     }
   }
   addresses {
-    id
-    isDefaultShippingAddress
-    isDefaultBillingAddress
+    ...GenericAddress
   }
   defaultShippingAddress {
     ...GenericAddress

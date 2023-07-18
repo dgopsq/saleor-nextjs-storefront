@@ -51,6 +51,7 @@ export type User = {
   checkoutTokens: Array<string>;
   defaultShippingAddress: Address | null;
   defaultBillingAddress: Address | null;
+  addresses: Array<Address>;
 };
 
 /**
@@ -100,9 +101,11 @@ export function parseAddress(input: GenericAddressFragment): Address {
  */
 export function parseUser(input: GenericUserFragment): User {
   const { id, email, firstName, lastName, checkouts } = input;
+
   const rawDefaultShippingAddress =
     getFragmentData(GenericAddressFragmentDoc, input.defaultShippingAddress) ??
     null;
+
   const rawDefaultBillingAddress =
     getFragmentData(GenericAddressFragmentDoc, input.defaultBillingAddress) ??
     null;
@@ -119,6 +122,14 @@ export function parseUser(input: GenericUserFragment): User {
     defaultBillingAddress: rawDefaultBillingAddress
       ? parseAddress(rawDefaultBillingAddress)
       : null,
+    addresses: input.addresses.map((rawAddress) => {
+      const addressFragment = getFragmentData(
+        GenericAddressFragmentDoc,
+        rawAddress
+      );
+
+      return parseAddress(addressFragment);
+    }),
   };
 }
 
