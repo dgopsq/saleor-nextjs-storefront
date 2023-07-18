@@ -34,12 +34,6 @@ fragment GenericUser on User {
   addresses {
     ...GenericAddress
   }
-  defaultShippingAddress {
-    ...GenericAddress
-  }
-  defaultBillingAddress {
-    ...GenericAddress
-  }
 }
 
 query GetMe {

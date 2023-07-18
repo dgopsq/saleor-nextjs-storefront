@@ -49,8 +49,6 @@ export type User = {
   firstName: string;
   lastName: string;
   checkoutTokens: Array<string>;
-  defaultShippingAddress: Address | null;
-  defaultBillingAddress: Address | null;
   addresses: Array<Address>;
 };
 
@@ -102,26 +100,12 @@ export function parseAddress(input: GenericAddressFragment): Address {
 export function parseUser(input: GenericUserFragment): User {
   const { id, email, firstName, lastName, checkouts } = input;
 
-  const rawDefaultShippingAddress =
-    getFragmentData(GenericAddressFragmentDoc, input.defaultShippingAddress) ??
-    null;
-
-  const rawDefaultBillingAddress =
-    getFragmentData(GenericAddressFragmentDoc, input.defaultBillingAddress) ??
-    null;
-
   return {
     id,
     email,
     firstName,
     lastName,
     checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
-    defaultShippingAddress: rawDefaultShippingAddress
-      ? parseAddress(rawDefaultShippingAddress)
-      : null,
-    defaultBillingAddress: rawDefaultBillingAddress
-      ? parseAddress(rawDefaultBillingAddress)
-      : null,
     addresses: input.addresses.map((rawAddress) => {
       const addressFragment = getFragmentData(
         GenericAddressFragmentDoc,
