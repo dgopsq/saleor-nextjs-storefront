@@ -1,29 +1,18 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef } from "react";
-import { Button } from "@/components/core/Button";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useMutation } from "@apollo/client";
-import {
-  UserSetDefaultAddressDocument,
-  UserUpdateDocument,
-} from "@/__generated__/graphql";
+import { UserUpdateDocument } from "@/__generated__/graphql";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
-import {
-  ChangeInfoForm,
-  ChangeInfoFormRef,
-} from "@/components/core/ChangeInfoForm";
+import { ChangeInfoForm } from "@/components/core/ChangeInfoForm";
 
 export const ProfileInfo: React.FC = () => {
   const [updateUser, { loading: updateUserLoading, data: updateData }] =
     useMutation(UserUpdateDocument);
-  const [setDefaultAddress, { loading: setDefaultAddressLoading }] =
-    useMutation(UserSetDefaultAddressDocument);
 
   const user = useUserInfo();
-
-  const changeInfoRef = useRef<ChangeInfoFormRef>(null);
 
   const userInfoInitialValues = useMemo<Partial<ChangeInfoForm>>(() => {
     return {
@@ -31,6 +20,20 @@ export const ProfileInfo: React.FC = () => {
       lastName: user?.lastName ?? undefined,
     };
   }, [user]);
+
+  const handleUpdate = useCallback(
+    (data: ChangeInfoForm) => {
+      updateUser({
+        variables: {
+          userInfo: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+          },
+        },
+      });
+    },
+    [updateUser]
+  );
 
   useEffect(() => {
     if (updateData?.accountUpdate?.user)
@@ -41,27 +44,16 @@ export const ProfileInfo: React.FC = () => {
     }
   }, [updateData]);
 
-  const isLoading = updateUserLoading || setDefaultAddressLoading;
-
   return (
     <>
-      <div className="border-b border-gray-100 pb-16">
+      <div>
         <h3 className="text-xl font-semibold">Personal informations</h3>
+
         <div className="mt-8">
           <ChangeInfoForm
-            ref={changeInfoRef}
+            onSubmit={handleUpdate}
             initialValues={userInfoInitialValues}
-          />
-        </div>
-      </div>
-
-      <div className="mt-16 flex justify-end">
-        <div className="w-48">
-          <Button
-            size="medium"
-            variant="primary"
-            text="Save"
-            isLoading={isLoading}
+            isLoading={updateUserLoading}
           />
         </div>
       </div>

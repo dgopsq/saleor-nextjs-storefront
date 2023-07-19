@@ -129,8 +129,8 @@ mutation UserConfirmEmailChange($token: String!) {
   }
 }
 
-mutation UserCreateAddress($input: AddressInput!, $type: AddressTypeEnum!) {
-  accountAddressCreate(input: $input, type: $type) {
+mutation UserCreateAddress($input: AddressInput!) {
+  accountAddressCreate(input: $input) {
     errors {
       code
       message
@@ -144,6 +144,19 @@ mutation UserCreateAddress($input: AddressInput!, $type: AddressTypeEnum!) {
 
 mutation UserUpdateAddress($id: ID!, $input: AddressInput!) {
   accountAddressUpdate(id: $id, input: $input) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}
+
+mutation UserDeleteAddress($id: ID!) {
+  accountAddressDelete(id: $id) {
     errors {
       code
       message

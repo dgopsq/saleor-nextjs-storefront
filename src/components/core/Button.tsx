@@ -6,7 +6,7 @@ import { match } from "ts-pattern";
 type BaseButtonProps = {
   text: string;
   size: "large" | "medium";
-  variant: "primary";
+  variant: "primary" | "danger";
   isLoading?: boolean;
   isDisabled?: boolean;
 } & Omit<
@@ -32,6 +32,7 @@ export const Button: React.FC<BaseButtonProps> = ({
 
   const computedVariant = match(variant)
     .with("primary", () => "bg-indigo-600 enabled:hover:bg-indigo-700")
+    .with("danger", () => "bg-red-600 enabled:hover:bg-red-700")
     .exhaustive();
 
   const disabledState = isLoading || isDisabled;

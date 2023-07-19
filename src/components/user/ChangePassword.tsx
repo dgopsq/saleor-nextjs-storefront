@@ -39,7 +39,7 @@ export const ChangePassword: React.FC = () => {
 
   return (
     <div className="w-full">
-      <h3 className="text-xl font-semibold">Change password</h3>
+      <h3 className="text-xl font-semibold">Password</h3>
 
       <div className="mt-8">
         <ChangePasswordForm onSubmit={handleSubmit} isLoading={loading} />

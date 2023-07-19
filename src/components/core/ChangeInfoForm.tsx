@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "@/components/core/Field";
-import { forwardRef, useImperativeHandle, useMemo } from "react";
+import { useMemo } from "react";
+import { Button } from "@/components/core/Button";
 
 /**
  *
@@ -19,53 +20,40 @@ const ChangeInfoFormSchema = z.object({
  */
 export type ChangeInfoForm = z.infer<typeof ChangeInfoFormSchema>;
 
-export type ChangeInfoFormRef = {
-  getValues: () => Promise<ChangeInfoForm | null>;
-};
-
 type Props = {
+  onSubmit: (data: ChangeInfoForm) => void;
   initialValues?: Partial<ChangeInfoForm>;
+  isLoading?: boolean;
 };
 
 /**
  *
  */
-export const ChangeInfoForm = forwardRef<ChangeInfoFormRef, Props>(
-  ({ initialValues }, ref) => {
-    const stableInitialValues = useMemo<ChangeInfoForm>(
-      () => ({
-        firstName: "",
-        lastName: "",
-        ...initialValues,
-      }),
-      [initialValues]
-    );
+export const ChangeInfoForm: React.FC<Props> = ({
+  initialValues,
+  onSubmit,
+  isLoading,
+}) => {
+  const stableInitialValues = useMemo<ChangeInfoForm>(
+    () => ({
+      firstName: "",
+      lastName: "",
+      ...initialValues,
+    }),
+    [initialValues]
+  );
 
-    const {
-      register,
-      formState: { errors },
-      getValues,
-      trigger,
-    } = useForm<ChangeInfoForm>({
-      resolver: zodResolver(ChangeInfoFormSchema),
-      values: stableInitialValues,
-    });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<ChangeInfoForm>({
+    resolver: zodResolver(ChangeInfoFormSchema),
+    values: stableInitialValues,
+  });
 
-    useImperativeHandle<
-      ChangeInfoFormRef,
-      Pick<ChangeInfoFormRef, "getValues">
-    >(
-      ref,
-      () => ({
-        getValues: async () => {
-          const isValid = await trigger();
-          return isValid ? getValues() : null;
-        },
-      }),
-      [getValues, trigger]
-    );
-
-    return (
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-3">
@@ -87,6 +75,18 @@ export const ChangeInfoForm = forwardRef<ChangeInfoFormRef, Props>(
           </div>
         </div>
       </div>
-    );
-  }
-);
+
+      <div className="mt-12 flex justify-end">
+        <div className="w-48">
+          <Button
+            variant="primary"
+            size="medium"
+            text="Change info"
+            type="submit"
+            isLoading={isLoading}
+          />
+        </div>
+      </div>
+    </form>
+  );
+};

@@ -41,7 +41,7 @@ export const ChangeEmail: React.FC = () => {
 
   return (
     <div className="w-full">
-      <h3 className="text-xl font-semibold">Change email</h3>
+      <h3 className="text-xl font-semibold">Email</h3>
 
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

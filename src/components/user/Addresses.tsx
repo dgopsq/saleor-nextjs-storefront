@@ -70,7 +70,10 @@ export const Addresses: React.FC = () => {
 
           <li className="lg:col-span-3">
             <Link className="h-full" href={`/account/addresses/new`}>
-              <div className="border border-gray-100 bg-gray-50 rounded-lg p-6 h-full flex flex-column items-center justify-center">
+              <div
+                className="border border-gray-100 bg-gray-50 rounded-lg p-6 h-full flex flex-column items-center justify-center"
+                style={{ minHeight: "11em" }}
+              >
                 <span className="text-gray-400 text-bold">
                   <PlusIcon className="h-8 w-8 text-gray-300" />
                 </span>
