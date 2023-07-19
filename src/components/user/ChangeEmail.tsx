@@ -44,8 +44,8 @@ export const ChangeEmail: React.FC = () => {
       <h3 className="text-xl font-semibold">Email</h3>
 
       <div className="mt-8">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div className="sm:col-span-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
+          <div className="md:col-span-3">
             <label className="block text-sm font-medium leading-6 text-gray-900">
               Current email
             </label>

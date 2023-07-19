@@ -1,6 +1,7 @@
 "use client";
 
 import { NeutralBadge } from "@/components/core/Badge";
+import { Island } from "@/components/core/Island";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -23,7 +24,7 @@ export const Addresses: React.FC = () => {
                 className="h-full"
                 href={`/account/addresses/${address.id}`}
               >
-                <div className="border border-gray-100 rounded-lg p-6 h-full">
+                <Island variant="outline">
                   <div>
                     <div className="font-semibold">
                       {address.firstName} {address.lastName}
@@ -63,7 +64,7 @@ export const Addresses: React.FC = () => {
                       ) : undefined}
                     </div>
                   ) : undefined}
-                </div>
+                </Island>
               </Link>
             </li>
           ))}
@@ -72,7 +73,7 @@ export const Addresses: React.FC = () => {
             <Link className="h-full" href={`/account/addresses/new`}>
               <div
                 className="border border-gray-100 bg-gray-50 rounded-lg p-6 h-full flex flex-column items-center justify-center"
-                style={{ minHeight: "11em" }}
+                style={{ minHeight: "10em" }}
               >
                 <span className="text-gray-400 text-bold">
                   <PlusIcon className="h-8 w-8 text-gray-300" />
