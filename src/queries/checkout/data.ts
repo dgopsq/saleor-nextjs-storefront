@@ -55,6 +55,7 @@ export type CheckoutProduct = {
  *
  */
 export type Checkout = {
+  email: string | null;
   lines: Array<CheckoutItem>;
   subtotalPrice: {
     amount: number;
@@ -76,8 +77,11 @@ export type Checkout = {
 /**
  *
  */
-export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
+export function parseGenericCheckoutInfo(
+  input: GenericCheckoutInfoFragment
+): Checkout {
   const {
+    email,
     lines,
     subtotalPrice,
     shippingPrice,
@@ -94,6 +98,7 @@ export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
     getFragmentData(GenericAddressFragmentDoc, billingAddress) ?? null;
 
   return {
+    email: email ?? null,
     lines: lines.map((line) => ({
       id: line.id,
       variant: parseVariant(line.variant),

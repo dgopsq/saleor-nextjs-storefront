@@ -8,6 +8,7 @@ fragment CheckoutProduct on ProductVariant {
 
 fragment GenericCheckoutInfo on Checkout {
   token
+  email
 
   lines {
     id
