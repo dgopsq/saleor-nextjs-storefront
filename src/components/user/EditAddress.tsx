@@ -104,34 +104,44 @@ export const EditAddress = ({ id }: Props) => {
           ref={addressFormRef}
           initialValues={addressToAddressForm(parseAddress(data))}
         />
+
+        <div className="bg-gray-50 rounded-lg mt-16">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-base font-semibold leading-6 text-gray-900">
+              Set this address as default
+            </h3>
+
+            <div className="mt-4 flex">
+              <div className="w-48">
+                <Button
+                  text="Default for shipping"
+                  type="submit"
+                  variant="primary"
+                  size="medium"
+                  isLoading={setDefaultLoading}
+                  onClick={handleSetShippingDefault}
+                  isDisabled={!!data.isDefaultShippingAddress}
+                />
+              </div>
+
+              <div className="ml-4 w-48">
+                <Button
+                  text="Default for billing"
+                  type="submit"
+                  variant="primary"
+                  size="medium"
+                  isLoading={setDefaultLoading}
+                  onClick={handleSetBillingDefault}
+                  isDisabled={!!data.isDefaultBillingAddress}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="mt-16 flex justify-end">
-        <div className="ml-4 w-48">
-          <Button
-            text="Default for shipping"
-            type="submit"
-            variant="primary"
-            size="medium"
-            isLoading={setDefaultLoading}
-            onClick={handleSetShippingDefault}
-            isDisabled={!!data.isDefaultShippingAddress}
-          />
-        </div>
-
-        <div className="ml-4 w-48">
-          <Button
-            text="Default for billing"
-            type="submit"
-            variant="primary"
-            size="medium"
-            isLoading={setDefaultLoading}
-            onClick={handleSetBillingDefault}
-            isDisabled={!!data.isDefaultBillingAddress}
-          />
-        </div>
-
-        <div className="ml-4 w-48">
+        <div className="w-48">
           <Button
             text="Save changes"
             type="submit"
