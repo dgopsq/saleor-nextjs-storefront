@@ -160,3 +160,14 @@ mutation UpdateCheckoutBillingAddress(
     }
   }
 }
+
+mutation UpdateCheckoutEmail($checkoutToken: UUID!, $email: String!) {
+  checkoutEmailUpdate(token: $checkoutToken, email: $email) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      message
+    }
+  }
+}

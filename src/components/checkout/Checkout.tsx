@@ -2,6 +2,7 @@
 
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
+import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { Button } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
@@ -30,7 +31,12 @@ export const Checkout: React.FC = () => {
               Items in your shopping cart
             </h2>
 
-            <div>Products</div>
+            <div className="border-b border-gray-100 pb-12">
+              <CheckoutEmail
+                checkoutToken={data.token}
+                email={data.email ?? undefined}
+              />
+            </div>
           </section>
 
           <section
