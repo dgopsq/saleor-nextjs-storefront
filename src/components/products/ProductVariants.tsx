@@ -1,3 +1,4 @@
+import { Select } from "@/components/core/Select";
 import {
   AttributeKind,
   Product,
@@ -93,20 +94,18 @@ export const ProductVariants: React.FC<Props> = ({
                   {attribute.name}
                 </label>
 
-                <select
-                  id={`attribute-${attribute.id}`}
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  value={currentAttributes?.[attribute.id] ?? undefined}
-                  onChange={({ target: { value } }) =>
-                    handleChange(attribute.id, value)
-                  }
-                >
-                  {attribute.values.map(({ id, name }) => (
-                    <option key={id} value={id}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+                <div className="mt-1">
+                  <Select
+                    value={currentAttributes?.[attribute.id] ?? undefined}
+                    onChange={(value) => handleChange(attribute.id, value)}
+                    options={attribute.values.map(({ id, name }) => ({
+                      id,
+                      value: id,
+                      label: name ?? "",
+                    }))}
+                    parseValue={(_) => _}
+                  />
+                </div>
               </div>
             );
         }
