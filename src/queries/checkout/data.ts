@@ -56,6 +56,7 @@ export type CheckoutProduct = {
  */
 export type Checkout = {
   email: string | null;
+  token: string;
   lines: Array<CheckoutItem>;
   subtotalPrice: {
     amount: number;
@@ -82,6 +83,7 @@ export function parseGenericCheckoutInfo(
 ): Checkout {
   const {
     email,
+    token,
     lines,
     subtotalPrice,
     shippingPrice,
@@ -99,6 +101,7 @@ export function parseGenericCheckoutInfo(
 
   return {
     email: email ?? null,
+    token,
     lines: lines.map((line) => ({
       id: line.id,
       variant: parseVariant(line.variant),

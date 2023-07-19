@@ -1,70 +1,30 @@
 "use client";
 
-import {
-  RemoveProductFromCartDocument,
-  UpdateProductInCartDocument,
-} from "@/__generated__/graphql";
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
-import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
+import { useProductRemove } from "@/misc/hooks/useProductRemove";
+import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
-import { useMutation } from "@apollo/client";
 import Link from "next/link";
-import { useCallback } from "react";
 
 /**
  *
  */
 export const Cart: React.FC = () => {
-  const checkoutToken = useCheckoutToken();
-  const [updateProducts, { loading: updateProductLoading }] = useMutation(
-    UpdateProductInCartDocument
-  );
-  const [removeProducts, { loading: deleteProductLoading }] = useMutation(
-    RemoveProductFromCartDocument
-  );
-
+  const { removeProduct, loading: removeProductLoading } = useProductRemove();
+  const { updateProduct, loading: updateProductLoading } = useProductUpdate();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
-
-  const handleUpdateProduct = useCallback(
-    (variantId: string, quantity: number) => {
-      updateProducts({
-        variables: {
-          checkoutToken,
-          lines:
-            data?.lines.map((line) => ({
-              variantId: line.variant.id,
-              quantity:
-                line.variant.id === variantId ? quantity : line.quantity,
-            })) ?? [],
-        },
-      });
-    },
-    [data, checkoutToken, updateProducts]
-  );
-
-  const handleRemoveProduct = useCallback(
-    (lineId: string) => {
-      removeProducts({
-        variables: {
-          checkoutToken,
-          linesIds: [lineId],
-        },
-      });
-    },
-    [checkoutToken, removeProducts]
-  );
 
   if (!data) return <LoadingSpinner />;
 
   // This will be `true` while re-fetching the checkout
   // after a change in a product.
   const checkoutRefreshing =
-    checkoutInfoLoading || updateProductLoading || deleteProductLoading;
+    checkoutInfoLoading || updateProductLoading || removeProductLoading;
 
   return (
     <div className="bg-white w-full">
@@ -78,8 +38,8 @@ export const Cart: React.FC = () => {
             <div>
               <CartProducts
                 products={data.lines}
-                onProductUpdate={handleUpdateProduct}
-                onProductRemove={handleRemoveProduct}
+                onProductUpdate={updateProduct}
+                onProductRemove={removeProduct}
               />
             </div>
           </section>
@@ -96,7 +56,7 @@ export const Cart: React.FC = () => {
                 id="summary-heading"
                 className="text-lg font-medium text-gray-900"
               >
-                Order summary
+                Total
               </h2>
 
               <div>
