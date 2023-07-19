@@ -1,3 +1,4 @@
+import { Island } from "@/components/core/Island";
 import { formatPrice } from "@/misc/currencies";
 import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
@@ -49,16 +50,18 @@ export const CartProducts: React.FC<Props> = ({
                     variantId: line.variant.id,
                   })}
                 >
-                  <Image
-                    src={imageUrl}
-                    alt={imageAlt}
-                    className={classNames(
-                      imageSize,
-                      "h-24 w-24 rounded-md object-cover object-center bg-gray-200"
-                    )}
-                    width={150}
-                    height={150}
-                  />
+                  <Island variant="solid-darker" noPadding>
+                    <Image
+                      src={imageUrl}
+                      alt={imageAlt}
+                      className={classNames(
+                        imageSize,
+                        "h-24 w-24 object-cover object-center"
+                      )}
+                      width={150}
+                      height={150}
+                    />
+                  </Island>
                 </Link>
               ) : undefined}
             </div>

@@ -2,6 +2,7 @@ import { Product } from "@/queries/products/data";
 import { classNames } from "@/misc/styles";
 import { Tab } from "@headlessui/react";
 import Image from "next/image";
+import { Island } from "@/components/core/Island";
 
 type Props = {
   images: Product["images"];
@@ -24,7 +25,7 @@ export const ProductImages: React.FC<Props> = ({ images }) => {
                 <div>
                   <span
                     className={classNames(
-                      selected ? "bg-gray-200" : "",
+                      selected ? "bg-gray-50" : "",
                       "pointer-events-none absolute inset-0 rounded-md"
                     )}
                     aria-hidden="true"
@@ -49,7 +50,7 @@ export const ProductImages: React.FC<Props> = ({ images }) => {
       <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
         {images.map((image) => (
           <Tab.Panel key={image.id}>
-            <div className="rounded-md bg-gray-200">
+            <Island variant="solid-darker">
               <Image
                 src={image.url}
                 alt={image.alt ?? ""}
@@ -57,7 +58,7 @@ export const ProductImages: React.FC<Props> = ({ images }) => {
                 width={600}
                 height={600}
               />
-            </div>
+            </Island>
           </Tab.Panel>
         ))}
       </Tab.Panels>
