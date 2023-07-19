@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 
 type Props = PropsWithChildren<{
-  variant: "outline";
+  variant: "outline" | "solid";
   className?: string;
 }>;
 
@@ -13,6 +13,7 @@ type Props = PropsWithChildren<{
 export const Island: React.FC<Props> = ({ variant, className, children }) => {
   const computedVariant = match(variant)
     .with("outline", () => "border border-gray-100")
+    .with("solid", () => "bg-gray-50 border border-gray-50")
     .exhaustive();
 
   return (

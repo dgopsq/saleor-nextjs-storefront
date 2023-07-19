@@ -7,6 +7,7 @@ import {
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
+import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
@@ -86,32 +87,34 @@ export const Cart: React.FC = () => {
           <section
             aria-labelledby="summary-heading"
             className={classNames(
-              "mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8",
+              "mt-16 lg:col-span-5 lg:mt-0",
               checkoutRefreshing ? "opacity-50" : ""
             )}
           >
-            <h2
-              id="summary-heading"
-              className="text-lg font-medium text-gray-900"
-            >
-              Order summary
-            </h2>
+            <Island variant="solid">
+              <h2
+                id="summary-heading"
+                className="text-lg font-medium text-gray-900"
+              >
+                Order summary
+              </h2>
 
-            <div>
-              <CartSummary checkout={data} />
-            </div>
+              <div>
+                <CartSummary checkout={data} />
+              </div>
 
-            <div className="mt-6">
-              <Link href="/checkout">
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="large"
-                  text="Checkout"
-                  isLoading={checkoutRefreshing}
-                />
-              </Link>
-            </div>
+              <div className="mt-6">
+                <Link href="/checkout">
+                  <Button
+                    type="button"
+                    variant="primary"
+                    size="large"
+                    text="Checkout"
+                    isLoading={checkoutRefreshing}
+                  />
+                </Link>
+              </div>
+            </Island>
           </section>
         </form>
       </div>
