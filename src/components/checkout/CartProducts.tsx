@@ -1,4 +1,6 @@
 import { formatPrice } from "@/misc/currencies";
+import { UseProductRemoveReturn } from "@/misc/hooks/useProductRemove";
+import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
 import { CheckoutProduct } from "@/queries/checkout/data";
 import { ProductVariant, generateProductUrl } from "@/queries/products/data";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -14,8 +16,8 @@ export type CartProduct = {
 
 type Props = {
   products: Array<CartProduct>;
-  onProductUpdate: (variantId: string, quantity: number) => void;
-  onProductRemove: (variantId: string) => void;
+  onProductUpdate: UseProductUpdateReturn["updateProduct"];
+  onProductRemove: UseProductRemoveReturn["removeProduct"];
 };
 
 /**

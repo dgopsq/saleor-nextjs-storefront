@@ -3,7 +3,7 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useMutation } from "@apollo/client";
 import { useCallback, useMemo } from "react";
 
-type UseProductsRemoveReturn = {
+export type UseProductRemoveReturn = {
   removeProduct: (lineId: string) => void;
   loading: boolean;
 };
@@ -11,7 +11,7 @@ type UseProductsRemoveReturn = {
 /**
  *
  */
-export function useProductRemove(): UseProductsRemoveReturn {
+export function useProductRemove(): UseProductRemoveReturn {
   const [removeProducts, { loading }] = useMutation(
     RemoveProductFromCartDocument
   );
@@ -30,7 +30,7 @@ export function useProductRemove(): UseProductsRemoveReturn {
     [data, removeProducts]
   );
 
-  const api = useMemo<UseProductsRemoveReturn>(
+  const api = useMemo<UseProductRemoveReturn>(
     () => ({
       removeProduct: action,
       loading,

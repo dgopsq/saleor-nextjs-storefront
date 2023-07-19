@@ -3,7 +3,7 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useMutation } from "@apollo/client";
 import { useCallback, useMemo } from "react";
 
-type UseProductsUpdateReturn = {
+export type UseProductUpdateReturn = {
   updateProduct: (variantId: string, quantity: number) => void;
   loading: boolean;
 };
@@ -11,7 +11,7 @@ type UseProductsUpdateReturn = {
 /**
  *
  */
-export function useProductUpdate(): UseProductsUpdateReturn {
+export function useProductUpdate(): UseProductUpdateReturn {
   const [updateProducts, { loading }] = useMutation(
     UpdateProductInCartDocument
   );
@@ -35,7 +35,7 @@ export function useProductUpdate(): UseProductsUpdateReturn {
     [data, updateProducts]
   );
 
-  const api = useMemo<UseProductsUpdateReturn>(
+  const api = useMemo<UseProductUpdateReturn>(
     () => ({
       updateProduct: action,
       loading,
