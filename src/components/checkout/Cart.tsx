@@ -6,7 +6,6 @@ import { Button } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
-import { useProductRemove } from "@/misc/hooks/useProductRemove";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
 import Link from "next/link";
@@ -15,7 +14,6 @@ import Link from "next/link";
  *
  */
 export const Cart: React.FC = () => {
-  const { removeProduct, loading: removeProductLoading } = useProductRemove();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
 
@@ -23,8 +21,7 @@ export const Cart: React.FC = () => {
 
   // This will be `true` while re-fetching the checkout
   // after a change in a product.
-  const checkoutRefreshing =
-    checkoutInfoLoading || updateProductLoading || removeProductLoading;
+  const checkoutRefreshing = checkoutInfoLoading || updateProductLoading;
 
   return (
     <div className="bg-white w-full">
@@ -39,7 +36,6 @@ export const Cart: React.FC = () => {
               <CartProducts
                 products={data.lines}
                 onProductUpdate={updateProduct}
-                onProductRemove={removeProduct}
               />
             </div>
           </section>

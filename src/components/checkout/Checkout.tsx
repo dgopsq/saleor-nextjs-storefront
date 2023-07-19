@@ -1,5 +1,11 @@
+"use client";
+
+import { CartProducts } from "@/components/checkout/CartProducts";
 import { Button } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
+import { LoadingSpinner } from "@/components/core/LoadingSpinner";
+import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
+import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
 import Link from "next/link";
 
@@ -7,7 +13,12 @@ import Link from "next/link";
  *
  */
 export const Checkout: React.FC = () => {
-  const checkoutRefreshing = false;
+  const { updateProduct, loading: updateProductLoading } = useProductUpdate();
+  const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
+
+  const checkoutRefreshing = checkoutInfoLoading || updateProductLoading;
+
+  if (!data) return <LoadingSpinner />;
 
   return (
     <div className="bg-white w-full">
@@ -36,7 +47,13 @@ export const Checkout: React.FC = () => {
                 Order summary
               </h2>
 
-              <div>Summary</div>
+              <div className="mt-4">
+                <CartProducts
+                  products={data.lines}
+                  onProductUpdate={updateProduct}
+                  condensed
+                />
+              </div>
 
               <div className="mt-6">
                 <Link href="/checkout">

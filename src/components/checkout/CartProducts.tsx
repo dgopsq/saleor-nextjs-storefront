@@ -1,11 +1,11 @@
 import { formatPrice } from "@/misc/currencies";
-import { UseProductRemoveReturn } from "@/misc/hooks/useProductRemove";
 import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
+import { classNames } from "@/misc/styles";
 import { CheckoutProduct } from "@/queries/checkout/data";
 import { ProductVariant, generateProductUrl } from "@/queries/products/data";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 
 export type CartProduct = {
   id: string;
@@ -17,7 +17,7 @@ export type CartProduct = {
 type Props = {
   products: Array<CartProduct>;
   onProductUpdate: UseProductUpdateReturn["updateProduct"];
-  onProductRemove: UseProductRemoveReturn["removeProduct"];
+  condensed?: boolean;
 };
 
 /**
@@ -26,8 +26,13 @@ type Props = {
 export const CartProducts: React.FC<Props> = ({
   products,
   onProductUpdate,
-  onProductRemove,
+  condensed,
 }) => {
+  const imageSize = useMemo(
+    () => (condensed ? "sm:h-28 sm:w-28" : "sm:h-40 sm:w-40"),
+    [condensed]
+  );
+
   return (
     <ul role="list" className="divide-y divide-gray-100 -mt-6">
       {products.map((line, productIdx) => {
@@ -47,7 +52,10 @@ export const CartProducts: React.FC<Props> = ({
                   <Image
                     src={imageUrl}
                     alt={imageAlt}
-                    className="h-24 w-24 rounded-md object-cover object-center sm:h-40 sm:w-40 bg-gray-200"
+                    className={classNames(
+                      imageSize,
+                      "h-24 w-24 rounded-md object-cover object-center bg-gray-200"
+                    )}
                     width={150}
                     height={150}
                   />
@@ -55,46 +63,54 @@ export const CartProducts: React.FC<Props> = ({
               ) : undefined}
             </div>
 
-            <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-              <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                <div>
-                  <Link
-                    href={generateProductUrl({
-                      product: line.product,
-                      variantId: line.variant.id,
-                    })}
-                  >
-                    <div className="flex justify-between">
-                      <h3 className="text-sm">{line.product.name}</h3>
-                    </div>
-
-                    {line.variant.attributes.map(({ attribute, values }) => (
-                      <p
-                        key={attribute.id}
-                        className="mt-1 text-xs font-medium text-gray-400"
-                      >
-                        {`${attribute.name}: ${values
-                          .map((value) => value.name)
-                          .join(", ")}`}
-                      </p>
-                    ))}
-                  </Link>
-
-                  {line.variant.price ? (
-                    <p className="mt-4 text-sm font-medium text-gray-900">
-                      {formatPrice(
-                        line.variant.price.amount,
-                        line.variant.price.currency
+            <div className="ml-4 flex flex-1 flex-row justify-between sm:ml-6">
+              <div>
+                <Link
+                  href={generateProductUrl({
+                    product: line.product,
+                    variantId: line.variant.id,
+                  })}
+                >
+                  <div className="flex justify-between">
+                    <h3
+                      className={classNames(
+                        condensed ? "text-sm truncate" : "text-md",
+                        "font-medium"
                       )}
+                    >
+                      {line.product.name}
+                    </h3>
+                  </div>
+
+                  {line.variant.attributes.map(({ attribute, values }) => (
+                    <p
+                      key={attribute.id}
+                      className="mt-2 text-sm font-medium text-gray-400"
+                    >
+                      {`${attribute.name}: ${values
+                        .map((value) => value.name)
+                        .join(", ")}`}
                     </p>
-                  ) : undefined}
-                </div>
+                  ))}
+                </Link>
 
-                <div className="mt-4 sm:mt-0 sm:pr-9">
-                  <label htmlFor={`quantity-${productIdx}`} className="sr-only">
-                    Quantity, {line.variant.name}
-                  </label>
+                {line.variant.price ? (
+                  <p
+                    className={classNames(
+                      condensed ? "text-sm" : "",
+                      "mt-2 font-semibold text-gray-900"
+                    )}
+                  >
+                    {formatPrice(
+                      line.variant.price.amount,
+                      line.variant.price.currency
+                    )}
+                  </p>
+                ) : undefined}
+              </div>
 
+              <div className="flex flex-col justify-between items-end mt-4 sm:mt-0">
+                <div>
                   <select
                     id={`quantity-${productIdx}`}
                     name={`quantity-${productIdx}`}
@@ -104,6 +120,7 @@ export const CartProducts: React.FC<Props> = ({
                       onProductUpdate(line.variant.id, parseInt(e.target.value))
                     }
                   >
+                    <option value={0}>0</option>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
                     <option value={3}>3</option>
@@ -114,17 +131,6 @@ export const CartProducts: React.FC<Props> = ({
                     <option value={8}>8</option>
                     <option value={9}>9</option>
                   </select>
-
-                  <div className="absolute right-0 top-0">
-                    <button
-                      type="button"
-                      className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
-                      onClick={() => onProductRemove(line.id)}
-                    >
-                      <span className="sr-only">Remove</span>
-                      <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
