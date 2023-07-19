@@ -37,14 +37,30 @@ export const CartProducts: React.FC<Props> = ({
     [condensed]
   );
 
+  const paddingTopIndexGap = useMemo(
+    () => (condensed ? "pt-6" : "pt-10"),
+    [condensed]
+  );
+  const paddingBottomIndexGap = useMemo(
+    () => (condensed ? "pb-6" : "pb-10"),
+    [condensed]
+  );
+
   return (
-    <ul role="list" className="divide-y divide-gray-100 -mt-6">
-      {products.map((line) => {
+    <ul role="list" className="divide-y divide-gray-100">
+      {products.map((line, index) => {
         const imageUrl = line.variant.images[0]?.url ?? null;
         const imageAlt = line.variant.images[0]?.alt ?? "";
 
         return (
-          <li key={line.id} className="flex py-6 sm:py-10">
+          <li
+            key={line.id}
+            className={classNames(
+              "flex",
+              index > 0 ? paddingTopIndexGap : "",
+              index < products.length - 1 ? paddingBottomIndexGap : ""
+            )}
+          >
             <div className="flex-shrink-0">
               {imageUrl ? (
                 <Link

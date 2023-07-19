@@ -1,6 +1,7 @@
 "use client";
 
 import { CartProducts } from "@/components/checkout/CartProducts";
+import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
@@ -47,7 +48,7 @@ export const Checkout: React.FC = () => {
                 Order summary
               </h2>
 
-              <div className="mt-4">
+              <div className="mt-8">
                 <CartProducts
                   products={data.lines}
                   onProductUpdate={updateProduct}
@@ -55,13 +56,17 @@ export const Checkout: React.FC = () => {
                 />
               </div>
 
-              <div className="mt-6">
+              <div className="mt-8">
+                <CartSummary checkout={data} />
+              </div>
+
+              <div className="mt-8">
                 <Link href="/checkout">
                   <Button
                     type="button"
                     variant="primary"
                     size="large"
-                    text="Checkout"
+                    text="Buy now"
                     isLoading={checkoutRefreshing}
                   />
                 </Link>
