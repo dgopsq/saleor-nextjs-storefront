@@ -143,3 +143,20 @@ mutation UpdateCheckoutShippingAddress(
     }
   }
 }
+
+mutation UpdateCheckoutBillingAddress(
+  $checkoutToken: UUID!
+  $address: AddressInput!
+) {
+  checkoutBillingAddressUpdate(
+    token: $checkoutToken
+    billingAddress: $address
+  ) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      message
+    }
+  }
+}
