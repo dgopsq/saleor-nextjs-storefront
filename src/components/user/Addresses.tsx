@@ -2,6 +2,7 @@
 
 import { NeutralBadge } from "@/components/core/Badge";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 /**
@@ -15,11 +16,14 @@ export const Addresses: React.FC = () => {
       <h3 className="text-xl font-semibold">Addresses</h3>
 
       <div className="mt-8">
-        <ul className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
+        <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-6">
           {userInfo?.addresses?.map((address) => (
-            <li key={address.id} className="md:col-span-3">
-              <Link href={`/account/addresses/${address.id}`}>
-                <div className="border border-gray-100 rounded-lg p-6">
+            <li key={address.id} className="lg:col-span-3">
+              <Link
+                className="h-full"
+                href={`/account/addresses/${address.id}`}
+              >
+                <div className="border border-gray-100 rounded-lg p-6 h-full">
                   <div>
                     <div className="font-semibold">
                       {address.firstName} {address.lastName}
@@ -63,6 +67,16 @@ export const Addresses: React.FC = () => {
               </Link>
             </li>
           ))}
+
+          <li className="lg:col-span-3">
+            <Link className="h-full" href={`/account/addresses/new`}>
+              <div className="border border-gray-100 bg-gray-50 rounded-lg p-6 h-full flex flex-column items-center justify-center">
+                <span className="text-gray-400 text-bold">
+                  <PlusIcon className="h-8 w-8 text-gray-300" />
+                </span>
+              </div>
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
