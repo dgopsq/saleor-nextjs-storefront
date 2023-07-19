@@ -31,5 +31,5 @@
     ".next/types/**/*.ts",
     "src/app/@checkout/cart"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next"]
 }

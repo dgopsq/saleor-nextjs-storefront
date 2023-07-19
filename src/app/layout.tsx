@@ -1,11 +1,11 @@
 import { Navbar } from "@/components/navigation/Navbar";
 import "./globals.css";
-import { ApolloWrapper } from "@/misc/apolloWrapper";
+import { ApolloWrapper } from "@/misc/apollo/apolloWrapper";
 import { Inter } from "next/font/google";
-import { getApolloClient } from "@/misc/apollo";
+import { getApolloClient } from "@/misc/apollo/apollo";
 import { GetCategoriesDocument } from "@/__generated__/graphql";
 import { parsePopulatedCategories } from "@/queries/categories/data";
-import { Bootstrap } from "@/misc/Bootstrap";
+import { Bootstrap } from "@/components/core/Bootstrap";
 import { Notifications } from "@/components/core/Notifications";
 
 const inter = Inter({ subsets: ["latin"] });

@@ -6,8 +6,9 @@ import { match } from "ts-pattern";
 type BaseButtonProps = {
   text: string;
   size: "large" | "medium";
-  variant: "primary";
+  variant: "primary" | "danger";
   isLoading?: boolean;
+  isDisabled?: boolean;
 } & Omit<
   HTMLAttributes<HTMLButtonElement> & ButtonHTMLAttributes<HTMLButtonElement>,
   "className" | "style" | "disabled"
@@ -21,6 +22,7 @@ export const Button: React.FC<BaseButtonProps> = ({
   size,
   variant,
   isLoading,
+  isDisabled,
   ...props
 }) => {
   const computedSize = match(size)
@@ -30,7 +32,10 @@ export const Button: React.FC<BaseButtonProps> = ({
 
   const computedVariant = match(variant)
     .with("primary", () => "bg-indigo-600 enabled:hover:bg-indigo-700")
+    .with("danger", () => "bg-red-600 enabled:hover:bg-red-700")
     .exhaustive();
+
+  const disabledState = isLoading || isDisabled;
 
   return (
     <button
@@ -39,9 +44,9 @@ export const Button: React.FC<BaseButtonProps> = ({
         "flex flex-1 items-center justify-center rounded-md border border-transparent  text-base font-medium text-white focus:outline-none",
         computedSize,
         computedVariant,
-        isLoading ? "opacity-75 cursor-not-allowed" : ""
+        disabledState ? "opacity-75 cursor-not-allowed" : ""
       )}
-      disabled={isLoading}
+      disabled={disabledState}
       {...props}
     >
       {isLoading ? <Spinner size="button" variant="white" /> : text}

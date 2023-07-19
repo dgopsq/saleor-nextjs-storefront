@@ -12,11 +12,15 @@ export const ProfileSidebar: React.FC = () => {
   return (
     <Sidebar
       items={[
-        { id: "info", label: "Informations", href: "/account/info" },
         {
-          id: "authentication",
-          label: "Email and password",
-          href: "/account/authentication",
+          id: "profile",
+          label: "Profile",
+          href: "/account/profile",
+        },
+        {
+          id: "addresses",
+          label: "Addresses",
+          href: "/account/addresses",
         },
       ]}
       active={selectedProfileSegment ?? undefined}

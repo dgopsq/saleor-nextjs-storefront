@@ -1,5 +1,6 @@
 import { getFragmentData } from "@/__generated__";
 import {
+  AddressInput,
   CountryCode,
   GenericAddressFragment,
   GenericAddressFragmentDoc,
@@ -22,7 +23,7 @@ export type RefreshToken = string;
 /**
  *
  */
-type Address = {
+export type Address = {
   id: string;
   firstName: string;
   lastName: string;
@@ -48,8 +49,7 @@ export type User = {
   firstName: string;
   lastName: string;
   checkoutTokens: Array<string>;
-  defaultShippingAddress: Address | null;
-  defaultBillingAddress: Address | null;
+  addresses: Array<Address>;
 };
 
 /**
@@ -99,12 +99,6 @@ export function parseAddress(input: GenericAddressFragment): Address {
  */
 export function parseUser(input: GenericUserFragment): User {
   const { id, email, firstName, lastName, checkouts } = input;
-  const rawDefaultShippingAddress =
-    getFragmentData(GenericAddressFragmentDoc, input.defaultShippingAddress) ??
-    null;
-  const rawDefaultBillingAddress =
-    getFragmentData(GenericAddressFragmentDoc, input.defaultBillingAddress) ??
-    null;
 
   return {
     id,
@@ -112,12 +106,14 @@ export function parseUser(input: GenericUserFragment): User {
     firstName,
     lastName,
     checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
-    defaultShippingAddress: rawDefaultShippingAddress
-      ? parseAddress(rawDefaultShippingAddress)
-      : null,
-    defaultBillingAddress: rawDefaultBillingAddress
-      ? parseAddress(rawDefaultBillingAddress)
-      : null,
+    addresses: input.addresses.map((rawAddress) => {
+      const addressFragment = getFragmentData(
+        GenericAddressFragmentDoc,
+        rawAddress
+      );
+
+      return parseAddress(addressFragment);
+    }),
   };
 }
 
@@ -156,5 +152,23 @@ export function addressToAddressForm(input: Address): Partial<AddressForm> {
     country: input.country ?? undefined,
     countryArea: input.countryArea ?? undefined,
     phone: input.phone ?? undefined,
+  };
+}
+
+/**
+ *
+ */
+export function addressToAddressInput(input: Address): AddressInput {
+  return {
+    firstName: input.firstName,
+    lastName: input.lastName,
+    companyName: input.companyName,
+    streetAddress1: input.streetAddress1,
+    streetAddress2: input.streetAddress2,
+    city: input.city,
+    postalCode: input.postalCode,
+    country: input.country,
+    countryArea: input.countryArea,
+    phone: input.phone,
   };
 }

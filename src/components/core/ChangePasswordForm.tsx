@@ -48,8 +48,8 @@ export const ChangePasswordForm: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div className="sm:col-span-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
+          <div className="md:col-span-3">
             <Field
               label="Current password"
               id="oldPassword"
@@ -61,8 +61,8 @@ export const ChangePasswordForm: React.FC<Props> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div className="sm:col-span-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
+          <div className="md:col-span-3">
             <Field
               id="newPassword"
               label="New password"
@@ -72,7 +72,7 @@ export const ChangePasswordForm: React.FC<Props> = ({
             />
           </div>
 
-          <div className="sm:col-span-3">
+          <div className="md:col-span-3">
             <Field
               id="repeatNewPassword"
               label="Repeat new password"

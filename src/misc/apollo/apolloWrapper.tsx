@@ -17,6 +17,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { getStoredAuthToken, refreshAuthToken } from "@/queries/user/token";
 import { logger } from "@/misc/logger";
+import { commonApolloTypePolicies } from "@/misc/apollo/apolloCommons";
 
 /**
  *
@@ -90,11 +91,7 @@ const makeClient = () => {
 
   return new ApolloClient({
     cache: new NextSSRInMemoryCache({
-      typePolicies: {
-        Product: {
-          keyFields: ["slug"],
-        },
-      },
+      typePolicies: commonApolloTypePolicies,
     }),
     link: mainLink,
     defaultOptions: {},

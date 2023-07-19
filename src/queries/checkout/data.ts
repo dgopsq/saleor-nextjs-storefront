@@ -1,8 +1,14 @@
 import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   CheckoutProductFragmentDoc,
-  GetCheckoutInfoQuery,
+  GenericAddressFragmentDoc,
+  ShippingMethod as BaseShippingMethod,
+  GenericCheckoutInfoFragment,
 } from "@/__generated__/graphql";
+import { Price, parsePrice } from "@/queries/common/data/price";
+import { Weight, parseWeight } from "@/queries/common/data/weight";
+import { ProductVariant, parseVariant } from "@/queries/products/data";
+import { Address, parseAddress } from "@/queries/user/data";
 
 /**
  *
@@ -14,12 +20,32 @@ export type CheckoutToken = string;
  */
 type CheckoutItem = {
   id: string;
+  variant: ProductVariant;
+  product: CheckoutProduct;
+  quantity: number;
 };
 
 /**
  *
  */
-type CheckoutProduct = {
+type ShippingMethod = {
+  id: string;
+  name: string;
+  description: string | null;
+  active: boolean;
+  minimumOrderPrice: Price | null;
+  maximumOrderPrice: Price | null;
+  minimumOrderWeight: Weight | null;
+  maximumOrderWeight: Weight | null;
+  price: Price;
+  maximumDeliveryDays: number | null;
+  minimumDeliveryDays: number | null;
+};
+
+/**
+ *
+ */
+export type CheckoutProduct = {
   id: string;
   name: string;
   slug: string;
@@ -42,28 +68,37 @@ export type Checkout = {
     amount: number;
     currency: string;
   } | null;
+  shippingAddress: Address | null;
+  billingAddress: Address | null;
+  shippingMethods: Array<ShippingMethod>;
 };
 
 /**
  *
  */
-export function parseCheckoutInfo({
-  checkout,
-}: GetCheckoutInfoQuery): Checkout {
-  if (!checkout) {
-    return {
-      lines: [],
-      subtotalPrice: null,
-      shippingPrice: null,
-      totalPrice: null,
-    };
-  }
+export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
+  const {
+    lines,
+    subtotalPrice,
+    shippingPrice,
+    totalPrice,
+    shippingAddress,
+    billingAddress,
+    shippingMethods,
+  } = input;
 
-  const { lines, subtotalPrice, shippingPrice, totalPrice } = checkout;
+  const rawShippingAddress =
+    getFragmentData(GenericAddressFragmentDoc, shippingAddress) ?? null;
+
+  const rawBillingAddress =
+    getFragmentData(GenericAddressFragmentDoc, billingAddress) ?? null;
 
   return {
     lines: lines.map((line) => ({
       id: line.id,
+      variant: parseVariant(line.variant),
+      product: parseCheckoutProductVariant(line.variant),
+      quantity: line.quantity,
     })),
     subtotalPrice: subtotalPrice
       ? {
@@ -83,6 +118,11 @@ export function parseCheckoutInfo({
           currency: totalPrice.gross.currency,
         }
       : null,
+    shippingAddress: rawShippingAddress
+      ? parseAddress(rawShippingAddress)
+      : null,
+    billingAddress: rawBillingAddress ? parseAddress(rawBillingAddress) : null,
+    shippingMethods: shippingMethods.map(parseShippingMethod),
   };
 }
 
@@ -100,5 +140,47 @@ export function parseCheckoutProductVariant(
     id,
     name,
     slug,
+  };
+}
+
+/**
+ *
+ */
+export function parseShippingMethod(
+  input: Pick<
+    BaseShippingMethod,
+    | "id"
+    | "name"
+    | "description"
+    | "active"
+    | "minimumOrderWeight"
+    | "minimumOrderPrice"
+    | "maximumOrderWeight"
+    | "maximumOrderPrice"
+    | "minimumDeliveryDays"
+    | "maximumDeliveryDays"
+    | "price"
+  >
+): ShippingMethod {
+  return {
+    id: input.id,
+    name: input.name,
+    description: input.description ?? null,
+    active: input.active,
+    minimumOrderPrice: input.minimumOrderPrice
+      ? parsePrice(input.minimumOrderPrice)
+      : null,
+    maximumOrderPrice: input.maximumOrderPrice
+      ? parsePrice(input.maximumOrderPrice)
+      : null,
+    minimumOrderWeight: input.minimumOrderWeight
+      ? parseWeight(input.minimumOrderWeight)
+      : null,
+    maximumOrderWeight: input.maximumOrderWeight
+      ? parseWeight(input.maximumOrderWeight)
+      : null,
+    price: parsePrice(input.price),
+    maximumDeliveryDays: input.maximumDeliveryDays ?? null,
+    minimumDeliveryDays: input.minimumDeliveryDays ?? null,
   };
 }

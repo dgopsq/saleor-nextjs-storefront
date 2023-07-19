@@ -10,6 +10,7 @@ import {
   ProductOrderField,
 } from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
+import { Price, parsePrice } from "@/queries/common/data/price";
 import {
   ProductAttribute,
   parseAttributes,
@@ -29,21 +30,13 @@ type ProductImage = {
 /**
  *
  */
-type ProductPrice = {
-  amount: number;
-  currency: string;
-};
-
-/**
- *
- */
 export type ProductVariant = {
   id: string;
   sku: string | null;
   name: string;
   images: Array<ProductImage>;
-  price: ProductPrice | null;
-  discount: ProductPrice | null;
+  price: Price | null;
+  discount: Price | null;
   attributes: Array<ProductAttribute>;
 };
 
@@ -57,8 +50,8 @@ export type Product = {
   description: string | null;
   images: Array<ProductImage>;
   prices: {
-    from: ProductPrice | null;
-    to: ProductPrice | null;
+    from: Price | null;
+    to: Price | null;
   };
   defaultVariant: ProductVariant | null;
   variants: Array<ProductVariant>;
@@ -74,8 +67,8 @@ export type PreviewProduct = {
   name: string;
   images: Array<ProductImage>;
   prices: {
-    from: ProductPrice | null;
-    to: ProductPrice | null;
+    from: Price | null;
+    to: Price | null;
   };
 };
 
@@ -109,17 +102,9 @@ export function parseVariant(
           alt: media.alt,
         }))
       : [],
-    price: pricing?.price?.gross
-      ? {
-          amount: pricing.price.gross.amount,
-          currency: pricing.price.gross.currency,
-        }
-      : null,
+    price: pricing?.price?.gross ? parsePrice(pricing.price.gross) : null,
     discount: pricing?.discount?.gross
-      ? {
-          amount: pricing.discount.gross.amount,
-          currency: pricing.discount.gross.currency,
-        }
+      ? parsePrice(pricing.discount.gross)
       : null,
     attributes: parseAttributes(attributes),
   };
@@ -151,16 +136,10 @@ export function parseProduct(
       : [],
     prices: {
       from: pricing?.priceRange?.start?.gross
-        ? {
-            amount: pricing.priceRange.start.gross.amount,
-            currency: pricing.priceRange.start.gross.currency,
-          }
+        ? parsePrice(pricing.priceRange.start.gross)
         : null,
       to: pricing?.priceRange?.stop?.gross
-        ? {
-            amount: pricing.priceRange.stop.gross.amount,
-            currency: pricing.priceRange.stop.gross.currency,
-          }
+        ? parsePrice(pricing.priceRange.stop.gross)
         : null,
     },
     defaultVariant: defaultVariant ? parseVariant(defaultVariant) : null,
@@ -190,16 +169,10 @@ export function parsePreviewProduct(
       : [],
     prices: {
       from: pricing?.priceRange?.start?.gross
-        ? {
-            amount: pricing.priceRange.start.gross.amount,
-            currency: pricing.priceRange.start.gross.currency,
-          }
+        ? parsePrice(pricing.priceRange.start.gross)
         : null,
       to: pricing?.priceRange?.stop?.gross
-        ? {
-            amount: pricing.priceRange.stop.gross.amount,
-            currency: pricing.priceRange.stop.gross.currency,
-          }
+        ? parsePrice(pricing.priceRange.stop.gross)
         : null,
     },
   };
