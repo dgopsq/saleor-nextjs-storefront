@@ -202,3 +202,21 @@ mutation UpdateCheckoutEmail($checkoutToken: UUID!, $email: String!) {
     }
   }
 }
+mutation UpdateCheckoutDeliveryMethod(
+  $checkoutToken: UUID!
+  $deliveryMethodId: ID!
+) {
+  checkoutDeliveryMethodUpdate(
+    token: $checkoutToken
+    deliveryMethodId: $deliveryMethodId
+  ) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}

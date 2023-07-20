@@ -29,7 +29,7 @@ type CheckoutItem = {
 /**
  *
  */
-type ShippingMethod = {
+export type DeliveryMethod = {
   id: string;
   name: string;
   description: string | null;
@@ -73,8 +73,8 @@ export type Checkout = {
   } | null;
   shippingAddress: Address | null;
   billingAddress: Address | null;
-  shippingMethods: Array<ShippingMethod>;
-  deliveryMethod: ShippingMethod | null;
+  shippingMethods: Array<DeliveryMethod>;
+  deliveryMethod: DeliveryMethod | null;
 };
 
 /**
@@ -174,7 +174,7 @@ export function parseCheckoutProductVariant(
  */
 export function parseShippingMethod(
   input: GenericShippingMethodFragment
-): ShippingMethod {
+): DeliveryMethod {
   return {
     id: input.id,
     name: input.name,

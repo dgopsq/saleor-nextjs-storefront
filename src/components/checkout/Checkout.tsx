@@ -2,12 +2,14 @@
 
 import {
   UpdateCheckoutBillingAddressDocument,
+  UpdateCheckoutDeliveryMethodDocument,
   UpdateCheckoutEmailDocument,
   UpdateCheckoutShippingAddressDocument,
 } from "@/__generated__/graphql";
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
+import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { Button } from "@/components/core/Button";
 import { Checkbox } from "@/components/core/Checkbox";
@@ -17,6 +19,7 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
+import { DeliveryMethod } from "@/queries/checkout/data";
 import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
@@ -38,6 +41,8 @@ export const Checkout: React.FC = () => {
     useMutation(UpdateCheckoutShippingAddressDocument);
   const [updateBillingAddress, { loading: loadingUpdateBillingAddress }] =
     useMutation(UpdateCheckoutBillingAddressDocument);
+  const [updateDeliveryMethod, { loading: loadingUpdateDeliveryMethod }] =
+    useMutation(UpdateCheckoutDeliveryMethodDocument);
 
   const handleEmailUpdate = useCallback(
     (email: string) => {
@@ -86,6 +91,19 @@ export const Checkout: React.FC = () => {
       handleBillingAddressUpdate,
       billingSameAsShipping,
     ]
+  );
+
+  const handleDeliveryMethodUpdate = useCallback(
+    (deliveryMethod: DeliveryMethod) => {
+      if (data)
+        updateDeliveryMethod({
+          variables: {
+            checkoutToken: data.token,
+            deliveryMethodId: deliveryMethod.id,
+          },
+        });
+    },
+    [updateDeliveryMethod, data]
   );
 
   const canBuy =
@@ -183,6 +201,15 @@ export const Checkout: React.FC = () => {
               >
                 Delivery method
               </h2>
+
+              <div className="mt-8">
+                <CheckoutDeliveryMethod
+                  deliveryMethods={data.shippingMethods ?? []}
+                  value={data.deliveryMethod ?? undefined}
+                  onChange={handleDeliveryMethodUpdate}
+                  isLoading={loadingUpdateDeliveryMethod}
+                />
+              </div>
             </div>
           </section>
 
