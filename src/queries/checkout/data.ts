@@ -2,8 +2,9 @@ import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
-  ShippingMethod as BaseShippingMethod,
   GenericCheckoutInfoFragment,
+  GenericShippingMethodFragment,
+  GenericShippingMethodFragmentDoc,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
@@ -73,6 +74,7 @@ export type Checkout = {
   shippingAddress: Address | null;
   billingAddress: Address | null;
   shippingMethods: Array<ShippingMethod>;
+  deliveryMethod: ShippingMethod | null;
 };
 
 /**
@@ -91,6 +93,7 @@ export function parseGenericCheckoutInfo(
     shippingAddress,
     billingAddress,
     shippingMethods,
+    deliveryMethod,
   } = input;
 
   const rawShippingAddress =
@@ -98,6 +101,11 @@ export function parseGenericCheckoutInfo(
 
   const rawBillingAddress =
     getFragmentData(GenericAddressFragmentDoc, billingAddress) ?? null;
+
+  const rawDeliveryMethod =
+    deliveryMethod?.__typename === "ShippingMethod"
+      ? getFragmentData(GenericShippingMethodFragmentDoc, deliveryMethod)
+      : null;
 
   return {
     email: email ?? null,
@@ -130,7 +138,17 @@ export function parseGenericCheckoutInfo(
       ? parseAddress(rawShippingAddress)
       : null,
     billingAddress: rawBillingAddress ? parseAddress(rawBillingAddress) : null,
-    shippingMethods: shippingMethods.map(parseShippingMethod),
+    shippingMethods: shippingMethods.map((rawShippingMethod) => {
+      const shippingMethodFragment = getFragmentData(
+        GenericShippingMethodFragmentDoc,
+        rawShippingMethod
+      );
+
+      return parseShippingMethod(shippingMethodFragment);
+    }),
+    deliveryMethod: rawDeliveryMethod
+      ? parseShippingMethod(rawDeliveryMethod)
+      : null,
   };
 }
 
@@ -155,20 +173,7 @@ export function parseCheckoutProductVariant(
  *
  */
 export function parseShippingMethod(
-  input: Pick<
-    BaseShippingMethod,
-    | "id"
-    | "name"
-    | "description"
-    | "active"
-    | "minimumOrderWeight"
-    | "minimumOrderPrice"
-    | "maximumOrderWeight"
-    | "maximumOrderPrice"
-    | "minimumDeliveryDays"
-    | "maximumDeliveryDays"
-    | "price"
-  >
+  input: GenericShippingMethodFragment
 ): ShippingMethod {
   return {
     id: input.id,

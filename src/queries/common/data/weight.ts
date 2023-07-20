@@ -1,10 +1,10 @@
-import { Weight as BaseWeight } from "@/__generated__/graphql";
+import { Weight as BaseWeight, WeightUnitsEnum } from "@/__generated__/graphql";
 
 /**
  *
  */
 export type Weight = {
-  unit: string;
+  unit: WeightUnitsEnum;
   value: number;
 };
 

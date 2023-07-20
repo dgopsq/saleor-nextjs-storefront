@@ -6,6 +6,37 @@ fragment CheckoutProduct on ProductVariant {
   }
 }
 
+fragment GenericShippingMethod on ShippingMethod {
+  id
+  name
+  description
+  active
+  minimumOrderPrice {
+    amount
+    currency
+  }
+  maximumOrderPrice {
+    amount
+    currency
+  }
+  price {
+    amount
+    currency
+  }
+  minimumDeliveryDays
+  maximumDeliveryDays
+
+  minimumOrderWeight {
+    unit
+    value
+  }
+
+  maximumOrderWeight {
+    unit
+    value
+  }
+}
+
 fragment GenericCheckoutInfo on Checkout {
   token
   email
@@ -49,24 +80,11 @@ fragment GenericCheckoutInfo on Checkout {
   }
 
   shippingMethods {
-    id
-    name
-    description
-    active
-    minimumOrderPrice {
-      amount
-      currency
-    }
-    maximumOrderPrice {
-      amount
-      currency
-    }
-    price {
-      amount
-      currency
-    }
-    maximumDeliveryDays
-    minimumDeliveryDays
+    ...GenericShippingMethod
+  }
+
+  deliveryMethod {
+    ...GenericShippingMethod
   }
 }
 

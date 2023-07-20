@@ -88,6 +88,12 @@ export const Checkout: React.FC = () => {
     ]
   );
 
+  const canBuy =
+    data?.billingAddress &&
+    data?.shippingAddress &&
+    data?.email &&
+    data?.deliveryMethod;
+
   const checkoutRefreshing =
     checkoutInfoLoading ||
     updateProductLoading ||
@@ -170,7 +176,14 @@ export const Checkout: React.FC = () => {
               ) : undefined}
             </div>
 
-            <div className="mt-12 border-b border-gray-100 pb-12">aaa</div>
+            <div className="mt-12 border-b border-gray-100 pb-12">
+              <h2
+                id="summary-heading"
+                className="text-lg font-medium text-gray-900"
+              >
+                Delivery method
+              </h2>
+            </div>
           </section>
 
           <section
@@ -208,6 +221,7 @@ export const Checkout: React.FC = () => {
                     size="large"
                     text="Buy now"
                     isLoading={checkoutRefreshing}
+                    isDisabled={!canBuy}
                   />
                 </Link>
               </div>
