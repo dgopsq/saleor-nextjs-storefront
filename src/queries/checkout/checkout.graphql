@@ -237,3 +237,17 @@ mutation CheckoutPaymentInitialize(
     }
   }
 }
+
+mutation CheckoutTransactionInitialize(
+  $checkoutId: ID!
+  $paymentGateway: PaymentGatewayToInitialize!
+) {
+  transactionInitialize(id: $checkoutId, paymentGateway: $paymentGateway) {
+    data
+    errors {
+      code
+      message
+      field
+    }
+  }
+}

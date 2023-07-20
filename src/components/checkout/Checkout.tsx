@@ -11,7 +11,7 @@ import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
-import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateways";
+import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
 import { Button } from "@/components/core/Button";
 import { Checkbox } from "@/components/core/Checkbox";
 import { Island } from "@/components/core/Island";
@@ -35,8 +35,6 @@ type Props = {
  */
 export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
-  const [selectedPaymentGateway, setSelectedPaymentGateway] =
-    useState<PaymentGatewayConfig | null>(null);
 
   const userInfo = useUserInfo();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
@@ -51,6 +49,8 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
     useMutation(UpdateCheckoutBillingAddressDocument);
   const [updateDeliveryMethod, { loading: loadingUpdateDeliveryMethod }] =
     useMutation(UpdateCheckoutDeliveryMethodDocument);
+
+  console.log(paymentGateways);
 
   const handleEmailUpdate = useCallback(
     (email: string) => {
@@ -115,15 +115,14 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
   );
 
   const handleBuyNow = useCallback(() => {
-    if (!data || !selectedPaymentGateway) return;
-  }, [data, selectedPaymentGateway]);
+    if (!data) return;
+  }, [data]);
 
   const canBuy =
     data?.billingAddress &&
     data?.shippingAddress &&
     data?.email &&
-    data?.deliveryMethod &&
-    selectedPaymentGateway;
+    data?.deliveryMethod;
 
   const checkoutRefreshing =
     checkoutInfoLoading ||
@@ -235,8 +234,7 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
               <div className="mt-8">
                 <CheckoutPaymentGateways
                   paymentGateways={paymentGateways}
-                  value={selectedPaymentGateway ?? undefined}
-                  onChange={setSelectedPaymentGateway}
+                  checkoutId={data.id}
                 />
               </div>
             </div>
