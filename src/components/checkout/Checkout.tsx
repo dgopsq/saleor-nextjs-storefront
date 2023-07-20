@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  UpdateCheckoutBillingAddressDocument,
   UpdateCheckoutEmailDocument,
   UpdateCheckoutShippingAddressDocument,
 } from "@/__generated__/graphql";
@@ -9,6 +10,7 @@ import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { Button } from "@/components/core/Button";
+import { Checkbox } from "@/components/core/Checkbox";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
@@ -18,12 +20,14 @@ import { classNames } from "@/misc/styles";
 import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 /**
  *
  */
 export const Checkout: React.FC = () => {
+  const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+
   const userInfo = useUserInfo();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
@@ -32,6 +36,8 @@ export const Checkout: React.FC = () => {
   );
   const [updateShippingAddress, { loading: loadingUpdateShippingAddress }] =
     useMutation(UpdateCheckoutShippingAddressDocument);
+  const [updateBillingAddress, { loading: loadingUpdateBillingAddress }] =
+    useMutation(UpdateCheckoutBillingAddressDocument);
 
   const handleEmailUpdate = useCallback(
     (email: string) => {
@@ -46,24 +52,48 @@ export const Checkout: React.FC = () => {
     [updateEmail, data]
   );
 
-  const handleShippingAddressUpdate = useCallback(
+  const handleBillingAddressUpdate = useCallback(
     (address: Address) => {
       if (data)
-        updateShippingAddress({
+        updateBillingAddress({
           variables: {
             checkoutToken: data.token,
             address: addressToAddressInput(address),
           },
         });
     },
-    [updateShippingAddress, data]
+    [updateBillingAddress, data]
+  );
+
+  const handleShippingAddressUpdate = useCallback(
+    (address: Address) => {
+      if (!data) return;
+
+      updateShippingAddress({
+        variables: {
+          checkoutToken: data.token,
+          address: addressToAddressInput(address),
+        },
+      });
+
+      // If the billing address is the same as the shipping address,
+      // we update it as well.
+      if (billingSameAsShipping) handleBillingAddressUpdate(address);
+    },
+    [
+      updateShippingAddress,
+      data,
+      handleBillingAddressUpdate,
+      billingSameAsShipping,
+    ]
   );
 
   const checkoutRefreshing =
     checkoutInfoLoading ||
     updateProductLoading ||
     loadingUpdateEmail ||
-    loadingUpdateShippingAddress;
+    loadingUpdateShippingAddress ||
+    loadingUpdateBillingAddress;
 
   if (!data) return <LoadingSpinner />;
 
@@ -85,7 +115,7 @@ export const Checkout: React.FC = () => {
               />
             </div>
 
-            <div className="mt-12">
+            <div className="mt-12 border-b border-gray-100 pb-12">
               {userInfo ? (
                 <>
                   <h2
@@ -103,6 +133,39 @@ export const Checkout: React.FC = () => {
                       isLoading={loadingUpdateShippingAddress}
                     />
                   </div>
+                </>
+              ) : undefined}
+            </div>
+
+            <div className="mt-12">
+              {userInfo ? (
+                <>
+                  <h2
+                    id="summary-heading"
+                    className="text-lg font-medium text-gray-900"
+                  >
+                    Billing address
+                  </h2>
+
+                  <div className="mt-8">
+                    <Checkbox
+                      id="billingSameAsShipping"
+                      label="Same as the shipping address"
+                      value={billingSameAsShipping}
+                      onClick={() => setBillingSameAsShipping((prev) => !prev)}
+                    />
+                  </div>
+
+                  {!billingSameAsShipping ? (
+                    <div className="mt-8">
+                      <CheckoutAddressUser
+                        addresses={userInfo.addresses}
+                        value={data.billingAddress ?? undefined}
+                        onChange={handleBillingAddressUpdate}
+                        isLoading={loadingUpdateBillingAddress}
+                      />
+                    </div>
+                  ) : undefined}
                 </>
               ) : undefined}
             </div>
