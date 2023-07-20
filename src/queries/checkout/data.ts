@@ -3,6 +3,8 @@ import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
   GenericCheckoutInfoFragment,
+  GenericPaymentGatewayFragment,
+  GenericPaymentGatewayFragmentDoc,
   GenericShippingMethodFragment,
   GenericShippingMethodFragmentDoc,
 } from "@/__generated__/graphql";
@@ -14,7 +16,7 @@ import { Address, parseAddress } from "@/queries/user/data";
 /**
  *
  */
-export type CheckoutToken = string;
+export type CheckoutId = string | number;
 
 /**
  *
@@ -55,9 +57,21 @@ export type CheckoutProduct = {
 /**
  *
  */
+export type PaymentGateway = {
+  id: string;
+  name: string;
+  config: Array<{
+    field: string;
+    value: string | null;
+  }>;
+};
+
+/**
+ *
+ */
 export type Checkout = {
+  id: string;
   email: string | null;
-  token: string;
   lines: Array<CheckoutItem>;
   subtotalPrice: {
     amount: number;
@@ -75,6 +89,7 @@ export type Checkout = {
   billingAddress: Address | null;
   shippingMethods: Array<DeliveryMethod>;
   deliveryMethod: DeliveryMethod | null;
+  availablePaymentGateways: Array<PaymentGateway>;
 };
 
 /**
@@ -84,8 +99,8 @@ export function parseGenericCheckoutInfo(
   input: GenericCheckoutInfoFragment
 ): Checkout {
   const {
+    id,
     email,
-    token,
     lines,
     subtotalPrice,
     shippingPrice,
@@ -94,6 +109,7 @@ export function parseGenericCheckoutInfo(
     billingAddress,
     shippingMethods,
     deliveryMethod,
+    availablePaymentGateways,
   } = input;
 
   const rawShippingAddress =
@@ -108,8 +124,8 @@ export function parseGenericCheckoutInfo(
       : null;
 
   return {
+    id,
     email: email ?? null,
-    token,
     lines: lines.map((line) => ({
       id: line.id,
       variant: parseVariant(line.variant),
@@ -149,6 +165,16 @@ export function parseGenericCheckoutInfo(
     deliveryMethod: rawDeliveryMethod
       ? parseShippingMethod(rawDeliveryMethod)
       : null,
+    availablePaymentGateways: availablePaymentGateways.map(
+      (rawPaymentGateway) => {
+        const paymentGatewayFragment = getFragmentData(
+          GenericPaymentGatewayFragmentDoc,
+          rawPaymentGateway
+        );
+
+        return parsePaymentGateway(paymentGatewayFragment);
+      }
+    ),
   };
 }
 
@@ -195,5 +221,22 @@ export function parseShippingMethod(
     price: parsePrice(input.price),
     maximumDeliveryDays: input.maximumDeliveryDays ?? null,
     minimumDeliveryDays: input.minimumDeliveryDays ?? null,
+  };
+}
+
+/**
+ *
+ */
+export function parsePaymentGateway(
+  input: GenericPaymentGatewayFragment
+): PaymentGateway {
+  return {
+    id: input.id,
+    name: input.name,
+    config:
+      input.config.map((config) => ({
+        field: config.field,
+        value: config.value ?? null,
+      })) ?? [],
   };
 }

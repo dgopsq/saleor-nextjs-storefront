@@ -1,6 +1,6 @@
 "use client";
 
-import { useCheckoutTokenStore } from "@/misc/states/checkoutTokenStore";
+import { useCheckoutIdStore } from "@/misc/states/checkoutIdStore";
 import { useApolloClient } from "@apollo/client";
 import { useEffect } from "react";
 
@@ -9,7 +9,7 @@ import { useEffect } from "react";
  */
 export const Bootstrap: React.FC = () => {
   const apolloClient = useApolloClient();
-  const initializeCheckoutToken = useCheckoutTokenStore(
+  const initializeCheckoutToken = useCheckoutIdStore(
     (state) => state.initialize
   );
 

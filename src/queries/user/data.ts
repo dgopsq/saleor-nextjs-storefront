@@ -7,6 +7,7 @@ import {
   GenericUserFragment,
 } from "@/__generated__/graphql";
 import { AddressForm } from "@/components/core/AddressForm";
+import { CheckoutId } from "@/queries/checkout/data";
 import jwt_decode from "jwt-decode";
 import * as z from "zod";
 
@@ -48,7 +49,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
-  checkoutTokens: Array<string>;
+  checkoutIds: Array<CheckoutId>;
   addresses: Array<Address>;
 };
 
@@ -105,7 +106,7 @@ export function parseUser(input: GenericUserFragment): User {
     email,
     firstName,
     lastName,
-    checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
+    checkoutIds: checkouts?.edges?.map((edge) => edge?.node?.id) ?? [],
     addresses: input.addresses.map((rawAddress) => {
       const addressFragment = getFragmentData(
         GenericAddressFragmentDoc,

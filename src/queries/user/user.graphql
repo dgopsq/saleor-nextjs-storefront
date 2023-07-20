@@ -27,7 +27,7 @@ fragment GenericUser on User {
   checkouts(first: 1) {
     edges {
       node {
-        token
+        id
       }
     }
   }

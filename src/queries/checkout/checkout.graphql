@@ -37,8 +37,17 @@ fragment GenericShippingMethod on ShippingMethod {
   }
 }
 
+fragment GenericPaymentGateway on PaymentGateway {
+  id
+  name
+  config {
+    field
+    value
+  }
+}
+
 fragment GenericCheckoutInfo on Checkout {
-  token
+  id
   email
 
   lines {
@@ -86,10 +95,14 @@ fragment GenericCheckoutInfo on Checkout {
   deliveryMethod {
     ...GenericShippingMethod
   }
+
+  availablePaymentGateways {
+    ...GenericPaymentGateway
+  }
 }
 
-query GetCheckoutInfo($checkoutToken: UUID!) {
-  checkout(token: $checkoutToken) {
+query GetCheckoutInfo($checkoutId: ID!) {
+  checkout(id: $checkoutId) {
     ...GenericCheckoutInfo
   }
 }
@@ -107,9 +120,9 @@ mutation CreateCheckout($channel: String!, $email: String!) {
   }
 }
 
-mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
+mutation AddProductToCart($checkoutId: ID!, $variantId: ID!) {
   checkoutLinesAdd(
-    token: $checkoutToken
+    id: $checkoutId
     lines: [{ quantity: 1, variantId: $variantId }]
   ) {
     checkout {
@@ -124,10 +137,10 @@ mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
 }
 
 mutation UpdateProductInCart(
-  $checkoutToken: UUID!
+  $checkoutId: ID!
   $lines: [CheckoutLineUpdateInput!]!
 ) {
-  checkoutLinesUpdate(token: $checkoutToken, lines: $lines) {
+  checkoutLinesUpdate(id: $checkoutId, lines: $lines) {
     checkout {
       ...GenericCheckoutInfo
     }
@@ -139,8 +152,8 @@ mutation UpdateProductInCart(
   }
 }
 
-mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
-  checkoutLinesDelete(token: $checkoutToken, linesIds: $linesIds) {
+mutation RemoveProductFromCart($checkoutId: ID!, $linesIds: [ID!]!) {
+  checkoutLinesDelete(id: $checkoutId, linesIds: $linesIds) {
     checkout {
       ...GenericCheckoutInfo
     }
@@ -153,13 +166,10 @@ mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
 }
 
 mutation UpdateCheckoutShippingAddress(
-  $checkoutToken: UUID!
+  $checkoutId: ID!
   $address: AddressInput!
 ) {
-  checkoutShippingAddressUpdate(
-    token: $checkoutToken
-    shippingAddress: $address
-  ) {
+  checkoutShippingAddressUpdate(id: $checkoutId, shippingAddress: $address) {
     checkout {
       ...GenericCheckoutInfo
     }
@@ -172,12 +182,41 @@ mutation UpdateCheckoutShippingAddress(
 }
 
 mutation UpdateCheckoutBillingAddress(
-  $checkoutToken: UUID!
+  $checkoutId: ID!
   $address: AddressInput!
 ) {
-  checkoutBillingAddressUpdate(
-    token: $checkoutToken
-    billingAddress: $address
+  checkoutBillingAddressUpdate(id: $checkoutId, billingAddress: $address) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UpdateCheckoutEmail($checkoutId: ID!, $email: String!) {
+  checkoutEmailUpdate(id: $checkoutId, email: $email) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UpdateCheckoutDeliveryMethod(
+  $checkoutId: ID!
+  $deliveryMethodId: ID!
+) {
+  checkoutDeliveryMethodUpdate(
+    id: $checkoutId
+    deliveryMethodId: $deliveryMethodId
   ) {
     checkout {
       ...GenericCheckoutInfo
@@ -190,28 +229,19 @@ mutation UpdateCheckoutBillingAddress(
   }
 }
 
-mutation UpdateCheckoutEmail($checkoutToken: UUID!, $email: String!) {
-  checkoutEmailUpdate(token: $checkoutToken, email: $email) {
-    checkout {
-      ...GenericCheckoutInfo
-    }
-    errors {
-      code
-      message
-      field
-    }
-  }
-}
-mutation UpdateCheckoutDeliveryMethod(
-  $checkoutToken: UUID!
-  $deliveryMethodId: ID!
+mutation CheckoutPaymentInitialize(
+  $checkoutId: ID!
+  $paymentGateways: [PaymentGatewayToInitialize!]
 ) {
-  checkoutDeliveryMethodUpdate(
-    token: $checkoutToken
-    deliveryMethodId: $deliveryMethodId
-  ) {
-    checkout {
-      ...GenericCheckoutInfo
+  paymentGatewayInitialize(id: $checkoutId, paymentGateways: $paymentGateways) {
+    gatewayConfigs {
+      id
+      data
+      errors {
+        code
+        message
+        field
+      }
     }
     errors {
       code

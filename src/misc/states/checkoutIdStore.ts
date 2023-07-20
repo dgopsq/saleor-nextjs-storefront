@@ -1,23 +1,23 @@
 import { ClientApolloInstance } from "@/misc/apollo/apolloWrapper";
 import { AsyncData } from "@/misc/asyncData";
 import { logger } from "@/misc/logger";
-import { CheckoutToken } from "@/queries/checkout/data";
+import { CheckoutId } from "@/queries/checkout/data";
 import { GenericCheckoutTokenError } from "@/queries/user/errors";
-import { retrieveCheckoutToken } from "@/queries/user/token";
+import { retrieveCheckoutId } from "@/queries/user/token";
 import { match } from "ts-pattern";
 import { create } from "zustand";
 
-type CheckoutTokenData = CheckoutToken | null;
+type CheckoutIdData = CheckoutId | null;
 
-type CheckoutTokenStore = {
-  value: AsyncData<CheckoutTokenData>;
+type CheckoutIdStore = {
+  value: AsyncData<CheckoutIdData>;
   initialize: (client: ClientApolloInstance) => void;
 };
 
 /**
  *
  */
-export const useCheckoutTokenStore = create<CheckoutTokenStore>((set) => ({
+export const useCheckoutIdStore = create<CheckoutIdStore>((set) => ({
   /**
    *
    */
@@ -32,7 +32,7 @@ export const useCheckoutTokenStore = create<CheckoutTokenStore>((set) => ({
 
       set({ value: { kind: "Loading" } });
 
-      const checkoutToken = await retrieveCheckoutToken(client);
+      const checkoutToken = await retrieveCheckoutId(client);
 
       logger.debug(
         "Checkout Token retrieval job ended with result:",
@@ -48,7 +48,10 @@ export const useCheckoutTokenStore = create<CheckoutTokenStore>((set) => ({
         },
       });
 
-      logger.error("Error while retrieving the Checkout Token", error);
+      logger.error(
+        "Error while retrieving the Checkout Id",
+        JSON.stringify(error)
+      );
     }
   },
 }));
@@ -56,10 +59,10 @@ export const useCheckoutTokenStore = create<CheckoutTokenStore>((set) => ({
 /**
  *
  */
-export const useCheckoutToken = () => {
-  const authTokenStore = useCheckoutTokenStore((state) => state.value);
+export const useCheckoutId = () => {
+  const store = useCheckoutIdStore((state) => state.value);
 
-  return match(authTokenStore)
+  return match(store)
     .with({ kind: "Success" }, ({ data }) => data)
     .otherwise(() => null);
 };

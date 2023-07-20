@@ -20,17 +20,18 @@ export function useProductUpdate(): UseProductUpdateReturn {
 
   const action = useCallback(
     (variantId: string, quantity: number) => {
-      updateProducts({
-        variables: {
-          checkoutToken: data?.token ?? "",
-          lines:
-            data?.lines.map((line) => ({
-              variantId: line.variant.id,
-              quantity:
-                line.variant.id === variantId ? quantity : line.quantity,
-            })) ?? [],
-        },
-      });
+      if (data?.id)
+        updateProducts({
+          variables: {
+            checkoutId: data.id,
+            lines:
+              data?.lines.map((line) => ({
+                variantId: line.variant.id,
+                quantity:
+                  line.variant.id === variantId ? quantity : line.quantity,
+              })) ?? [],
+          },
+        });
     },
     [data, updateProducts]
   );

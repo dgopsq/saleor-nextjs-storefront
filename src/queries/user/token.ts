@@ -6,7 +6,7 @@ import {
 import { ClientApolloInstance } from "@/misc/apollo/apolloWrapper";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
-import { CheckoutToken } from "@/queries/checkout/data";
+import { CheckoutId } from "@/queries/checkout/data";
 import { AuthToken, decodeUserToken } from "@/queries/user/data";
 import Cookies from "js-cookie";
 import { setContext } from "@apollo/client/link/context";
@@ -61,36 +61,36 @@ export async function refreshAuthToken(): Promise<AuthToken | null> {
 /**
  *
  */
-export async function retrieveCheckoutToken(
+export async function retrieveCheckoutId(
   client: ClientApolloInstance
-): Promise<CheckoutToken | null> {
+): Promise<CheckoutId | null> {
   const maybeStoredAuthToken = getStoredAuthToken();
-  const localCheckoutToken = getStoredCheckoutToken();
+  const localCheckoutId = getStoredCheckoutId();
 
-  if (localCheckoutToken) {
-    logger.debug("Checkout Token found, checking if it's valid.");
+  if (localCheckoutId) {
+    logger.debug("Checkout Id found, checking if it's valid.");
 
     const checkoutInfoRes = await client.query({
       query: GetCheckoutInfoDocument,
-      variables: { checkoutToken: localCheckoutToken },
+      variables: { checkoutId: localCheckoutId },
       errorPolicy: "ignore",
     });
 
     if (checkoutInfoRes.data.checkout) {
-      logger.debug("Local Checkout Token is valid:", localCheckoutToken);
-      return localCheckoutToken;
+      logger.debug("Local Checkout Id is valid:", localCheckoutId);
+      return localCheckoutId;
     }
   }
 
-  logger.debug("Creating a new Checkout Token.");
+  logger.debug("Creating a new Checkout Id.");
 
   const maybeUser = maybeStoredAuthToken
     ? decodeUserToken(maybeStoredAuthToken)
     : null;
 
   if (maybeUser)
-    logger.debug("Creating the Checkout Token for the user:", maybeUser.email);
-  else logger.debug("Creating the Checkout Token for a guest user.");
+    logger.debug("Creating the Checkout Id for the user:", maybeUser.email);
+  else logger.debug("Creating the Checkout Id for a guest user.");
 
   const email = maybeUser?.email ?? publicConfig.defaultCheckoutEmail;
   const channel = publicConfig.defaultCheckoutChannel;
@@ -108,18 +108,18 @@ export async function retrieveCheckoutToken(
     createCheckoutRes.data?.checkoutCreate?.checkout
   );
 
-  const newCheckoutToken: string | null = parsedFragmentData?.token ?? null;
+  const newCheckoutId = parsedFragmentData?.id ?? null;
 
-  if (newCheckoutToken) {
-    logger.debug("Checkout Token created:", newCheckoutToken);
+  if (newCheckoutId) {
+    logger.debug("Checkout Id created:", newCheckoutId);
 
-    Cookies.set(publicConfig.checkoutTokenStorageKey, newCheckoutToken);
+    Cookies.set(publicConfig.checkoutIdStorageKey, newCheckoutId);
 
     setContext(() => ({
       headers: {},
     }));
 
-    return newCheckoutToken;
+    return newCheckoutId;
   }
 
   return null;
@@ -142,6 +142,6 @@ export function getStoredRefreshToken(): AuthToken | null {
 /**
  *
  */
-export function getStoredCheckoutToken(): CheckoutToken | null {
-  return Cookies.get(publicConfig.checkoutTokenStorageKey) ?? null;
+export function getStoredCheckoutId(): CheckoutId | null {
+  return Cookies.get(publicConfig.checkoutIdStorageKey) ?? null;
 }

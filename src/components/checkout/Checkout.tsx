@@ -11,6 +11,7 @@ import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
+import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateways";
 import { Button } from "@/components/core/Button";
 import { Checkbox } from "@/components/core/Checkbox";
 import { Island } from "@/components/core/Island";
@@ -19,7 +20,7 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
-import { DeliveryMethod } from "@/queries/checkout/data";
+import { DeliveryMethod, PaymentGateway } from "@/queries/checkout/data";
 import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
@@ -30,10 +31,13 @@ import { useCallback, useState } from "react";
  */
 export const Checkout: React.FC = () => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+  const [selectedPaymentGateway, setSelectedPaymentGateway] =
+    useState<PaymentGateway | null>(null);
 
   const userInfo = useUserInfo();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
+
   const [updateEmail, { loading: loadingUpdateEmail }] = useMutation(
     UpdateCheckoutEmailDocument
   );
@@ -49,7 +53,7 @@ export const Checkout: React.FC = () => {
       if (data)
         updateEmail({
           variables: {
-            checkoutToken: data.token,
+            checkoutId: data.id,
             email,
           },
         });
@@ -62,7 +66,7 @@ export const Checkout: React.FC = () => {
       if (data)
         updateBillingAddress({
           variables: {
-            checkoutToken: data.token,
+            checkoutId: data.id,
             address: addressToAddressInput(address),
           },
         });
@@ -76,7 +80,7 @@ export const Checkout: React.FC = () => {
 
       updateShippingAddress({
         variables: {
-          checkoutToken: data.token,
+          checkoutId: data.id,
           address: addressToAddressInput(address),
         },
       });
@@ -98,7 +102,7 @@ export const Checkout: React.FC = () => {
       if (data)
         updateDeliveryMethod({
           variables: {
-            checkoutToken: data.token,
+            checkoutId: data.id,
             deliveryMethodId: deliveryMethod.id,
           },
         });
@@ -106,11 +110,16 @@ export const Checkout: React.FC = () => {
     [updateDeliveryMethod, data]
   );
 
+  const handleBuyNow = useCallback(() => {
+    if (!data || !selectedPaymentGateway) return;
+  }, [data, selectedPaymentGateway]);
+
   const canBuy =
     data?.billingAddress &&
     data?.shippingAddress &&
     data?.email &&
-    data?.deliveryMethod;
+    data?.deliveryMethod &&
+    selectedPaymentGateway;
 
   const checkoutRefreshing =
     checkoutInfoLoading ||
@@ -132,7 +141,6 @@ export const Checkout: React.FC = () => {
 
             <div className="border-b border-gray-100 pb-12">
               <CheckoutEmail
-                checkoutToken={data.token}
                 email={data.email ?? undefined}
                 onChange={handleEmailUpdate}
                 isLoading={loadingUpdateEmail}
@@ -211,6 +219,23 @@ export const Checkout: React.FC = () => {
                 />
               </div>
             </div>
+
+            <div className="mt-12">
+              <h2
+                id="summary-heading"
+                className="text-lg font-medium text-gray-900"
+              >
+                Payment method
+              </h2>
+
+              <div className="mt-8">
+                <CheckoutPaymentGateways
+                  paymentGateways={data.availablePaymentGateways ?? []}
+                  value={selectedPaymentGateway ?? undefined}
+                  onChange={setSelectedPaymentGateway}
+                />
+              </div>
+            </div>
           </section>
 
           <section
@@ -249,6 +274,7 @@ export const Checkout: React.FC = () => {
                     text="Buy now"
                     isLoading={checkoutRefreshing}
                     isDisabled={!canBuy}
+                    onClick={handleBuyNow}
                   />
                 </Link>
               </div>

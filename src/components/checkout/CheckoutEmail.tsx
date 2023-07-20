@@ -12,7 +12,6 @@ const checkoutEmailFormSchema = z.object({
 type CheckoutEmailForm = z.infer<typeof checkoutEmailFormSchema>;
 
 type Props = {
-  checkoutToken: string;
   email?: string;
   onChange?: (email: string) => void;
   isLoading?: boolean;
@@ -22,7 +21,6 @@ type Props = {
  *
  */
 export const CheckoutEmail: React.FC<Props> = ({
-  checkoutToken,
   email,
   onChange,
   isLoading,
@@ -48,7 +46,7 @@ export const CheckoutEmail: React.FC<Props> = ({
   useEffect(() => {
     if (errors || isLoading || !debouncedEmail) return;
     onChange?.(debouncedEmail);
-  }, [debouncedEmail, onChange, isLoading, errors, checkoutToken]);
+  }, [debouncedEmail, onChange, isLoading, errors]);
 
   return (
     <div>

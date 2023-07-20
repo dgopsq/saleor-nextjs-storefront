@@ -10,10 +10,16 @@ export const publicConfig = {
   defaultCurrency: process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || "EUR",
 
   /**
-   *
+   * @deprecated
    */
   checkoutTokenStorageKey:
     process.env.NEXT_PUBLIC_CHECKOUT_TOKEN_STORAGE_KEY || "checkout-token",
+
+  /**
+   *
+   */
+  checkoutIdStorageKey:
+    process.env.NEXT_PUBLIC_CHECKOUT_ID_STORAGE_KEY || "checkout-token",
 
   /**
    *
