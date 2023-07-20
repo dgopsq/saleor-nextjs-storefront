@@ -1,6 +1,4 @@
-import { UpdateCheckoutEmailDocument } from "@/__generated__/graphql";
 import { Field } from "@/components/core/Field";
-import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
@@ -16,12 +14,19 @@ type CheckoutEmailForm = z.infer<typeof checkoutEmailFormSchema>;
 type Props = {
   checkoutToken: string;
   email?: string;
+  onChange?: (email: string) => void;
+  isLoading?: boolean;
 };
 
 /**
  *
  */
-export const CheckoutEmail: React.FC<Props> = ({ checkoutToken, email }) => {
+export const CheckoutEmail: React.FC<Props> = ({
+  checkoutToken,
+  email,
+  onChange,
+  isLoading,
+}) => {
   const stableInitialValues = useMemo<CheckoutEmailForm>(
     () => ({ email: email ?? "" }),
     [email]
@@ -37,21 +42,13 @@ export const CheckoutEmail: React.FC<Props> = ({ checkoutToken, email }) => {
     values: stableInitialValues,
   });
 
-  const [updateEmail, { loading }] = useMutation(UpdateCheckoutEmailDocument);
-
   const watchedEmail = watch("email");
   const debouncedEmail = useDebounce(watchedEmail, 1000);
 
   useEffect(() => {
-    if (errors || loading || !debouncedEmail) return;
-
-    updateEmail({
-      variables: {
-        checkoutToken,
-        email: debouncedEmail,
-      },
-    });
-  }, [debouncedEmail, updateEmail, loading, errors, checkoutToken]);
+    if (errors || isLoading || !debouncedEmail) return;
+    onChange?.(debouncedEmail);
+  }, [debouncedEmail, onChange, isLoading, errors, checkoutToken]);
 
   return (
     <div>

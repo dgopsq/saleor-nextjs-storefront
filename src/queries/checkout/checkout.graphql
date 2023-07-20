@@ -82,8 +82,9 @@ mutation CreateCheckout($channel: String!, $email: String!) {
       ...GenericCheckoutInfo
     }
     errors {
-      field
       code
+      message
+      field
     }
   }
 }
@@ -97,7 +98,9 @@ mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
@@ -111,7 +114,9 @@ mutation UpdateProductInCart(
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
@@ -122,7 +127,9 @@ mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
@@ -139,7 +146,9 @@ mutation UpdateCheckoutShippingAddress(
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
@@ -156,7 +165,9 @@ mutation UpdateCheckoutBillingAddress(
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
@@ -167,7 +178,9 @@ mutation UpdateCheckoutEmail($checkoutToken: UUID!, $email: String!) {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
