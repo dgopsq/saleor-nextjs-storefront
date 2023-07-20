@@ -1,11 +1,11 @@
 import { PaymentGatewayBox } from "@/components/core/PaymentGatewayBox";
-import { PaymentGateway } from "@/queries/checkout/data";
+import { PaymentGatewayConfig } from "@/queries/checkout/data";
 import { useMemo } from "react";
 
 type Props = {
-  paymentGateways: Array<PaymentGateway>;
-  onChange?: (address: PaymentGateway) => void;
-  value?: PaymentGateway;
+  paymentGateways: Array<PaymentGatewayConfig>;
+  onChange?: (address: PaymentGatewayConfig) => void;
+  value?: PaymentGatewayConfig;
   isLoading?: boolean;
 };
 

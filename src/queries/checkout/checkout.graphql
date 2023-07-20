@@ -37,15 +37,6 @@ fragment GenericShippingMethod on ShippingMethod {
   }
 }
 
-fragment GenericPaymentGateway on PaymentGateway {
-  id
-  name
-  config {
-    field
-    value
-  }
-}
-
 fragment GenericCheckoutInfo on Checkout {
   id
   email
@@ -94,10 +85,6 @@ fragment GenericCheckoutInfo on Checkout {
 
   deliveryMethod {
     ...GenericShippingMethod
-  }
-
-  availablePaymentGateways {
-    ...GenericPaymentGateway
   }
 }
 

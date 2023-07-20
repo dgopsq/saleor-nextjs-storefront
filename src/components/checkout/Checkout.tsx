@@ -20,19 +20,23 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
-import { DeliveryMethod, PaymentGateway } from "@/queries/checkout/data";
+import { DeliveryMethod, PaymentGatewayConfig } from "@/queries/checkout/data";
 import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
+type Props = {
+  paymentGateways: Array<PaymentGatewayConfig>;
+};
+
 /**
  *
  */
-export const Checkout: React.FC = () => {
+export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [selectedPaymentGateway, setSelectedPaymentGateway] =
-    useState<PaymentGateway | null>(null);
+    useState<PaymentGatewayConfig | null>(null);
 
   const userInfo = useUserInfo();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
@@ -230,7 +234,7 @@ export const Checkout: React.FC = () => {
 
               <div className="mt-8">
                 <CheckoutPaymentGateways
-                  paymentGateways={data.availablePaymentGateways ?? []}
+                  paymentGateways={paymentGateways}
                   value={selectedPaymentGateway ?? undefined}
                   onChange={setSelectedPaymentGateway}
                 />

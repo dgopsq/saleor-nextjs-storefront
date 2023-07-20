@@ -3,10 +3,9 @@ import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
   GenericCheckoutInfoFragment,
-  GenericPaymentGatewayFragment,
-  GenericPaymentGatewayFragmentDoc,
   GenericShippingMethodFragment,
   GenericShippingMethodFragmentDoc,
+  PaymentGatewayConfig as BasePaymentGatewayConfig,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
@@ -57,18 +56,6 @@ export type CheckoutProduct = {
 /**
  *
  */
-export type PaymentGateway = {
-  id: string;
-  name: string;
-  config: Array<{
-    field: string;
-    value: string | null;
-  }>;
-};
-
-/**
- *
- */
 export type Checkout = {
   id: string;
   email: string | null;
@@ -89,7 +76,14 @@ export type Checkout = {
   billingAddress: Address | null;
   shippingMethods: Array<DeliveryMethod>;
   deliveryMethod: DeliveryMethod | null;
-  availablePaymentGateways: Array<PaymentGateway>;
+};
+
+/**
+ *
+ */
+export type PaymentGatewayConfig = {
+  id: string;
+  data: unknown;
 };
 
 /**
@@ -109,7 +103,6 @@ export function parseGenericCheckoutInfo(
     billingAddress,
     shippingMethods,
     deliveryMethod,
-    availablePaymentGateways,
   } = input;
 
   const rawShippingAddress =
@@ -165,16 +158,6 @@ export function parseGenericCheckoutInfo(
     deliveryMethod: rawDeliveryMethod
       ? parseShippingMethod(rawDeliveryMethod)
       : null,
-    availablePaymentGateways: availablePaymentGateways.map(
-      (rawPaymentGateway) => {
-        const paymentGatewayFragment = getFragmentData(
-          GenericPaymentGatewayFragmentDoc,
-          rawPaymentGateway
-        );
-
-        return parsePaymentGateway(paymentGatewayFragment);
-      }
-    ),
   };
 }
 
@@ -227,16 +210,11 @@ export function parseShippingMethod(
 /**
  *
  */
-export function parsePaymentGateway(
-  input: GenericPaymentGatewayFragment
-): PaymentGateway {
+export function parsePaymentGatewayConfig(
+  input: BasePaymentGatewayConfig
+): PaymentGatewayConfig {
   return {
     id: input.id,
-    name: input.name,
-    config:
-      input.config.map((config) => ({
-        field: config.field,
-        value: config.value ?? null,
-      })) ?? [],
+    data: input.data,
   };
 }
