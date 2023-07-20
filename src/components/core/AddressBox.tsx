@@ -34,7 +34,7 @@ export const AddressBox: React.FC<Props> = ({
     isDefaultBillingAddress || isDefaultShippingAddress;
 
   return (
-    <Island variant={selected ? "outline-selected" : "outline"}>
+    <Island variant="outline" selected={selected}>
       <div className="text-left">
         <div className="font-semibold">
           {firstName} {lastName}

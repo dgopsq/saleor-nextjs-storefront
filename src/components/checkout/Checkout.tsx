@@ -137,7 +137,7 @@ export const Checkout: React.FC = () => {
               ) : undefined}
             </div>
 
-            <div className="mt-12">
+            <div className="mt-12 border-b border-gray-100 pb-12">
               {userInfo ? (
                 <>
                   <h2
@@ -169,6 +169,8 @@ export const Checkout: React.FC = () => {
                 </>
               ) : undefined}
             </div>
+
+            <div className="mt-12 border-b border-gray-100 pb-12">aaa</div>
           </section>
 
           <section
