@@ -7,6 +7,7 @@ import {
   GenericUserFragment,
 } from "@/__generated__/graphql";
 import { AddressForm } from "@/components/core/AddressForm";
+import { isDeepEqual, omit } from "@/misc/object";
 import { CheckoutId } from "@/queries/checkout/data";
 import jwt_decode from "jwt-decode";
 import * as z from "zod";
@@ -172,4 +173,27 @@ export function addressToAddressInput(input: Address): AddressInput {
     countryArea: input.countryArea,
     phone: input.phone,
   };
+}
+
+/**
+ *
+ */
+export function comparableAddress(
+  input: Address
+): Omit<
+  Address,
+  "id" | "isDefaultBillingAddress" | "isDefaultShippingAddress"
+> {
+  return omit(input, [
+    "id",
+    "isDefaultBillingAddress",
+    "isDefaultShippingAddress",
+  ]);
+}
+
+/**
+ *
+ */
+export function areAddressEqual(a: Address, b: Address): boolean {
+  return isDeepEqual(comparableAddress(a), comparableAddress(b));
 }

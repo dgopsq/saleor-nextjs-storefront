@@ -1,15 +1,6 @@
 import { AddressBox } from "@/components/core/AddressBox";
-import { isDeepEqual, omit } from "@/misc/object";
-import { Address } from "@/queries/user/data";
+import { Address, areAddressEqual } from "@/queries/user/data";
 import { useMemo } from "react";
-
-const omitAddressMetaValues = (address: Address) => {
-  return omit(address, [
-    "id",
-    "isDefaultBillingAddress",
-    "isDefaultShippingAddress",
-  ]);
-};
 
 type Props = {
   addresses: Array<Address>;
@@ -27,19 +18,10 @@ export const CheckoutAddressUser: React.FC<Props> = ({
   value,
   isLoading,
 }) => {
-  const currentAddr = useMemo(
-    () => (value ? omitAddressMetaValues(value) : null),
-    [value]
-  );
-
   const addressesRender = useMemo(
     () =>
       addresses.map((address) => {
-        const valueAddr = omitAddressMetaValues(address);
-
-        const isSameAddr = currentAddr
-          ? isDeepEqual(valueAddr, currentAddr)
-          : false;
+        const isSameAddr = value ? areAddressEqual(value, address) : false;
 
         const handleClick = () => {
           if (!isLoading) onChange?.(address);
@@ -57,7 +39,7 @@ export const CheckoutAddressUser: React.FC<Props> = ({
           </li>
         );
       }),
-    [addresses, onChange, isLoading, currentAddr]
+    [addresses, onChange, isLoading, value]
   );
 
   return (
