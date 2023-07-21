@@ -297,7 +297,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                           />
 
                           <div className="flow-root">
-                            <Link href="/cart">
+                            <Link href="/checkout/cart">
                               <CartButton />
                             </Link>
                           </div>

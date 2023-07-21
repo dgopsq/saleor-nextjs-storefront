@@ -63,7 +63,7 @@ export const Cart: React.FC = () => {
               </div>
 
               <div className="mt-6">
-                <Link href="/checkout">
+                <Link href="/checkout/shipping">
                   <Button
                     type="button"
                     variant="primary"
