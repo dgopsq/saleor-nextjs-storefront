@@ -20,7 +20,7 @@ export type CartProduct = {
 
 type Props = {
   products: Array<CartProduct>;
-  onProductUpdate: UseProductUpdateReturn["updateProduct"];
+  onProductUpdate?: UseProductUpdateReturn["updateProduct"];
   condensed?: boolean;
 };
 
@@ -136,7 +136,7 @@ export const CartProducts: React.FC<Props> = ({
                   <Select
                     value={line.quantity}
                     onChange={(value) =>
-                      onProductUpdate(line.variant.id, value)
+                      onProductUpdate?.(line.variant.id, value)
                     }
                     options={qtyRange.map((value) => ({
                       id: value.toString(),

@@ -1,19 +1,19 @@
+import Link from "next/link";
+
 function formatStepIndex(index: number) {
   const step = index + 1;
   return step < 10 ? `0${step}` : step;
 }
 
-type StepKind = "cart" | "informations" | "payment";
-
 type Step = {
-  id: StepKind;
   name: string;
+  route: string;
 };
 
 const steps: Array<Step> = [
-  { id: "cart", name: "Cart" },
-  { id: "informations", name: "Shipping" },
-  { id: "payment", name: "Payment" },
+  { name: "Cart", route: "/checkout/cart" },
+  { name: "Shipping", route: "/checkout/shipping" },
+  { name: "Payment", route: "/checkout/payment" },
 ];
 
 type Props = {
@@ -30,12 +30,14 @@ export const CheckoutSteps: React.FC<Props> = ({ currentStep }) => {
         {steps.map((step, index) => (
           <li key={step.name} className="md:flex-1">
             {currentStep > index ? (
-              <span className="group flex flex-col border-l-4 border-indigo-600 py-2 pl-4 hover:border-indigo-800 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-indigo-600 group-hover:text-indigo-800">
-                  {formatStepIndex(index)}
+              <Link href={step.route}>
+                <span className="group flex flex-col border-l-4 border-indigo-600 py-2 pl-4 hover:border-indigo-800 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                  <span className="text-sm font-medium text-indigo-600 group-hover:text-indigo-800">
+                    {formatStepIndex(index)}
+                  </span>
+                  <span className="text-sm font-medium">{step.name}</span>
                 </span>
-                <span className="text-sm font-medium">{step.name}</span>
-              </span>
+              </Link>
             ) : currentStep === index ? (
               <span
                 className="flex flex-col border-l-4 border-indigo-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"

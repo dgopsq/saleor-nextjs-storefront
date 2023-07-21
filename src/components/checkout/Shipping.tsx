@@ -11,7 +11,6 @@ import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
-import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { Button } from "@/components/core/Button";
 import { Checkbox } from "@/components/core/Checkbox";
@@ -21,20 +20,16 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
-import { DeliveryMethod, PaymentGatewayConfig } from "@/queries/checkout/data";
+import { DeliveryMethod } from "@/queries/checkout/data";
 import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
-type Props = {
-  paymentGateways: Array<PaymentGatewayConfig>;
-};
-
 /**
  *
  */
-export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
+export const Shipping: React.FC = () => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
 
   const userInfo = useUserInfo();
@@ -50,8 +45,6 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
     useMutation(UpdateCheckoutBillingAddressDocument);
   const [updateDeliveryMethod, { loading: loadingUpdateDeliveryMethod }] =
     useMutation(UpdateCheckoutDeliveryMethodDocument);
-
-  console.log(paymentGateways);
 
   const handleEmailUpdate = useCallback(
     (email: string) => {
@@ -208,7 +201,7 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
               ) : undefined}
             </div>
 
-            <div className="mt-12 border-b border-gray-100 pb-12">
+            <div className="mt-12">
               <h2
                 id="summary-heading"
                 className="text-lg font-medium text-gray-900"
@@ -222,22 +215,6 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
                   value={data.deliveryMethod ?? undefined}
                   onChange={handleDeliveryMethodUpdate}
                   isLoading={loadingUpdateDeliveryMethod}
-                />
-              </div>
-            </div>
-
-            <div className="mt-12">
-              <h2
-                id="summary-heading"
-                className="text-lg font-medium text-gray-900"
-              >
-                Payment method
-              </h2>
-
-              <div className="mt-8">
-                <CheckoutPaymentGateways
-                  paymentGateways={paymentGateways}
-                  checkoutId={data.id}
                 />
               </div>
             </div>
@@ -271,12 +248,12 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
               </div>
 
               <div className="mt-8">
-                <Link href="/checkout">
+                <Link href="/checkout/payment">
                   <Button
                     type="button"
                     variant="primary"
                     size="large"
-                    text="Buy now"
+                    text="Continue to payment"
                     isLoading={checkoutRefreshing}
                     isDisabled={!canBuy}
                     onClick={handleBuyNow}
