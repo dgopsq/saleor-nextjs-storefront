@@ -6,9 +6,9 @@ import { CheckoutTransactionInitializeDocument } from "@/__generated__/graphql";
 import { StripePaymentGateway } from "@/components/checkout/StripePaymentGateway";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 
-const stripePaymentGatewayId = "app.saleor.stripe";
+const paymentGatewayId = "app.saleor.stripe";
 
-const stripeConfigDataSchema = z.object({
+const configDataSchema = z.object({
   paymentIntent: z.object({
     client_secret: z.string(),
   }),
@@ -29,7 +29,7 @@ export const CheckoutPaymentGateways: React.FC<Props> = ({
 }) => {
   const maybePaymentGatewayData = useMemo(() => {
     const maybeStripeGateway = paymentGateways.find(
-      ({ id }) => id === stripePaymentGatewayId
+      ({ id }) => id === paymentGatewayId
     );
 
     return maybeStripeGateway ?? null;
@@ -40,7 +40,7 @@ export const CheckoutPaymentGateways: React.FC<Props> = ({
   );
 
   const maybeGatewayConfig = useMemo(() => {
-    const maybeConfig = stripeConfigDataSchema.safeParse(
+    const maybeConfig = configDataSchema.safeParse(
       data?.transactionInitialize?.data
     );
 
@@ -54,7 +54,7 @@ export const CheckoutPaymentGateways: React.FC<Props> = ({
       variables: {
         checkoutId,
         paymentGateway: {
-          id: stripePaymentGatewayId,
+          id: paymentGatewayId,
           data: {
             automatic_payment_methods: {
               enabled: true,

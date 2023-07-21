@@ -12,6 +12,7 @@ import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
+import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { Button } from "@/components/core/Button";
 import { Checkbox } from "@/components/core/Checkbox";
 import { Island } from "@/components/core/Island";
@@ -135,7 +136,9 @@ export const Checkout: React.FC<Props> = ({ paymentGateways }) => {
 
   return (
     <div className="bg-white w-full">
-      <div>
+      <CheckoutSteps currentStep={1} />
+
+      <div className="mt-12">
         <form className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
