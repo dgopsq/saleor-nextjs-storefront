@@ -18,10 +18,14 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
-import { Address, addressToAddressInput } from "@/queries/user/data";
+import {
+  Address,
+  addressToAddressInput,
+  areAddressEqual,
+} from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { P, match } from "ts-pattern";
 
 /**
@@ -102,6 +106,17 @@ export const Informations: React.FC = () => {
     loadingUpdateEmail ||
     loadingUpdateShippingAddress ||
     loadingUpdateBillingAddress;
+
+  useEffect(() => {
+    const billingAddress = data?.billingAddress ?? null;
+    const shippingAddress = data?.shippingAddress ?? null;
+
+    if (!billingAddress || !shippingAddress) return;
+
+    const isSameAddress = areAddressEqual(billingAddress, shippingAddress);
+
+    if (!isSameAddress) setBillingSameAsShipping(false);
+  }, [data, setBillingSameAsShipping]);
 
   if (!data) return <LoadingSpinner />;
 
