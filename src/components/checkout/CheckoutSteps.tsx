@@ -11,7 +11,7 @@ type Step = {
 };
 
 const steps: Array<Step> = [
-  { name: "Cart", route: "/checkout/cart" },
+  { name: "Informations", route: "/checkout/informations" },
   { name: "Shipping", route: "/checkout/shipping" },
   { name: "Payment", route: "/checkout/payment" },
 ];

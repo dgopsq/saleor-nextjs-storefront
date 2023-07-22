@@ -2,7 +2,6 @@
 
 import {
   UpdateCheckoutBillingAddressDocument,
-  UpdateCheckoutDeliveryMethodDocument,
   UpdateCheckoutEmailDocument,
   UpdateCheckoutShippingAddressDocument,
 } from "@/__generated__/graphql";
@@ -10,7 +9,6 @@ import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutAddAddress } from "@/components/checkout/CheckoutAddAddress";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
-import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { Button, TextButton } from "@/components/core/Button";
@@ -20,17 +18,17 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
-import { DeliveryMethod } from "@/queries/checkout/data";
 import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { P, match } from "ts-pattern";
 
 /**
  *
  */
-export const Shipping: React.FC = () => {
+export const Informations: React.FC = () => {
+  const router = useRouter();
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [addShippingAddress, setAddShippingAddress] = useState(false);
   const [addBillingAddress, setAddBillingAddress] = useState(false);
@@ -46,8 +44,6 @@ export const Shipping: React.FC = () => {
     useMutation(UpdateCheckoutShippingAddressDocument);
   const [updateBillingAddress, { loading: loadingUpdateBillingAddress }] =
     useMutation(UpdateCheckoutBillingAddressDocument);
-  const [updateDeliveryMethod, { loading: loadingUpdateDeliveryMethod }] =
-    useMutation(UpdateCheckoutDeliveryMethodDocument);
 
   const handleEmailUpdate = useCallback(
     (email: string) => {
@@ -98,28 +94,7 @@ export const Shipping: React.FC = () => {
     ]
   );
 
-  const handleDeliveryMethodUpdate = useCallback(
-    (deliveryMethod: DeliveryMethod) => {
-      if (data)
-        updateDeliveryMethod({
-          variables: {
-            checkoutId: data.id,
-            deliveryMethodId: deliveryMethod.id,
-          },
-        });
-    },
-    [updateDeliveryMethod, data]
-  );
-
-  const handleBuyNow = useCallback(() => {
-    if (!data) return;
-  }, [data]);
-
-  const canBuy =
-    data?.billingAddress &&
-    data?.shippingAddress &&
-    data?.email &&
-    data?.deliveryMethod;
+  const canBuy = data?.billingAddress && data?.shippingAddress && data?.email;
 
   const checkoutRefreshing =
     checkoutInfoLoading ||
@@ -132,7 +107,7 @@ export const Shipping: React.FC = () => {
 
   return (
     <div className="bg-white w-full">
-      <CheckoutSteps currentStep={1} />
+      <CheckoutSteps currentStep={0} />
 
       <div className="mt-12">
         <form className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
@@ -197,7 +172,7 @@ export const Shipping: React.FC = () => {
               ) : undefined}
             </div>
 
-            <div className="mt-12 border-b border-gray-100 pb-12">
+            <div className="mt-12">
               {userInfo ? (
                 <>
                   <div className="flex flex-row items-center gap-4">
@@ -253,24 +228,6 @@ export const Shipping: React.FC = () => {
                 </>
               ) : undefined}
             </div>
-
-            <div className="mt-12">
-              <h2
-                id="summary-heading"
-                className="text-lg font-medium text-gray-900"
-              >
-                Delivery method
-              </h2>
-
-              <div className="mt-8">
-                <CheckoutDeliveryMethod
-                  deliveryMethods={data.shippingMethods ?? []}
-                  value={data.deliveryMethod ?? undefined}
-                  onChange={handleDeliveryMethodUpdate}
-                  isLoading={loadingUpdateDeliveryMethod}
-                />
-              </div>
-            </div>
           </section>
 
           <section
@@ -301,17 +258,15 @@ export const Shipping: React.FC = () => {
               </div>
 
               <div className="mt-8">
-                <Link href="/checkout/payment">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    size="large"
-                    text="Continue to payment"
-                    isLoading={checkoutRefreshing}
-                    isDisabled={!canBuy}
-                    onClick={handleBuyNow}
-                  />
-                </Link>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="large"
+                  text="Continue to shipping"
+                  isLoading={checkoutRefreshing}
+                  isDisabled={!canBuy}
+                  onClick={() => router.push("/checkout/shipping")}
+                />
               </div>
             </Island>
           </section>
