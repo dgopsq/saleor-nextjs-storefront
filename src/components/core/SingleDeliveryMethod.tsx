@@ -1,25 +1,20 @@
 import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
-import { Island } from "@/components/core/Island";
 import { formatPrice } from "@/misc/currencies";
 import { DeliveryMethod } from "@/queries/checkout/data";
 
 type Props = {
   deliveryMethod: DeliveryMethod;
-  selected?: boolean;
 };
 
 /**
  *
  */
-export const DeliveryMethodBox: React.FC<Props> = ({
-  deliveryMethod,
-  selected,
-}) => {
+export const SingleDeliveryMethod: React.FC<Props> = ({ deliveryMethod }) => {
   const { name, description, price } = deliveryMethod;
 
   return (
-    <Island variant="outline" isSelected={selected}>
-      <div className="text-left">
+    <div className="w-full text-left flex justify-between">
+      <div>
         <div className="font-semibold">{name}</div>
 
         {description ? (
@@ -27,13 +22,13 @@ export const DeliveryMethodBox: React.FC<Props> = ({
             <EditorJSRenderer data={description} />
           </div>
         ) : undefined}
-
-        {price ? (
-          <div className="mt-1 text-sm">
-            {formatPrice(price.amount, price.currency)}
-          </div>
-        ) : undefined}
       </div>
-    </Island>
+
+      {price ? (
+        <div className="font-semibold">
+          {formatPrice(price.amount, price.currency)}
+        </div>
+      ) : undefined}
+    </div>
   );
 };

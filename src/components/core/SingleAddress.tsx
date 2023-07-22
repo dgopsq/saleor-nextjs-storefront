@@ -30,7 +30,7 @@ export const SingleAddress: React.FC<Props> = ({
     isDefaultBillingAddress || isDefaultShippingAddress;
 
   return (
-    <div className="flex flex-col justify-between gap-4 lg:flex-row">
+    <div className="flex flex-col justify-between gap-4 lg:flex-row text-left">
       <div className="flex flex-row items-center gap-2">
         <div className="text-sm font-semibold">
           {firstName} {lastName}

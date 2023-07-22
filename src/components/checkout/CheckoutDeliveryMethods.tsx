@@ -1,4 +1,5 @@
-import { DeliveryMethodBox } from "@/components/core/DeliveryMethodBox";
+import { RadioIsland } from "@/components/core/RadioIsland";
+import { SingleDeliveryMethod } from "@/components/core/SingleDeliveryMethod";
 import { DeliveryMethod } from "@/queries/checkout/data";
 import { useMemo } from "react";
 
@@ -28,16 +29,15 @@ export const CheckoutDeliveryMethod: React.FC<Props> = ({
         };
 
         return (
-          <li key={deliveryMethod.id} className="lg:col-span-3">
+          <li key={deliveryMethod.id}>
             <button
               onClick={handleClick}
               type="button"
               className="w-full h-full"
             >
-              <DeliveryMethodBox
-                deliveryMethod={deliveryMethod}
-                selected={isSameAddr}
-              />
+              <RadioIsland isSelected={isSameAddr}>
+                <SingleDeliveryMethod deliveryMethod={deliveryMethod} />
+              </RadioIsland>
             </button>
           </li>
         );
@@ -47,9 +47,7 @@ export const CheckoutDeliveryMethod: React.FC<Props> = ({
 
   return (
     <div className={isLoading ? "opacity-75 cursor-not-allowed" : undefined}>
-      <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-6">
-        {deliveryMethodsRender}
-      </ul>
+      <ul className="flex flex-col gap-4">{deliveryMethodsRender}</ul>
     </div>
   );
 };

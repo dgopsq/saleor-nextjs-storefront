@@ -12,10 +12,10 @@ type Props = PropsWithChildren<{
 export const RadioIsland: React.FC<Props> = ({ isSelected, children }) => {
   return (
     <Island variant="outline" isSelected={isSelected}>
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row items-center gap-6">
         <Radio selected={!!isSelected} />
 
-        <div>{children}</div>
+        <div className="basis-full grow shrink">{children}</div>
       </div>
     </Island>
   );
