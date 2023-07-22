@@ -38,7 +38,17 @@ export const CheckoutAddAddress: React.FC<Props> = ({ onCancel }) => {
       <AddressForm ref={formRef} compact />
 
       <div className="flex flex-row justify-end gap-4 mt-8">
-        <div className="w-52">
+        <div>
+          <Button
+            variant="secondary"
+            size="medium"
+            text="Cancel"
+            onClick={onCancel}
+            isDisabled={loading}
+          />
+        </div>
+
+        <div>
           <Button
             variant="primary"
             size="medium"

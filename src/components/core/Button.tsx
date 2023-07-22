@@ -6,7 +6,7 @@ import { match } from "ts-pattern";
 type BaseButtonProps = {
   text: string;
   size: "large" | "medium";
-  variant: "primary" | "danger";
+  variant: "primary" | "secondary" | "danger";
   isLoading?: boolean;
   isDisabled?: boolean;
 } & Omit<
@@ -32,6 +32,7 @@ export const Button: React.FC<BaseButtonProps> = ({
 
   const computedVariant = match(variant)
     .with("primary", () => "bg-indigo-600 enabled:hover:bg-indigo-700")
+    .with("secondary", () => "bg-slate-400 enabled:hover:bg-slate-500")
     .with("danger", () => "bg-red-600 enabled:hover:bg-red-700")
     .exhaustive();
 
@@ -41,7 +42,7 @@ export const Button: React.FC<BaseButtonProps> = ({
     <button
       type="button"
       className={classNames(
-        "flex flex-1 items-center justify-center rounded-md border border-transparent text-base font-medium text-white focus:outline-none",
+        "flex flex-1 items-center justify-center rounded-md border border-transparent text-base font-medium text-white focus:outline-none px-8",
         computedSize,
         computedVariant,
         disabledState ? "opacity-75 cursor-not-allowed" : ""
@@ -66,6 +67,7 @@ export const TextButton: React.FC<Omit<BaseButtonProps, "size">> = ({
 }) => {
   const computedVariant = match(variant)
     .with("primary", () => "text-indigo-600 enabled:hover:text-indigo-700")
+    .with("secondary", () => "text-slate-600 enabled:hover:text-slate-700")
     .with("danger", () => "text-red-600 enabled:hover:text-red-700")
     .exhaustive();
 

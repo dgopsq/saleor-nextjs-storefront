@@ -1,3 +1,4 @@
+import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
 import { Island } from "@/components/core/Island";
 import { formatPrice } from "@/misc/currencies";
 import { DeliveryMethod } from "@/queries/checkout/data";
@@ -22,7 +23,9 @@ export const DeliveryMethodBox: React.FC<Props> = ({
         <div className="font-semibold">{name}</div>
 
         {description ? (
-          <div className="mt-1 text-sm">{description}</div>
+          <div className="mt-1 text-sm">
+            <EditorJSRenderer data={description} />
+          </div>
         ) : undefined}
 
         {price ? (

@@ -168,7 +168,7 @@ export const Shipping: React.FC = () => {
                     {!addShippingAddress ? (
                       <div>
                         <TextButton
-                          text="Add new"
+                          text="Add new address"
                           onClick={() => setAddShippingAddress(true)}
                           variant="primary"
                         />
