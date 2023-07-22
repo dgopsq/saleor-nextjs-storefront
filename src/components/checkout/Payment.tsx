@@ -7,16 +7,11 @@ import { SectionHeading } from "@/components/core/Headings";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { classNames } from "@/misc/styles";
-import { PaymentGatewayConfig } from "@/queries/checkout/data";
-
-type Props = {
-  paymentGateways: Array<PaymentGatewayConfig>;
-};
 
 /**
  *
  */
-export const Payment: React.FC<Props> = ({ paymentGateways }) => {
+export const Payment: React.FC = () => {
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
 
   const checkoutRefreshing = checkoutInfoLoading;
@@ -33,7 +28,7 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
 
           <div className="mt-8">
             <CheckoutPaymentGateway
-              paymentGateways={paymentGateways}
+              paymentGateways={data.availablePaymentGateways}
               checkoutId={data.id}
             />
           </div>

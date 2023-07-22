@@ -5,7 +5,6 @@ import {
   GenericCheckoutInfoFragment,
   GenericShippingMethodFragment,
   GenericShippingMethodFragmentDoc,
-  PaymentGatewayConfig as BasePaymentGatewayConfig,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
@@ -56,6 +55,15 @@ export type CheckoutProduct = {
 /**
  *
  */
+export type PaymentGateway = {
+  id: string;
+  name: string;
+  config: Array<{ field: string; value: string | null }>;
+};
+
+/**
+ *
+ */
 export type Checkout = {
   id: string;
   email: string | null;
@@ -76,14 +84,7 @@ export type Checkout = {
   billingAddress: Address | null;
   shippingMethods: Array<DeliveryMethod>;
   deliveryMethod: DeliveryMethod | null;
-};
-
-/**
- *
- */
-export type PaymentGatewayConfig = {
-  id: string;
-  data: unknown;
+  availablePaymentGateways: Array<PaymentGateway>;
 };
 
 /**
@@ -103,6 +104,7 @@ export function parseGenericCheckoutInfo(
     billingAddress,
     shippingMethods,
     deliveryMethod,
+    availablePaymentGateways,
   } = input;
 
   const rawShippingAddress =
@@ -158,6 +160,14 @@ export function parseGenericCheckoutInfo(
     deliveryMethod: rawDeliveryMethod
       ? parseShippingMethod(rawDeliveryMethod)
       : null,
+    availablePaymentGateways: availablePaymentGateways.map((gateway) => ({
+      id: gateway.id,
+      name: gateway.name,
+      config: gateway.config.map((config) => ({
+        field: config.field,
+        value: config.value ?? null,
+      })),
+    })),
   };
 }
 
@@ -204,17 +214,5 @@ export function parseShippingMethod(
     price: parsePrice(input.price),
     maximumDeliveryDays: input.maximumDeliveryDays ?? null,
     minimumDeliveryDays: input.minimumDeliveryDays ?? null,
-  };
-}
-
-/**
- *
- */
-export function parsePaymentGatewayConfig(
-  input: BasePaymentGatewayConfig
-): PaymentGatewayConfig {
-  return {
-    id: input.id,
-    data: input.data,
   };
 }

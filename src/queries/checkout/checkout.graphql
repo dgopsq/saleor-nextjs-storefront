@@ -86,6 +86,15 @@ fragment GenericCheckoutInfo on Checkout {
   deliveryMethod {
     ...GenericShippingMethod
   }
+
+  availablePaymentGateways {
+    id
+    name
+    config {
+      field
+      value
+    }
+  }
 }
 
 query GetCheckoutInfo($checkoutId: ID!) {

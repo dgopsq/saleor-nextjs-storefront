@@ -1,4 +1,4 @@
-import { PaymentGatewayConfig } from "@/queries/checkout/data";
+import { PaymentGateway } from "@/queries/checkout/data";
 import { useEffect, useMemo } from "react";
 import { z } from "zod";
 import { useMutation } from "@apollo/client";
@@ -16,7 +16,7 @@ const configDataSchema = z.object({
 });
 
 type Props = {
-  paymentGateways: Array<PaymentGatewayConfig>;
+  paymentGateways: Array<PaymentGateway>;
   checkoutId: string;
 };
 

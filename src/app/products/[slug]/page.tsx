@@ -5,12 +5,14 @@ type Params = {
   slug: string;
 };
 
+type SearchParams = { [key: string]: string | string[] | undefined };
+
 export default async function SingleProductPage({
   params,
   searchParams,
 }: {
   params: Params;
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }) {
   const rawVariantId = searchParams[publicConfig.variantIdQueryParam];
   const parsedVariantId = Array.isArray(rawVariantId)
