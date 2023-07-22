@@ -21,7 +21,7 @@ export type CartProduct = {
 type Props = {
   products: Array<CartProduct>;
   onProductUpdate?: UseProductUpdateReturn["updateProduct"];
-  condensed?: boolean;
+  compact?: boolean;
 };
 
 /**
@@ -30,20 +30,20 @@ type Props = {
 export const CartProducts: React.FC<Props> = ({
   products,
   onProductUpdate,
-  condensed,
+  compact,
 }) => {
   const imageSize = useMemo(
-    () => (condensed ? "sm:h-28 sm:w-28" : "sm:h-40 sm:w-40"),
-    [condensed]
+    () => (compact ? "sm:h-28 sm:w-28" : "sm:h-40 sm:w-40"),
+    [compact]
   );
 
   const paddingTopIndexGap = useMemo(
-    () => (condensed ? "pt-6" : "pt-10"),
-    [condensed]
+    () => (compact ? "pt-6" : "pt-10"),
+    [compact]
   );
   const paddingBottomIndexGap = useMemo(
-    () => (condensed ? "pb-6" : "pb-10"),
-    [condensed]
+    () => (compact ? "pb-6" : "pb-10"),
+    [compact]
   );
 
   return (
@@ -85,23 +85,23 @@ export const CartProducts: React.FC<Props> = ({
               ) : undefined}
             </div>
 
-            <div className="ml-4 flex flex-1 flex-row justify-between sm:ml-6">
-              <div>
+            <div className="ml-4 flex flex-1 flex-row gap-4 justify-between sm:ml-6">
+              <div className="grow-0 basis-full overflow-hidden">
                 <Link
                   href={generateProductUrl({
                     product: line.product,
                     variantId: line.variant.id,
                   })}
                 >
-                  <div className="flex justify-between">
-                    <h3
+                  <div>
+                    <span
                       className={classNames(
-                        condensed ? "text-sm truncate" : "text-md",
+                        compact ? "block text-sm truncate" : "text-md",
                         "font-medium"
                       )}
                     >
                       {line.product.name}
-                    </h3>
+                    </span>
                   </div>
 
                   {line.variant.attributes.map(({ attribute, values }) => (
@@ -119,7 +119,7 @@ export const CartProducts: React.FC<Props> = ({
                 {line.variant.price ? (
                   <p
                     className={classNames(
-                      condensed ? "text-sm" : "",
+                      compact ? "text-sm" : "",
                       "mt-2 font-semibold text-gray-900"
                     )}
                   >
@@ -131,22 +131,24 @@ export const CartProducts: React.FC<Props> = ({
                 ) : undefined}
               </div>
 
-              <div className="flex flex-col justify-between items-end mt-4 sm:mt-0">
-                <div>
-                  <Select
-                    value={line.quantity}
-                    onChange={(value) =>
-                      onProductUpdate?.(line.variant.id, value)
-                    }
-                    options={qtyRange.map((value) => ({
-                      id: value.toString(),
-                      label: value.toString(),
-                      value,
-                    }))}
-                    parseValue={parseInt}
-                  />
+              {!compact ? (
+                <div className="basis-auto shrink-0 grow-0 flex flex-col  justify-between items-end mt-4 sm:mt-0">
+                  <div>
+                    <Select
+                      value={line.quantity}
+                      onChange={(value) =>
+                        onProductUpdate?.(line.variant.id, value)
+                      }
+                      options={qtyRange.map((value) => ({
+                        id: value.toString(),
+                        label: value.toString(),
+                        value,
+                      }))}
+                      parseValue={parseInt}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : undefined}
             </div>
           </li>
         );

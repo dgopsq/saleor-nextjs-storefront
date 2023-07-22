@@ -290,7 +290,7 @@ export const Shipping: React.FC = () => {
                 <CartProducts
                   products={data.lines}
                   onProductUpdate={updateProduct}
-                  condensed
+                  compact
                 />
               </div>
 
