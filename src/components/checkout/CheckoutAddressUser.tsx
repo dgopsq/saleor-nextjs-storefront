@@ -32,9 +32,9 @@ export const CheckoutAddressUser: React.FC<Props> = ({
             <button
               onClick={handleClick}
               type="button"
-              className="w-full h-full"
+              className="w-full h-full flex flex-row"
             >
-              <AddressBox address={address} selected={isSameAddr} />
+              <AddressBox address={address} selected={isSameAddr} showRadio />
             </button>
           </li>
         );

@@ -1,11 +1,13 @@
 import { NeutralBadge } from "@/components/core/Badge";
 import { Island } from "@/components/core/Island";
+import { Radio } from "@/components/core/Radio";
 import { Address } from "@/queries/user/data";
 
 type Props = {
   address: Address;
   showDefaultBadges?: boolean;
   selected?: boolean;
+  showRadio?: boolean;
 };
 
 /**
@@ -15,6 +17,7 @@ export const AddressBox: React.FC<Props> = ({
   address,
   showDefaultBadges,
   selected,
+  showRadio,
 }) => {
   const {
     firstName,
@@ -35,6 +38,12 @@ export const AddressBox: React.FC<Props> = ({
     <Island variant="outline" selected={selected}>
       <div className="flex flex-col justify-between gap-4 lg:flex-row">
         <div className="flex flex-row items-center gap-2">
+          {showRadio ? (
+            <div className="pr-4 inline" style={{ lineHeight: 0 }}>
+              <Radio selected={!!selected} />
+            </div>
+          ) : undefined}
+
           <div className="text-sm font-semibold">
             {firstName} {lastName}
           </div>
