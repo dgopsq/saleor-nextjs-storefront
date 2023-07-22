@@ -1,10 +1,11 @@
 "use client";
 
-import { AddressBox } from "@/components/core/AddressBox";
+import { SingleAddress } from "@/components/core/SingleAddress";
 import { PageHeading } from "@/components/core/Headings";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { Island } from "@/components/core/Island";
 
 /**
  *
@@ -24,7 +25,9 @@ export const Addresses: React.FC = () => {
                 className="h-full"
                 href={`/account/addresses/${address.id}`}
               >
-                <AddressBox address={address} showDefaultBadges />
+                <Island variant="outline">
+                  <SingleAddress address={address} showDefaultBadges />
+                </Island>
               </Link>
             </li>
           ))}

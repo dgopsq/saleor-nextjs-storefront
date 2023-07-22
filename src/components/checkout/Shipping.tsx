@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 import { SectionHeading } from "@/components/core/Headings";
@@ -27,10 +28,10 @@ export const Shipping: React.FC = () => {
 
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <div>
-            <SectionHeading>Payment method</SectionHeading>
+          <SectionHeading>Shipping methods</SectionHeading>
 
-            <div className="mt-8">...</div>
+          <div className="mt-8">
+            <CheckoutDeliveryMethod deliveryMethods={data.shippingMethods} />
           </div>
         </section>
 

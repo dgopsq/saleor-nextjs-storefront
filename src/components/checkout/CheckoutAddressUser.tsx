@@ -1,4 +1,5 @@
-import { AddressBox } from "@/components/core/AddressBox";
+import { RadioIsland } from "@/components/core/RadioIsland";
+import { SingleAddress } from "@/components/core/SingleAddress";
 import { Address, areAddressEqual } from "@/queries/user/data";
 import { useMemo } from "react";
 
@@ -34,7 +35,9 @@ export const CheckoutAddressUser: React.FC<Props> = ({
               type="button"
               className="w-full h-full flex flex-row"
             >
-              <AddressBox address={address} selected={isSelected} showRadio />
+              <RadioIsland isSelected={isSelected}>
+                <SingleAddress address={address} selected={isSelected} />
+              </RadioIsland>
             </button>
           </li>
         );

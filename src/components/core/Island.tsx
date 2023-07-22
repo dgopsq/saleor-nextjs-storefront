@@ -6,7 +6,7 @@ type Props = PropsWithChildren<{
   variant: "outline" | "solid" | "solid-darker";
   className?: string;
   noPadding?: boolean;
-  selected?: boolean;
+  isSelected?: boolean;
 }>;
 
 /**
@@ -17,7 +17,7 @@ export const Island: React.FC<Props> = ({
   className,
   children,
   noPadding,
-  selected,
+  isSelected,
 }) => {
   const computedVariant = match(variant)
     .with("outline", () => "border border-gray-100")
@@ -32,7 +32,9 @@ export const Island: React.FC<Props> = ({
         "rounded-lg h-full w-full",
         noPadding ? "" : "p-6",
         className ?? "",
-        selected ? "outline outline-2 outline-offset-2 outline-indigo-600" : ""
+        isSelected
+          ? "outline outline-2 outline-offset-2 outline-indigo-600"
+          : ""
       )}
     >
       {children}

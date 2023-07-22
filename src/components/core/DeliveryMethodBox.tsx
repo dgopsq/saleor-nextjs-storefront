@@ -18,7 +18,7 @@ export const DeliveryMethodBox: React.FC<Props> = ({
   const { name, description, price } = deliveryMethod;
 
   return (
-    <Island variant="outline" selected={selected}>
+    <Island variant="outline" isSelected={selected}>
       <div className="text-left">
         <div className="font-semibold">{name}</div>
 
