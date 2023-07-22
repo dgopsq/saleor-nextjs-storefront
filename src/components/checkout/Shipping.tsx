@@ -182,6 +182,7 @@ export const Shipping: React.FC = () => {
                     {addShippingAddress ? (
                       <CheckoutAddAddress
                         onCancel={() => setAddShippingAddress(false)}
+                        onAddressCreated={handleShippingAddressUpdate}
                       />
                     ) : (
                       <CheckoutAddressUser
@@ -244,6 +245,7 @@ export const Shipping: React.FC = () => {
                       .with([false, true], () => (
                         <CheckoutAddAddress
                           onCancel={() => setAddBillingAddress(false)}
+                          onAddressCreated={handleBillingAddressUpdate}
                         />
                       ))
                       .otherwise(() => null)}

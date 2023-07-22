@@ -1,21 +1,28 @@
-import { UserCreateAddressDocument } from "@/__generated__/graphql";
+import { getFragmentData } from "@/__generated__";
+import {
+  GenericAddressFragmentDoc,
+  UserCreateAddressDocument,
+} from "@/__generated__/graphql";
 import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { Button } from "@/components/core/Button";
+import { Address, parseAddress } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 
 type Props = {
   onCancel?: () => void;
+  onAddressCreated?: (address: Address) => void;
 };
 
 /**
  *
  */
-export const CheckoutAddAddress: React.FC<Props> = ({ onCancel }) => {
+export const CheckoutAddAddress: React.FC<Props> = ({
+  onCancel,
+  onAddressCreated,
+}) => {
   const formRef = useRef<AddressFormRef>(null);
-  const [createAddress, { data, loading }] = useMutation(
-    UserCreateAddressDocument
-  );
+  const [createAddress, { loading }] = useMutation(UserCreateAddressDocument);
 
   const handleSubmit = useCallback(async () => {
     const formData = (await formRef.current?.getValues()) ?? null;
@@ -25,13 +32,21 @@ export const CheckoutAddAddress: React.FC<Props> = ({ onCancel }) => {
         variables: {
           input: formData,
         },
+        onCompleted: (data) => {
+          const maybeAddress =
+            getFragmentData(
+              GenericAddressFragmentDoc,
+              data.accountAddressCreate?.address
+            ) ?? null;
+
+          if (maybeAddress) {
+            onAddressCreated?.(parseAddress(maybeAddress));
+            onCancel?.();
+          }
+        },
       });
     }
-  }, [createAddress]);
-
-  useEffect(() => {
-    if (data?.accountAddressCreate?.user) onCancel?.();
-  }, [data, onCancel]);
+  }, [createAddress, onCancel, onAddressCreated]);
 
   return (
     <div>

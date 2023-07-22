@@ -139,6 +139,9 @@ mutation UserCreateAddress($input: AddressInput!) {
     user {
       ...GenericUser
     }
+    address {
+      ...GenericAddress
+    }
   }
 }
 
