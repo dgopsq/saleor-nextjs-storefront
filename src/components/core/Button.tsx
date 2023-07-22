@@ -41,8 +41,41 @@ export const Button: React.FC<BaseButtonProps> = ({
     <button
       type="button"
       className={classNames(
-        "flex flex-1 items-center justify-center rounded-md border border-transparent  text-base font-medium text-white focus:outline-none",
+        "flex flex-1 items-center justify-center rounded-md border border-transparent text-base font-medium text-white focus:outline-none",
         computedSize,
+        computedVariant,
+        disabledState ? "opacity-75 cursor-not-allowed" : ""
+      )}
+      disabled={disabledState}
+      {...props}
+    >
+      {isLoading ? <Spinner size="button" variant="white" /> : text}
+    </button>
+  );
+};
+
+/**
+ *
+ */
+export const TextButton: React.FC<Omit<BaseButtonProps, "size">> = ({
+  text,
+  variant,
+  isLoading,
+  isDisabled,
+  ...props
+}) => {
+  const computedVariant = match(variant)
+    .with("primary", () => "text-indigo-600 enabled:hover:text-indigo-700")
+    .with("danger", () => "text-red-600 enabled:hover:text-red-700")
+    .exhaustive();
+
+  const disabledState = isLoading || isDisabled;
+
+  return (
+    <button
+      type="button"
+      className={classNames(
+        "flex flex-1 items-center justify-center rounded-md border border-transparent text-base font-medium focus:outline-none hover:underline",
         computedVariant,
         disabledState ? "opacity-75 cursor-not-allowed" : ""
       )}

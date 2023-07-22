@@ -12,8 +12,7 @@ import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
-import { Button } from "@/components/core/Button";
-import { Checkbox } from "@/components/core/Checkbox";
+import { Button, TextButton } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
@@ -179,24 +178,27 @@ export const Shipping: React.FC = () => {
                   </h2>
 
                   <div className="mt-8">
-                    <Checkbox
-                      id="billingSameAsShipping"
-                      label="Same as the shipping address"
-                      value={billingSameAsShipping}
-                      onClick={() => setBillingSameAsShipping((prev) => !prev)}
-                    />
-                  </div>
-
-                  {!billingSameAsShipping ? (
-                    <div className="mt-8">
+                    {!billingSameAsShipping ? (
                       <CheckoutAddressUser
                         addresses={userInfo.addresses}
                         value={data.billingAddress ?? undefined}
                         onChange={handleBillingAddressUpdate}
                         isLoading={loadingUpdateBillingAddress}
                       />
-                    </div>
-                  ) : undefined}
+                    ) : (
+                      <div className="flex flex-row items-center">
+                        <span>Same as the shipping address.</span>
+
+                        <div className="ml-4">
+                          <TextButton
+                            text="Change"
+                            onClick={() => setBillingSameAsShipping(false)}
+                            variant="primary"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </>
               ) : undefined}
             </div>
