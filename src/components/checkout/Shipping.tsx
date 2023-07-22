@@ -8,6 +8,7 @@ import {
 } from "@/__generated__/graphql";
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
+import { CheckoutAddAddress } from "@/components/checkout/CheckoutAddAddress";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutDeliveryMethod } from "@/components/checkout/CheckoutDeliveryMethods";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
@@ -30,6 +31,7 @@ import { useCallback, useState } from "react";
  */
 export const Shipping: React.FC = () => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+  const [addShippingAddress, setAddShippingAddress] = useState(false);
 
   const userInfo = useUserInfo();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
@@ -155,20 +157,38 @@ export const Shipping: React.FC = () => {
             >
               {userInfo ? (
                 <>
-                  <h2
-                    id="summary-heading"
-                    className="text-lg font-medium text-gray-900"
-                  >
-                    Shipping address
-                  </h2>
+                  <div className="flex flex-row items-center gap-4">
+                    <h2
+                      id="summary-heading"
+                      className="text-lg font-medium text-gray-900"
+                    >
+                      Shipping address
+                    </h2>
+
+                    {!addShippingAddress ? (
+                      <div>
+                        <TextButton
+                          text="Add new"
+                          onClick={() => setAddShippingAddress(true)}
+                          variant="primary"
+                        />
+                      </div>
+                    ) : undefined}
+                  </div>
 
                   <div className="mt-8">
-                    <CheckoutAddressUser
-                      addresses={userInfo.addresses}
-                      value={data.shippingAddress ?? undefined}
-                      onChange={handleShippingAddressUpdate}
-                      isLoading={loadingUpdateShippingAddress}
-                    />
+                    {addShippingAddress ? (
+                      <CheckoutAddAddress
+                        onCancel={() => setAddShippingAddress(false)}
+                      />
+                    ) : (
+                      <CheckoutAddressUser
+                        addresses={userInfo.addresses}
+                        value={data.shippingAddress ?? undefined}
+                        onChange={handleShippingAddressUpdate}
+                        isLoading={loadingUpdateShippingAddress}
+                      />
+                    )}
                   </div>
                 </>
               ) : undefined}
@@ -193,10 +213,10 @@ export const Shipping: React.FC = () => {
                         isLoading={loadingUpdateBillingAddress}
                       />
                     ) : (
-                      <div className="flex flex-row items-center">
+                      <div className="flex flex-row items-center gap-4">
                         <span>Same as the shipping address.</span>
 
-                        <div className="ml-4">
+                        <div>
                           <TextButton
                             text="Change"
                             onClick={() => setBillingSameAsShipping(false)}

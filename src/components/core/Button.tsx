@@ -75,7 +75,7 @@ export const TextButton: React.FC<Omit<BaseButtonProps, "size">> = ({
     <button
       type="button"
       className={classNames(
-        "flex flex-1 items-center justify-center rounded-md border border-transparent text-base font-medium focus:outline-none hover:underline",
+        "flex flex-1 items-center justify-center rounded-md border border-transparent text-sm font-medium focus:outline-none hover:underline",
         computedVariant,
         disabledState ? "opacity-75 cursor-not-allowed" : ""
       )}

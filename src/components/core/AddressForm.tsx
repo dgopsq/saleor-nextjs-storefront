@@ -3,6 +3,7 @@
 import { CountryCode } from "@/__generated__/graphql";
 import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
+import { classNames } from "@/misc/styles";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -37,13 +38,14 @@ export type AddressFormRef = {
 
 type Props = {
   initialValues?: Partial<AddressForm>;
+  compact?: boolean;
 };
 
 /**
  *
  */
 export const AddressForm = forwardRef<AddressFormRef, Props>(
-  ({ initialValues }, ref) => {
+  ({ initialValues, compact }, ref) => {
     const stableInitialValues = useMemo<AddressForm>(
       () => ({
         firstName: "",
@@ -89,7 +91,12 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
     );
 
     return (
-      <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
+      <div
+        className={classNames(
+          "grid grid-cols-1 sm:grid-cols-6",
+          compact ? "gap-x-4 gap-y-4" : "gap-x-6 gap-y-8"
+        )}
+      >
         <div className="sm:col-span-3">
           <Field
             id="firstName"

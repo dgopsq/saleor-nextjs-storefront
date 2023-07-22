@@ -21,20 +21,20 @@ export const CheckoutAddressUser: React.FC<Props> = ({
   const addressesRender = useMemo(
     () =>
       addresses.map((address) => {
-        const isSameAddr = value ? areAddressEqual(value, address) : false;
+        const isSelected = value ? areAddressEqual(value, address) : false;
 
         const handleClick = () => {
           if (!isLoading) onChange?.(address);
         };
 
         return (
-          <li key={address.id} className="lg:col-span-3">
+          <li key={address.id}>
             <button
               onClick={handleClick}
               type="button"
               className="w-full h-full flex flex-row"
             >
-              <AddressBox address={address} selected={isSameAddr} showRadio />
+              <AddressBox address={address} selected={isSelected} showRadio />
             </button>
           </li>
         );
