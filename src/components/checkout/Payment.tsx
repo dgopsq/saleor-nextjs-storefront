@@ -1,12 +1,9 @@
 "use client";
 
-import { CartProducts } from "@/components/checkout/CartProducts";
-import { CartSummary } from "@/components/checkout/CartSummary";
+import { CheckoutCartSummary } from "@/components/checkout/CheckoutCartSummary";
 import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
-import { Button } from "@/components/core/Button";
 import { SectionHeading } from "@/components/core/Headings";
-import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { classNames } from "@/misc/styles";
@@ -52,27 +49,12 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
               checkoutRefreshing ? "opacity-50" : ""
             )}
           >
-            <Island variant="solid">
-              <SectionHeading>Order summary</SectionHeading>
-
-              <div className="mt-8">
-                <CartProducts products={data.lines} compact />
-              </div>
-
-              <div className="mt-8">
-                <CartSummary checkout={data} />
-              </div>
-
-              <div className="mt-8">
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="large"
-                  text="Buy now"
-                  isLoading={checkoutRefreshing}
-                />
-              </div>
-            </Island>
+            <CheckoutCartSummary
+              checkout={data}
+              ctaText="Place order"
+              isLoading={checkoutRefreshing}
+              isDisabled={false}
+            />
           </section>
         </form>
       </div>
