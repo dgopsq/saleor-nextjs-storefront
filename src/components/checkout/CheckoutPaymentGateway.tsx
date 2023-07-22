@@ -23,7 +23,7 @@ type Props = {
 /**
  *
  */
-export const CheckoutPaymentGateways: React.FC<Props> = ({
+export const CheckoutPaymentGateway: React.FC<Props> = ({
   paymentGateways,
   checkoutId,
 }) => {
@@ -65,12 +65,14 @@ export const CheckoutPaymentGateways: React.FC<Props> = ({
     });
   }, [maybePaymentGatewayData, transactionInitialize, checkoutId]);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading || !maybeGatewayConfig) return <LoadingSpinner />;
 
-  return maybeGatewayConfig ? (
-    <StripePaymentGateway
-      publishableKey={maybeGatewayConfig.publishableKey}
-      clientSecret={maybeGatewayConfig.paymentIntent.client_secret}
-    />
-  ) : null;
+  return (
+    <div>
+      <StripePaymentGateway
+        publishableKey={maybeGatewayConfig.publishableKey}
+        clientSecret={maybeGatewayConfig.paymentIntent.client_secret}
+      />
+    </div>
+  );
 };

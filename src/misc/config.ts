@@ -70,4 +70,11 @@ export const publicConfig = {
   emailChangeRedirectUrl:
     process.env.NEXT_PUBLIC_EMAIL_CHANGE_REDIRECT_URL ||
     "http://localhost:3000/account/authentication",
+
+  /**
+   *
+   */
+  stripePaymentCallbackUrl:
+    process.env.NEXT_PUBLIC_STRIPE_PAYMENT_CALLBACK_URL ||
+    "http://localhost:3000/checkout/stripe/callback",
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
-import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
+import { CheckoutPaymentGateway } from "@/components/checkout/CheckoutPaymentGateway";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { SectionHeading } from "@/components/core/Headings";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
@@ -29,15 +29,13 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
 
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <div className="mt-12">
-            <SectionHeading>Payment method</SectionHeading>
+          <SectionHeading>Payment method</SectionHeading>
 
-            <div className="mt-8">
-              <CheckoutPaymentGateways
-                paymentGateways={paymentGateways}
-                checkoutId={data.id}
-              />
-            </div>
+          <div className="mt-8">
+            <CheckoutPaymentGateway
+              paymentGateways={paymentGateways}
+              checkoutId={data.id}
+            />
           </div>
         </section>
 
@@ -48,12 +46,7 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
             checkoutRefreshing ? "opacity-50" : ""
           )}
         >
-          <CheckoutSummary
-            checkout={data}
-            ctaText="Place order"
-            isLoading={checkoutRefreshing}
-            isDisabled={false}
-          />
+          <CheckoutSummary checkout={data} />
         </section>
       </div>
     </div>

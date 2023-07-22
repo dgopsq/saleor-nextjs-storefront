@@ -7,7 +7,7 @@ import { Checkout } from "@/queries/checkout/data";
 
 type Props = {
   checkout: Checkout;
-  ctaText: string;
+  ctaText?: string;
   onCtaClick?: () => void;
   isLoading?: boolean;
   isDisabled?: boolean;
@@ -35,17 +35,19 @@ export const CheckoutSummary: React.FC<Props> = ({
         <CartSummary checkout={checkout} />
       </div>
 
-      <div className="mt-8">
-        <Button
-          type="button"
-          variant="primary"
-          size="large"
-          text={ctaText}
-          isLoading={isLoading}
-          isDisabled={isDisabled}
-          onClick={onCtaClick}
-        />
-      </div>
+      {ctaText ? (
+        <div className="mt-8">
+          <Button
+            type="button"
+            variant="primary"
+            size="large"
+            text={ctaText}
+            isLoading={isLoading}
+            isDisabled={isDisabled}
+            onClick={onCtaClick}
+          />
+        </div>
+      ) : undefined}
     </Island>
   );
 };
