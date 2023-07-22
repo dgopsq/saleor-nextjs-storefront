@@ -44,9 +44,7 @@ export const CheckoutAddressUser: React.FC<Props> = ({
 
   return (
     <div className={isLoading ? "opacity-75 cursor-not-allowed" : undefined}>
-      <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-6">
-        {addressesRender}
-      </ul>
+      <ul className="flex flex-col gap-4">{addressesRender}</ul>
     </div>
   );
 };

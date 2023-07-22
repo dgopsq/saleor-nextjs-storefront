@@ -19,9 +19,7 @@ export const AddressBox: React.FC<Props> = ({
   const {
     firstName,
     lastName,
-    companyName,
     streetAddress1,
-    streetAddress2,
     city,
     postalCode,
     country,
@@ -35,41 +33,27 @@ export const AddressBox: React.FC<Props> = ({
 
   return (
     <Island variant="outline" selected={selected}>
-      <div className="text-left">
-        <div className="font-semibold">
-          {firstName} {lastName}
+      <div className="flex flex-col justify-between gap-4 lg:flex-row">
+        <div className="flex flex-row items-center gap-2">
+          <div className="text-sm font-semibold">
+            {firstName} {lastName}
+          </div>
+
+          <div className="text-sm text-gray-700">{`${streetAddress1}, ${city} (${countryArea}), ${postalCode}, ${country}`}</div>
         </div>
 
-        {companyName ? (
-          <div className="mt-1 text-sm">{companyName}</div>
-        ) : undefined}
+        {showDefaultBadges && hasDefaultAddresses ? (
+          <div className="flex flex-row gap-2">
+            {isDefaultBillingAddress ? (
+              <NeutralBadge label="Default billing" />
+            ) : undefined}
 
-        <div className="mt-1 text-sm">{streetAddress1}</div>
-
-        {address.streetAddress2 ? (
-          <div className="mt-1 text-sm">{streetAddress2}</div>
-        ) : undefined}
-
-        <div className="mt-1 text-sm">
-          {city} ({countryArea}), {postalCode}, {country}
-        </div>
-
-        {address.phone ? (
-          <div className="mt-1 text-sm">{address.phone}</div>
+            {isDefaultShippingAddress ? (
+              <NeutralBadge label="Default shipping" />
+            ) : undefined}
+          </div>
         ) : undefined}
       </div>
-
-      {showDefaultBadges && hasDefaultAddresses ? (
-        <div className="mt-4 grid gap-2 grid-cols-3">
-          {isDefaultBillingAddress ? (
-            <NeutralBadge label="Default billing" />
-          ) : undefined}
-
-          {isDefaultShippingAddress ? (
-            <NeutralBadge label="Default shipping" />
-          ) : undefined}
-        </div>
-      ) : undefined}
     </Island>
   );
 };

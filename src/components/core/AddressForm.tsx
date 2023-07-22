@@ -108,30 +108,12 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
           />
         </div>
 
-        <div className="sm:col-span-3">
-          <Field
-            id="companyNamy"
-            label="Company name"
-            register={register("companyName")}
-            error={errors.companyName?.message}
-          />
-        </div>
-
         <div className="col-span-full">
           <Field
             id="streetAddress1"
-            label="Street address 1"
+            label="Address"
             register={register("streetAddress1")}
             error={errors.streetAddress1?.message}
-          />
-        </div>
-
-        <div className="col-span-full">
-          <Field
-            id="streetAddress2"
-            label="Street address 2"
-            register={register("streetAddress2")}
-            error={errors.streetAddress2?.message}
           />
         </div>
 

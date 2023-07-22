@@ -16,7 +16,7 @@ export const Addresses: React.FC = () => {
       <h3 className="text-xl font-semibold">Addresses</h3>
 
       <div className="mt-8">
-        <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-6">
+        <ul className="flex flex-col gap-4">
           {userInfo?.addresses?.map((address) => (
             <li key={address.id} className="lg:col-span-3">
               <Link
@@ -30,12 +30,9 @@ export const Addresses: React.FC = () => {
 
           <li className="lg:col-span-3">
             <Link className="h-full" href={`/account/addresses/new`}>
-              <div
-                className="border border-gray-100 bg-gray-50 rounded-lg p-6 h-full flex flex-column items-center justify-center"
-                style={{ minHeight: "10em" }}
-              >
+              <div className="border border-gray-100 bg-gray-50 rounded-lg p-6 h-full flex flex-column items-center justify-center">
                 <span className="text-gray-400 text-bold">
-                  <PlusIcon className="h-8 w-8 text-gray-300" />
+                  <PlusIcon className="h-6 w-6 text-gray-300" />
                 </span>
               </div>
             </Link>
