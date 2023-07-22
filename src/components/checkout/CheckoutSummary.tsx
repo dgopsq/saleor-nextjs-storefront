@@ -16,7 +16,7 @@ type Props = {
 /**
  *
  */
-export const CheckoutCartSummary: React.FC<Props> = ({
+export const CheckoutSummary: React.FC<Props> = ({
   checkout,
   isLoading,
   isDisabled,

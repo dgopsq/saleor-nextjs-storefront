@@ -7,7 +7,7 @@ import {
 } from "@/__generated__/graphql";
 import { CheckoutAddAddress } from "@/components/checkout/CheckoutAddAddress";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
-import { CheckoutCartSummary } from "@/components/checkout/CheckoutCartSummary";
+import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { TextButton } from "@/components/core/Button";
@@ -235,7 +235,7 @@ export const Informations: React.FC = () => {
               checkoutRefreshing ? "opacity-50" : ""
             )}
           >
-            <CheckoutCartSummary
+            <CheckoutSummary
               checkout={data}
               isLoading={checkoutRefreshing}
               isDisabled={!canBuy}

@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckoutCartSummary } from "@/components/checkout/CheckoutCartSummary";
+import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { SectionHeading } from "@/components/core/Headings";
@@ -49,7 +49,7 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
               checkoutRefreshing ? "opacity-50" : ""
             )}
           >
-            <CheckoutCartSummary
+            <CheckoutSummary
               checkout={data}
               ctaText="Place order"
               isLoading={checkoutRefreshing}
