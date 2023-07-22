@@ -25,6 +25,7 @@ import { Address, addressToAddressInput } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useCallback, useState } from "react";
+import { P, match } from "ts-pattern";
 
 /**
  *
@@ -32,6 +33,7 @@ import { useCallback, useState } from "react";
 export const Shipping: React.FC = () => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [addShippingAddress, setAddShippingAddress] = useState(false);
+  const [addBillingAddress, setAddBillingAddress] = useState(false);
 
   const userInfo = useUserInfo();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
@@ -197,34 +199,54 @@ export const Shipping: React.FC = () => {
             <div className="mt-12 border-b border-gray-100 pb-12">
               {userInfo ? (
                 <>
-                  <h2
-                    id="summary-heading"
-                    className="text-lg font-medium text-gray-900"
-                  >
-                    Billing address
-                  </h2>
+                  <div className="flex flex-row items-center gap-4">
+                    <h2
+                      id="summary-heading"
+                      className="text-lg font-medium text-gray-900"
+                    >
+                      Billing address
+                    </h2>
+
+                    {!addBillingAddress && !billingSameAsShipping ? (
+                      <div>
+                        <TextButton
+                          text="Add new address"
+                          onClick={() => setAddBillingAddress(true)}
+                          variant="primary"
+                        />
+                      </div>
+                    ) : undefined}
+                  </div>
 
                   <div className="mt-8">
-                    {!billingSameAsShipping ? (
-                      <CheckoutAddressUser
-                        addresses={userInfo.addresses}
-                        value={data.billingAddress ?? undefined}
-                        onChange={handleBillingAddressUpdate}
-                        isLoading={loadingUpdateBillingAddress}
-                      />
-                    ) : (
-                      <div className="flex flex-row items-center gap-4">
-                        <span>Same as the shipping address.</span>
+                    {match([billingSameAsShipping, addBillingAddress])
+                      .with([true, P._], () => (
+                        <div className="flex flex-row items-center gap-4">
+                          <span>Same as the shipping address.</span>
 
-                        <div>
-                          <TextButton
-                            text="Change"
-                            onClick={() => setBillingSameAsShipping(false)}
-                            variant="primary"
-                          />
+                          <div>
+                            <TextButton
+                              text="Change"
+                              onClick={() => setBillingSameAsShipping(false)}
+                              variant="primary"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      ))
+                      .with([false, false], () => (
+                        <CheckoutAddressUser
+                          addresses={userInfo.addresses}
+                          value={data.billingAddress ?? undefined}
+                          onChange={handleBillingAddressUpdate}
+                          isLoading={loadingUpdateBillingAddress}
+                        />
+                      ))
+                      .with([false, true], () => (
+                        <CheckoutAddAddress
+                          onCancel={() => setAddBillingAddress(false)}
+                        />
+                      ))
+                      .otherwise(() => null)}
                   </div>
                 </>
               ) : undefined}
