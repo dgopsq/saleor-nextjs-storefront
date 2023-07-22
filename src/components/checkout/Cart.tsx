@@ -3,7 +3,7 @@
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
-import { SectionHeading } from "@/components/core/Headings";
+import { PageHeading, SectionHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
@@ -27,7 +27,9 @@ export const Cart: React.FC = () => {
 
   return (
     <div className="bg-white w-full">
-      <form className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+      <PageHeading>Cart</PageHeading>
+
+      <div className="mt-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
           <div>
             <CartProducts
@@ -63,7 +65,7 @@ export const Cart: React.FC = () => {
             </div>
           </Island>
         </section>
-      </form>
+      </div>
     </div>
   );
 };

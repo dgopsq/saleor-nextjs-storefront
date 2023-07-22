@@ -46,6 +46,13 @@ export const CartProducts: React.FC<Props> = ({
     [compact]
   );
 
+  if (products.length === 0)
+    return (
+      <div>
+        <p className="text-gray-400">Your cart is empty.</p>
+      </div>
+    );
+
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {products.map((line, index) => {
