@@ -192,8 +192,8 @@ export const EditAddress = ({ id }: Props) => {
               Set this address as default
             </h3>
 
-            <div className="mt-4 flex">
-              <div className="w-48">
+            <div className="mt-4 flex flex-row items-center gap-4">
+              <div>
                 <Button
                   text="Default for shipping"
                   type="submit"
@@ -205,7 +205,7 @@ export const EditAddress = ({ id }: Props) => {
                 />
               </div>
 
-              <div className="ml-4 w-48">
+              <div>
                 <Button
                   text="Default for billing"
                   type="submit"
@@ -221,8 +221,8 @@ export const EditAddress = ({ id }: Props) => {
         </div>
       </div>
 
-      <div className="mt-16 flex justify-end">
-        <div className="w-48">
+      <div className="mt-16 flex justify-end gap-4">
+        <div>
           <Button
             text="Delete"
             type="submit"
@@ -234,7 +234,7 @@ export const EditAddress = ({ id }: Props) => {
           />
         </div>
 
-        <div className="ml-4 w-48">
+        <div>
           <Button
             text="Save changes"
             type="submit"
