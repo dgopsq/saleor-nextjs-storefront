@@ -1,6 +1,7 @@
 import { Button } from "@/components/core/Button";
 import { errorToast } from "@/components/core/Notifications";
 import { publicConfig } from "@/misc/config";
+import { stripeConfigSchema } from "@/misc/stripe";
 import {
   Elements,
   PaymentElement,
@@ -58,23 +59,27 @@ const CheckoutForm: React.FC = () => {
 };
 
 type Props = {
-  publishableKey: string;
-  clientSecret: string;
+  config: unknown;
 };
 
 /**
  *
  */
-export const StripePaymentGateway: React.FC<Props> = ({
-  publishableKey,
-  clientSecret,
-}) => {
+export const StripePaymentGateway: React.FC<Props> = ({ config }) => {
+  const maybeConfig = useMemo(() => {
+    const parsedConfig = stripeConfigSchema.safeParse(config);
+    return parsedConfig.success ? parsedConfig.data : null;
+  }, [config]);
+
   const stripePromise = useMemo(
-    () => loadStripe(publishableKey),
-    [publishableKey]
+    () => (maybeConfig ? loadStripe(maybeConfig.publishableKey) : null),
+    [maybeConfig]
   );
 
-  const options = useMemo(() => ({ clientSecret }), [clientSecret]);
+  const options = useMemo(
+    () => ({ clientSecret: maybeConfig?.paymentIntent.client_secret }),
+    [maybeConfig]
+  );
 
   return (
     <Elements stripe={stripePromise} options={options}>

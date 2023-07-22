@@ -77,4 +77,10 @@ export const publicConfig = {
   stripePaymentCallbackUrl:
     process.env.NEXT_PUBLIC_STRIPE_PAYMENT_CALLBACK_URL ||
     "http://localhost:3000/checkout/stripe/callback",
+
+  /**
+   *
+   */
+  stripeGatewayId:
+    process.env.NEXT_PUBLIC_STRIPE_GATEWAY_ID || "app.saleor.stripe",
 };
