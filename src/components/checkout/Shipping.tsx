@@ -137,15 +137,22 @@ export const Shipping: React.FC = () => {
               Items in your shopping cart
             </h2>
 
-            <div className="border-b border-gray-100 pb-12">
-              <CheckoutEmail
-                email={data.email ?? undefined}
-                onChange={handleEmailUpdate}
-                isLoading={loadingUpdateEmail}
-              />
-            </div>
+            {!userInfo ? (
+              <div className="border-b border-gray-100 pb-12">
+                <CheckoutEmail
+                  email={data.email ?? undefined}
+                  onChange={handleEmailUpdate}
+                  isLoading={loadingUpdateEmail}
+                />
+              </div>
+            ) : undefined}
 
-            <div className="mt-12 border-b border-gray-100 pb-12">
+            <div
+              className={classNames(
+                "border-b border-gray-100 pb-12",
+                !userInfo ? "mt-12" : ""
+              )}
+            >
               {userInfo ? (
                 <>
                   <h2

@@ -56,7 +56,6 @@ export const CheckoutEmail: React.FC<Props> = ({
         type="email"
         autoComplete="email"
         error={errors.email?.message}
-        disabled={email !== undefined}
         register={register("email")}
       />
     </div>
