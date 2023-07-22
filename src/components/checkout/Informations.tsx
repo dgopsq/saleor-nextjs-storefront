@@ -12,6 +12,7 @@ import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { Button, TextButton } from "@/components/core/Button";
+import { SectionHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
@@ -127,10 +128,6 @@ export const Informations: React.FC = () => {
       <div className="mt-12">
         <form className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
-            <h2 id="cart-heading" className="sr-only">
-              Items in your shopping cart
-            </h2>
-
             {!userInfo ? (
               <div className="border-b border-gray-100 pb-12">
                 <CheckoutEmail
@@ -150,12 +147,7 @@ export const Informations: React.FC = () => {
               {userInfo ? (
                 <>
                   <div className="flex flex-row items-center gap-4">
-                    <h2
-                      id="summary-heading"
-                      className="text-lg font-medium text-gray-900"
-                    >
-                      Shipping address
-                    </h2>
+                    <SectionHeading>Shipping address</SectionHeading>
 
                     {!addShippingAddress ? (
                       <div>
@@ -191,12 +183,7 @@ export const Informations: React.FC = () => {
               {userInfo ? (
                 <>
                   <div className="flex flex-row items-center gap-4">
-                    <h2
-                      id="summary-heading"
-                      className="text-lg font-medium text-gray-900"
-                    >
-                      Billing address
-                    </h2>
+                    <SectionHeading>Billing address</SectionHeading>
 
                     {!addBillingAddress && !billingSameAsShipping ? (
                       <div>

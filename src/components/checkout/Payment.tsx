@@ -5,6 +5,7 @@ import { CartSummary } from "@/components/checkout/CartSummary";
 import { CheckoutPaymentGateways } from "@/components/checkout/CheckoutPaymentGateway";
 import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { Button } from "@/components/core/Button";
+import { SectionHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
@@ -33,12 +34,7 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
         <form className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <div className="mt-12">
-              <h2
-                id="summary-heading"
-                className="text-lg font-medium text-gray-900"
-              >
-                Payment method
-              </h2>
+              <SectionHeading>Payment method</SectionHeading>
 
               <div className="mt-8">
                 <CheckoutPaymentGateways
@@ -57,15 +53,10 @@ export const Payment: React.FC<Props> = ({ paymentGateways }) => {
             )}
           >
             <Island variant="solid">
-              <h2
-                id="summary-heading"
-                className="text-lg font-medium text-gray-900"
-              >
-                Order summary
-              </h2>
+              <SectionHeading>Order summary</SectionHeading>
 
               <div className="mt-8">
-                <CartProducts products={data.lines} condensed />
+                <CartProducts products={data.lines} compact />
               </div>
 
               <div className="mt-8">

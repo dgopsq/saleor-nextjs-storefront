@@ -3,6 +3,7 @@
 import { CartProducts } from "@/components/checkout/CartProducts";
 import { CartSummary } from "@/components/checkout/CartSummary";
 import { Button } from "@/components/core/Button";
+import { SectionHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
@@ -28,10 +29,6 @@ export const Cart: React.FC = () => {
     <div className="bg-white w-full">
       <form className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <h2 id="cart-heading" className="sr-only">
-            Items in your shopping cart
-          </h2>
-
           <div>
             <CartProducts
               products={data.lines}
@@ -48,12 +45,7 @@ export const Cart: React.FC = () => {
           )}
         >
           <Island variant="solid">
-            <h2
-              id="summary-heading"
-              className="text-lg font-medium text-gray-900"
-            >
-              Total
-            </h2>
+            <SectionHeading>Total</SectionHeading>
 
             <div>
               <CartSummary checkout={data} />

@@ -2,6 +2,7 @@
 
 import { UserEmailChangeDocument } from "@/__generated__/graphql";
 import { ChangeEmailForm } from "@/components/core/ChangeEmailForm";
+import { SectionHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { publicConfig } from "@/misc/config";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
@@ -41,7 +42,7 @@ export const ChangeEmail: React.FC = () => {
 
   return (
     <div className="w-full">
-      <h3 className="text-xl font-semibold">Email</h3>
+      <SectionHeading>Email</SectionHeading>
 
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">

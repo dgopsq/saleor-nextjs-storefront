@@ -1,6 +1,7 @@
 "use client";
 
 import { AddressBox } from "@/components/core/AddressBox";
+import { PageHeading } from "@/components/core/Headings";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -13,7 +14,7 @@ export const Addresses: React.FC = () => {
 
   return (
     <div className="">
-      <h3 className="text-xl font-semibold">Addresses</h3>
+      <PageHeading>Addresses</PageHeading>
 
       <div className="mt-8">
         <ul className="flex flex-col gap-4">

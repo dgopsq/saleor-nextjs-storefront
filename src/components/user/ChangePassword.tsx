@@ -2,6 +2,7 @@
 
 import { UserPasswordChangeDocument } from "@/__generated__/graphql";
 import { ChangePasswordForm } from "@/components/core/ChangePasswordForm";
+import { SectionHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
@@ -39,7 +40,7 @@ export const ChangePassword: React.FC = () => {
 
   return (
     <div className="w-full">
-      <h3 className="text-xl font-semibold">Password</h3>
+      <SectionHeading>Password</SectionHeading>
 
       <div className="mt-8">
         <ChangePasswordForm onSubmit={handleSubmit} isLoading={loading} />
