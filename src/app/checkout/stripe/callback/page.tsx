@@ -2,10 +2,17 @@ import { P, match } from "ts-pattern";
 import Stripe from "stripe";
 import { getStoredCheckoutIdServer } from "@/app/account/@auth/login/actions";
 import { getApolloClient } from "@/misc/apollo/apollo";
-import { CheckoutPaymentInitializeDocument } from "@/__generated__/graphql";
+import {
+  CheckoutCompleteDocument,
+  CheckoutPaymentInitializeDocument,
+} from "@/__generated__/graphql";
 import { publicConfig } from "@/misc/config";
 import { stripeServerConfigSchema } from "@/misc/stripe";
 import { logger } from "@/misc/logger";
+import { LoadingSpinner } from "@/components/core/LoadingSpinner";
+import { redirect } from "next/navigation";
+
+const commonReturn = <LoadingSpinner />;
 
 type SearchParams = {
   payment_intent?: string | string[];
@@ -24,7 +31,7 @@ export default async function SingleProductPage({
       "Stripe callback page was called without a checkout id in the session."
     );
 
-    return null;
+    return commonReturn;
   }
 
   const client = getApolloClient();
@@ -41,7 +48,7 @@ export default async function SingleProductPage({
 
   if (!queryPaymentIntent) {
     logger.warn("Stripe callback page was called without a payment intent.");
-    return null;
+    return commonReturn;
   }
 
   if (!queryPaymentIntentClientSecret) {
@@ -49,7 +56,7 @@ export default async function SingleProductPage({
       "Stripe callback page was called without a payment intent client secret."
     );
 
-    return null;
+    return commonReturn;
   }
 
   const paymentGateway = await client.mutate({
@@ -83,7 +90,7 @@ export default async function SingleProductPage({
       rawStripeData
     );
 
-    return null;
+    return commonReturn;
   }
 
   const stripe = new Stripe(maybeStripeData.publishableKey, {
@@ -97,5 +104,35 @@ export default async function SingleProductPage({
     }
   );
 
-  return `Payment intent: ${paymentIntent.status}`;
+  if (paymentIntent.status !== "succeeded") {
+    logger.warn(
+      "The payment intent status is not succeeded.",
+      paymentIntent.status
+    );
+
+    return commonReturn;
+  }
+
+  const checkoutComplete = await client.mutate({
+    mutation: CheckoutCompleteDocument,
+    variables: {
+      checkoutId,
+    },
+  });
+
+  if (checkoutComplete?.errors?.length) {
+    logger.error(
+      "Errors while executing the checkout complete mutation",
+      checkoutComplete?.errors
+    );
+  }
+
+  if (!checkoutComplete?.data?.checkoutComplete?.order) {
+    logger.error("Could not retrieve the order from the checkout complete.");
+    return commonReturn;
+  }
+
+  redirect("/checkout/complete");
+
+  return commonReturn;
 }

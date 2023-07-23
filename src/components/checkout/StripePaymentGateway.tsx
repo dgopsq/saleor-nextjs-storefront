@@ -8,7 +8,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { StripeElementsOptions, loadStripe } from "@stripe/stripe-js";
 import { FormEventHandler, useCallback, useMemo, useState } from "react";
 
 const CheckoutForm: React.FC = () => {
@@ -76,7 +76,7 @@ export const StripePaymentGateway: React.FC<Props> = ({ config }) => {
     [maybeConfig]
   );
 
-  const options = useMemo(
+  const options = useMemo<StripeElementsOptions>(
     () => ({ clientSecret: maybeConfig?.paymentIntent.client_secret }),
     [maybeConfig]
   );

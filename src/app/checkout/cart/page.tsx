@@ -1,5 +1,5 @@
 import { Cart } from "@/components/checkout/Cart";
 
-export default async function CartPage() {
+export default async function Page() {
   return <Cart />;
 }

@@ -97,6 +97,13 @@ fragment GenericCheckoutInfo on Checkout {
   }
 }
 
+fragment GenericOrder on Order {
+  id
+  created
+  updatedAt
+  status
+}
+
 query GetCheckoutInfo($checkoutId: ID!) {
   checkout(id: $checkoutId) {
     ...GenericCheckoutInfo
@@ -253,6 +260,21 @@ mutation CheckoutTransactionInitialize(
 ) {
   transactionInitialize(id: $checkoutId, paymentGateway: $paymentGateway) {
     data
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation CheckoutComplete($checkoutId: ID!) {
+  checkoutComplete(id: $checkoutId) {
+    order {
+      ...GenericOrder
+    }
+    confirmationNeeded
+    confirmationData
     errors {
       code
       message
