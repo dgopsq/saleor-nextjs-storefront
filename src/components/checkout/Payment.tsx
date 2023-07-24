@@ -63,7 +63,10 @@ export const Payment: React.FC = () => {
             checkoutRefreshing ? "opacity-50" : ""
           )}
         >
-          <CheckoutSummary checkout={data} />
+          <CheckoutSummary
+            checkout={data}
+            onCartEditClick={() => router.push("/checkout")}
+          />
         </section>
       </div>
     </div>

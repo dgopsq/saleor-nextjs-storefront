@@ -9,6 +9,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
+const priceFallback = "-";
+
 const qtyRange = Array.from({ length: 20 }, (_, index) => index);
 
 export type CartProduct = {
@@ -123,19 +125,27 @@ export const CartProducts: React.FC<Props> = ({
                   ))}
                 </Link>
 
-                {line.variant.price ? (
+                <div className="mt-2 flex flex-row items-center">
                   <p
                     className={classNames(
                       compact ? "text-sm" : "",
-                      "mt-2 font-semibold text-gray-900"
+                      "font-semibold text-gray-900"
                     )}
                   >
-                    {formatPrice(
-                      line.variant.price.amount,
-                      line.variant.price.currency
-                    )}
+                    {line.variant.price
+                      ? formatPrice(
+                          line.variant.price.amount,
+                          line.variant.price.currency
+                        )
+                      : priceFallback}
                   </p>
-                ) : undefined}
+
+                  {compact ? (
+                    <div className="ml-1">
+                      <p className="text-sm">× {line.quantity}</p>
+                    </div>
+                  ) : undefined}
+                </div>
               </div>
 
               {!compact ? (

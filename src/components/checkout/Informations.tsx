@@ -240,6 +240,7 @@ export const Informations: React.FC = () => {
             isDisabled={!canContinue}
             ctaText="Continue to shipping"
             onCtaClick={() => router.push("/checkout/shipping")}
+            onCartEditClick={() => router.push("/checkout")}
           />
         </section>
       </div>
