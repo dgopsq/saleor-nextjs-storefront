@@ -216,3 +216,20 @@ export function parseShippingMethod(
     minimumDeliveryDays: input.minimumDeliveryDays ?? null,
   };
 }
+
+/**
+ *
+ */
+export function validateInformationsStep(checkout: Checkout): boolean {
+  const { email, shippingAddress, billingAddress } = checkout;
+
+  return !!email && !!shippingAddress && !!billingAddress;
+}
+
+/**
+ *
+ */
+export function validateShippingStep(checkout: Checkout): boolean {
+  const { deliveryMethod } = checkout;
+  return !!deliveryMethod;
+}

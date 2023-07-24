@@ -8,10 +8,13 @@ import { SectionHeading } from "@/components/core/Headings";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { classNames } from "@/misc/styles";
-import { DeliveryMethod } from "@/queries/checkout/data";
+import {
+  DeliveryMethod,
+  validateInformationsStep,
+} from "@/queries/checkout/data";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 /**
  *
@@ -40,7 +43,16 @@ export const Shipping: React.FC = () => {
     [data, updateDeliveryMethod]
   );
 
-  if (!data) return <LoadingSpinner />;
+  const informationsStepValid = useMemo(
+    () => (data ? validateInformationsStep(data) : false),
+    [data]
+  );
+
+  useEffect(() => {
+    if (!informationsStepValid) router.push("/checkout");
+  }, [router, informationsStepValid]);
+
+  if (!data || !informationsStepValid) return <LoadingSpinner />;
 
   return (
     <div className="bg-white w-full">
