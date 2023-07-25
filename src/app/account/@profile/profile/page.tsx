@@ -8,19 +8,19 @@ export default async function Page() {
   return (
     <>
       <div>
-        <Island variant="solid">
+        <Island variant="outline">
           <ProfileInfo />
         </Island>
       </div>
 
       <div className="mt-8">
-        <Island variant="solid">
+        <Island variant="outline">
           <ChangePassword />
         </Island>
       </div>
 
       <div className="mt-8">
-        <Island variant="solid">
+        <Island variant="outline">
           <ChangeEmail />
         </Island>
       </div>
