@@ -22,7 +22,9 @@ export const CheckoutAddAddress: React.FC<Props> = ({
   onAddressCreated,
 }) => {
   const formRef = useRef<AddressFormRef>(null);
-  const [createAddress, { loading }] = useMutation(UserCreateAddressDocument);
+  const [createAddress, { loading, data }] = useMutation(
+    UserCreateAddressDocument
+  );
 
   const handleSubmit = useCallback(async () => {
     const formData = (await formRef.current?.getValues()) ?? null;
@@ -50,7 +52,11 @@ export const CheckoutAddAddress: React.FC<Props> = ({
 
   return (
     <div>
-      <AddressForm ref={formRef} compact />
+      <AddressForm
+        ref={formRef}
+        asyncErrors={data?.accountAddressCreate?.errors}
+        compact
+      />
 
       <div className="flex flex-row justify-end gap-4 mt-8">
         <div>

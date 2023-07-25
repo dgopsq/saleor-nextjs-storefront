@@ -23,7 +23,7 @@ const AddressFormSchema = z.object({
   city: z.string().trim().min(1),
   postalCode: z.string().trim().min(1),
   country: z.nativeEnum(CountryCode),
-  countryArea: z.string().trim().min(1),
+  countryArea: z.string().trim().optional(),
   phone: z.string().trim().optional(),
 });
 
