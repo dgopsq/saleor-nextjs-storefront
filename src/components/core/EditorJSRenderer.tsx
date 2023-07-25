@@ -1,15 +1,15 @@
 import edjsHTML from "editorjs-html";
 
 type Props = {
-  description: string;
+  data: string;
 };
 
 /**
  *
  */
-export const ProductDescription: React.FC<Props> = ({ description }) => {
+export const EditorJSRenderer: React.FC<Props> = ({ data }) => {
   const edjsParser = edjsHTML();
-  const parsedDescription = edjsParser.parse(JSON.parse(description));
+  const parsedDescription = edjsParser.parse(JSON.parse(data));
 
   return (
     <div dangerouslySetInnerHTML={{ __html: parsedDescription.join("") }} />

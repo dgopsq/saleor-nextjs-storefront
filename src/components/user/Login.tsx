@@ -39,8 +39,8 @@ export const Login: React.FC = () => {
           const maybeUserFragment =
             getFragmentData(GenericUserFragmentDoc, data.tokenCreate?.user) ??
             null;
-          const maybeCheckoutToken: string | null =
-            maybeUserFragment?.checkouts?.edges[0]?.node.token ?? null;
+          const maybeCheckoutId: string | null =
+            maybeUserFragment?.checkouts?.edges[0]?.node.id ?? null;
 
           if (maybeToken && maybeRefreshToken) {
             logger.debug("Auth and Refresh Token found, creating cookies.");
@@ -52,13 +52,10 @@ export const Login: React.FC = () => {
             );
           }
 
-          if (maybeCheckoutToken) {
+          if (maybeCheckoutId) {
             logger.debug("Checkout Token found, creating the cookie.");
 
-            Cookies.set(
-              publicConfig.checkoutTokenStorageKey,
-              maybeCheckoutToken
-            );
+            Cookies.set(publicConfig.checkoutIdStorageKey, maybeCheckoutId);
           }
 
           window.location.href = "/account";

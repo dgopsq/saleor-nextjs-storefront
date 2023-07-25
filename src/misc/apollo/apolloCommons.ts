@@ -7,7 +7,4 @@ export const commonApolloTypePolicies: TypePolicies = {
   Product: {
     keyFields: ["slug"],
   },
-  Checkout: {
-    keyFields: ["token"],
-  },
 };

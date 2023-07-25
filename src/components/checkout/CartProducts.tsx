@@ -1,9 +1,17 @@
+import { Island } from "@/components/core/Island";
+import { Select } from "@/components/core/Select";
 import { formatPrice } from "@/misc/currencies";
+import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
+import { classNames } from "@/misc/styles";
 import { CheckoutProduct } from "@/queries/checkout/data";
 import { ProductVariant, generateProductUrl } from "@/queries/products/data";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
+
+const priceFallback = "-";
+
+const qtyRange = Array.from({ length: 20 }, (_, index) => index);
 
 export type CartProduct = {
   id: string;
@@ -14,8 +22,8 @@ export type CartProduct = {
 
 type Props = {
   products: Array<CartProduct>;
-  onProductUpdate: (variantId: string, quantity: number) => void;
-  onProductRemove: (variantId: string) => void;
+  onProductUpdate?: UseProductUpdateReturn["updateProduct"];
+  compact?: boolean;
 };
 
 /**
@@ -24,16 +32,44 @@ type Props = {
 export const CartProducts: React.FC<Props> = ({
   products,
   onProductUpdate,
-  onProductRemove,
+  compact,
 }) => {
+  const imageSize = useMemo(
+    () => (compact ? "sm:h-28 sm:w-28" : "sm:h-40 sm:w-40"),
+    [compact]
+  );
+
+  const paddingTopIndexGap = useMemo(
+    () => (compact ? "pt-6" : "pt-10"),
+    [compact]
+  );
+  const paddingBottomIndexGap = useMemo(
+    () => (compact ? "pb-6" : "pb-10"),
+    [compact]
+  );
+
+  if (products.length === 0)
+    return (
+      <div>
+        <p className="text-gray-400">Your cart is empty.</p>
+      </div>
+    );
+
   return (
-    <ul role="list" className="divide-y divide-gray-100 -mt-6">
-      {products.map((line, productIdx) => {
+    <ul role="list" className="divide-y divide-gray-100">
+      {products.map((line, index) => {
         const imageUrl = line.variant.images[0]?.url ?? null;
         const imageAlt = line.variant.images[0]?.alt ?? "";
 
         return (
-          <li key={line.id} className="flex py-6 sm:py-10">
+          <li
+            key={line.id}
+            className={classNames(
+              "flex",
+              index > 0 ? paddingTopIndexGap : "",
+              index < products.length - 1 ? paddingBottomIndexGap : ""
+            )}
+          >
             <div className="flex-shrink-0">
               {imageUrl ? (
                 <Link
@@ -42,89 +78,94 @@ export const CartProducts: React.FC<Props> = ({
                     variantId: line.variant.id,
                   })}
                 >
-                  <Image
-                    src={imageUrl}
-                    alt={imageAlt}
-                    className="h-24 w-24 rounded-md object-cover object-center sm:h-40 sm:w-40 bg-gray-200"
-                    width={150}
-                    height={150}
-                  />
+                  <Island variant="solid-darker" noPadding>
+                    <Image
+                      src={imageUrl}
+                      alt={imageAlt}
+                      className={classNames(
+                        imageSize,
+                        "h-24 w-24 object-cover object-center"
+                      )}
+                      width={150}
+                      height={150}
+                    />
+                  </Island>
                 </Link>
               ) : undefined}
             </div>
 
-            <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-              <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                <div>
-                  <Link
-                    href={generateProductUrl({
-                      product: line.product,
-                      variantId: line.variant.id,
-                    })}
-                  >
-                    <div className="flex justify-between">
-                      <h3 className="text-sm">{line.product.name}</h3>
-                    </div>
-
-                    {line.variant.attributes.map(({ attribute, values }) => (
-                      <p
-                        key={attribute.id}
-                        className="mt-1 text-xs font-medium text-gray-400"
-                      >
-                        {`${attribute.name}: ${values
-                          .map((value) => value.name)
-                          .join(", ")}`}
-                      </p>
-                    ))}
-                  </Link>
-
-                  {line.variant.price ? (
-                    <p className="mt-4 text-sm font-medium text-gray-900">
-                      {formatPrice(
-                        line.variant.price.amount,
-                        line.variant.price.currency
+            <div className="ml-4 flex flex-1 flex-row gap-4 justify-between sm:ml-6">
+              <div className="grow-0 basis-full overflow-hidden">
+                <Link
+                  href={generateProductUrl({
+                    product: line.product,
+                    variantId: line.variant.id,
+                  })}
+                >
+                  <div>
+                    <span
+                      className={classNames(
+                        compact ? "block text-sm truncate" : "text-md",
+                        "font-medium"
                       )}
+                    >
+                      {line.product.name}
+                    </span>
+                  </div>
+
+                  {line.variant.attributes.map(({ attribute, values }) => (
+                    <p
+                      key={attribute.id}
+                      className="mt-2 text-sm font-medium text-gray-400"
+                    >
+                      {`${attribute.name}: ${values
+                        .map((value) => value.name)
+                        .join(", ")}`}
                     </p>
+                  ))}
+                </Link>
+
+                <div className="mt-2 flex flex-row items-center">
+                  <p
+                    className={classNames(
+                      compact ? "text-sm" : "",
+                      "font-semibold text-gray-900"
+                    )}
+                  >
+                    {line.variant.price
+                      ? formatPrice(
+                          line.variant.price.amount,
+                          line.variant.price.currency
+                        )
+                      : priceFallback}
+                  </p>
+
+                  {compact ? (
+                    <div className="ml-1">
+                      <p className="text-sm">× {line.quantity}</p>
+                    </div>
                   ) : undefined}
                 </div>
+              </div>
 
-                <div className="mt-4 sm:mt-0 sm:pr-9">
-                  <label htmlFor={`quantity-${productIdx}`} className="sr-only">
-                    Quantity, {line.variant.name}
-                  </label>
-
-                  <select
-                    id={`quantity-${productIdx}`}
-                    name={`quantity-${productIdx}`}
-                    className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                    value={line.quantity}
-                    onChange={(e) =>
-                      onProductUpdate(line.variant.id, parseInt(e.target.value))
-                    }
-                  >
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={6}>6</option>
-                    <option value={7}>7</option>
-                    <option value={8}>8</option>
-                    <option value={9}>9</option>
-                  </select>
-
-                  <div className="absolute right-0 top-0">
-                    <button
-                      type="button"
-                      className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
-                      onClick={() => onProductRemove(line.id)}
-                    >
-                      <span className="sr-only">Remove</span>
-                      <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
+              {!compact ? (
+                <div className="basis-auto shrink-0 grow-0 flex flex-col  justify-between items-end mt-4 sm:mt-0">
+                  <div>
+                    <Select
+                      value={line.quantity}
+                      onChange={(value) =>
+                        onProductUpdate?.(line.variant.id, value)
+                      }
+                      options={qtyRange.map((value) => ({
+                        id: value.toString(),
+                        label: value.toString(),
+                        value,
+                      }))}
+                      parseValue={parseInt}
+                    />
                   </div>
                 </div>
-              </div>
+              ) : undefined}
             </div>
           </li>
         );

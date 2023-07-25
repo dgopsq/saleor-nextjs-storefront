@@ -63,7 +63,7 @@ export const ChangeEmailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
       </div>
 
       <div className="mt-12 flex justify-end">
-        <div className="w-48">
+        <div>
           <Button
             variant="primary"
             size="medium"

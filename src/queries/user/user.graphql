@@ -27,7 +27,7 @@ fragment GenericUser on User {
   checkouts(first: 1) {
     edges {
       node {
-        token
+        id
       }
     }
   }
@@ -138,6 +138,9 @@ mutation UserCreateAddress($input: AddressInput!) {
     }
     user {
       ...GenericUser
+    }
+    address {
+      ...GenericAddress
     }
   }
 }

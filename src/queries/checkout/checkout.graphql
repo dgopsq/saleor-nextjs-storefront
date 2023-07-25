@@ -6,8 +6,40 @@ fragment CheckoutProduct on ProductVariant {
   }
 }
 
+fragment GenericShippingMethod on ShippingMethod {
+  id
+  name
+  description
+  active
+  minimumOrderPrice {
+    amount
+    currency
+  }
+  maximumOrderPrice {
+    amount
+    currency
+  }
+  price {
+    amount
+    currency
+  }
+  minimumDeliveryDays
+  maximumDeliveryDays
+
+  minimumOrderWeight {
+    unit
+    value
+  }
+
+  maximumOrderWeight {
+    unit
+    value
+  }
+}
+
 fragment GenericCheckoutInfo on Checkout {
-  token
+  id
+  email
 
   lines {
     id
@@ -48,29 +80,32 @@ fragment GenericCheckoutInfo on Checkout {
   }
 
   shippingMethods {
+    ...GenericShippingMethod
+  }
+
+  deliveryMethod {
+    ...GenericShippingMethod
+  }
+
+  availablePaymentGateways {
     id
     name
-    description
-    active
-    minimumOrderPrice {
-      amount
-      currency
+    config {
+      field
+      value
     }
-    maximumOrderPrice {
-      amount
-      currency
-    }
-    price {
-      amount
-      currency
-    }
-    maximumDeliveryDays
-    minimumDeliveryDays
   }
 }
 
-query GetCheckoutInfo($checkoutToken: UUID!) {
-  checkout(token: $checkoutToken) {
+fragment GenericOrder on Order {
+  id
+  created
+  updatedAt
+  status
+}
+
+query GetCheckoutInfo($checkoutId: ID!) {
+  checkout(id: $checkoutId) {
     ...GenericCheckoutInfo
   }
 }
@@ -81,64 +116,169 @@ mutation CreateCheckout($channel: String!, $email: String!) {
       ...GenericCheckoutInfo
     }
     errors {
-      field
       code
+      message
+      field
     }
   }
 }
 
-mutation AddProductToCart($checkoutToken: UUID!, $variantId: ID!) {
+mutation AddProductToCart($checkoutId: ID!, $variantId: ID!) {
   checkoutLinesAdd(
-    token: $checkoutToken
+    id: $checkoutId
     lines: [{ quantity: 1, variantId: $variantId }]
   ) {
     checkout {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
 
 mutation UpdateProductInCart(
-  $checkoutToken: UUID!
+  $checkoutId: ID!
   $lines: [CheckoutLineUpdateInput!]!
 ) {
-  checkoutLinesUpdate(token: $checkoutToken, lines: $lines) {
+  checkoutLinesUpdate(id: $checkoutId, lines: $lines) {
     checkout {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
 
-mutation RemoveProductFromCart($checkoutToken: UUID!, $linesIds: [ID!]!) {
-  checkoutLinesDelete(token: $checkoutToken, linesIds: $linesIds) {
+mutation RemoveProductFromCart($checkoutId: ID!, $linesIds: [ID!]!) {
+  checkoutLinesDelete(id: $checkoutId, linesIds: $linesIds) {
     checkout {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
     }
   }
 }
 
 mutation UpdateCheckoutShippingAddress(
-  $checkoutToken: UUID!
+  $checkoutId: ID!
   $address: AddressInput!
 ) {
-  checkoutShippingAddressUpdate(
-    token: $checkoutToken
-    shippingAddress: $address
+  checkoutShippingAddressUpdate(id: $checkoutId, shippingAddress: $address) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UpdateCheckoutBillingAddress(
+  $checkoutId: ID!
+  $address: AddressInput!
+) {
+  checkoutBillingAddressUpdate(id: $checkoutId, billingAddress: $address) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UpdateCheckoutEmail($checkoutId: ID!, $email: String!) {
+  checkoutEmailUpdate(id: $checkoutId, email: $email) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation UpdateCheckoutDeliveryMethod(
+  $checkoutId: ID!
+  $deliveryMethodId: ID!
+) {
+  checkoutDeliveryMethodUpdate(
+    id: $checkoutId
+    deliveryMethodId: $deliveryMethodId
   ) {
     checkout {
       ...GenericCheckoutInfo
     }
     errors {
+      code
       message
+      field
+    }
+  }
+}
+
+mutation CheckoutPaymentInitialize(
+  $checkoutId: ID!
+  $paymentGateways: [PaymentGatewayToInitialize!]
+) {
+  paymentGatewayInitialize(id: $checkoutId, paymentGateways: $paymentGateways) {
+    gatewayConfigs {
+      id
+      data
+      errors {
+        code
+        message
+        field
+      }
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation CheckoutTransactionInitialize(
+  $checkoutId: ID!
+  $paymentGateway: PaymentGatewayToInitialize!
+) {
+  transactionInitialize(id: $checkoutId, paymentGateway: $paymentGateway) {
+    data
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+
+mutation CheckoutComplete($checkoutId: ID!) {
+  checkoutComplete(id: $checkoutId) {
+    order {
+      ...GenericOrder
+    }
+    confirmationNeeded
+    confirmationData
+    errors {
+      code
+      message
+      field
     }
   }
 }

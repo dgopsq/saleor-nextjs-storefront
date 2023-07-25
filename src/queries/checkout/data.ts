@@ -2,8 +2,9 @@ import { FragmentType, getFragmentData } from "@/__generated__";
 import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
-  ShippingMethod as BaseShippingMethod,
   GenericCheckoutInfoFragment,
+  GenericShippingMethodFragment,
+  GenericShippingMethodFragmentDoc,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
@@ -13,7 +14,7 @@ import { Address, parseAddress } from "@/queries/user/data";
 /**
  *
  */
-export type CheckoutToken = string;
+export type CheckoutId = string | number;
 
 /**
  *
@@ -28,7 +29,7 @@ type CheckoutItem = {
 /**
  *
  */
-type ShippingMethod = {
+export type DeliveryMethod = {
   id: string;
   name: string;
   description: string | null;
@@ -54,7 +55,18 @@ export type CheckoutProduct = {
 /**
  *
  */
+export type PaymentGateway = {
+  id: string;
+  name: string;
+  config: Array<{ field: string; value: string | null }>;
+};
+
+/**
+ *
+ */
 export type Checkout = {
+  id: string;
+  email: string | null;
   lines: Array<CheckoutItem>;
   subtotalPrice: {
     amount: number;
@@ -70,14 +82,20 @@ export type Checkout = {
   } | null;
   shippingAddress: Address | null;
   billingAddress: Address | null;
-  shippingMethods: Array<ShippingMethod>;
+  shippingMethods: Array<DeliveryMethod>;
+  deliveryMethod: DeliveryMethod | null;
+  availablePaymentGateways: Array<PaymentGateway>;
 };
 
 /**
  *
  */
-export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
+export function parseGenericCheckoutInfo(
+  input: GenericCheckoutInfoFragment
+): Checkout {
   const {
+    id,
+    email,
     lines,
     subtotalPrice,
     shippingPrice,
@@ -85,6 +103,8 @@ export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
     shippingAddress,
     billingAddress,
     shippingMethods,
+    deliveryMethod,
+    availablePaymentGateways,
   } = input;
 
   const rawShippingAddress =
@@ -93,7 +113,14 @@ export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
   const rawBillingAddress =
     getFragmentData(GenericAddressFragmentDoc, billingAddress) ?? null;
 
+  const rawDeliveryMethod =
+    deliveryMethod?.__typename === "ShippingMethod"
+      ? getFragmentData(GenericShippingMethodFragmentDoc, deliveryMethod)
+      : null;
+
   return {
+    id,
+    email: email ?? null,
     lines: lines.map((line) => ({
       id: line.id,
       variant: parseVariant(line.variant),
@@ -122,7 +149,25 @@ export function parseGenericCheckoutInfo(input: GenericCheckoutInfoFragment) {
       ? parseAddress(rawShippingAddress)
       : null,
     billingAddress: rawBillingAddress ? parseAddress(rawBillingAddress) : null,
-    shippingMethods: shippingMethods.map(parseShippingMethod),
+    shippingMethods: shippingMethods.map((rawShippingMethod) => {
+      const shippingMethodFragment = getFragmentData(
+        GenericShippingMethodFragmentDoc,
+        rawShippingMethod
+      );
+
+      return parseShippingMethod(shippingMethodFragment);
+    }),
+    deliveryMethod: rawDeliveryMethod
+      ? parseShippingMethod(rawDeliveryMethod)
+      : null,
+    availablePaymentGateways: availablePaymentGateways.map((gateway) => ({
+      id: gateway.id,
+      name: gateway.name,
+      config: gateway.config.map((config) => ({
+        field: config.field,
+        value: config.value ?? null,
+      })),
+    })),
   };
 }
 
@@ -147,21 +192,8 @@ export function parseCheckoutProductVariant(
  *
  */
 export function parseShippingMethod(
-  input: Pick<
-    BaseShippingMethod,
-    | "id"
-    | "name"
-    | "description"
-    | "active"
-    | "minimumOrderWeight"
-    | "minimumOrderPrice"
-    | "maximumOrderWeight"
-    | "maximumOrderPrice"
-    | "minimumDeliveryDays"
-    | "maximumDeliveryDays"
-    | "price"
-  >
-): ShippingMethod {
+  input: GenericShippingMethodFragment
+): DeliveryMethod {
   return {
     id: input.id,
     name: input.name,
@@ -183,4 +215,21 @@ export function parseShippingMethod(
     maximumDeliveryDays: input.maximumDeliveryDays ?? null,
     minimumDeliveryDays: input.minimumDeliveryDays ?? null,
   };
+}
+
+/**
+ *
+ */
+export function validateInformationsStep(checkout: Checkout): boolean {
+  const { email, shippingAddress, billingAddress } = checkout;
+
+  return !!email && !!shippingAddress && !!billingAddress;
+}
+
+/**
+ *
+ */
+export function validateShippingStep(checkout: Checkout): boolean {
+  const { deliveryMethod } = checkout;
+  return !!deliveryMethod;
 }

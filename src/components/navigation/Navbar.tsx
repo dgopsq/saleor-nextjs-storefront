@@ -13,7 +13,7 @@ import Image from "next/image";
 import { Category, generateCategoryUrl } from "@/queries/categories/data";
 import { CartButton } from "@/components/checkout/CartButton";
 import { UserButton } from "@/components/user/UserButton";
-import { useCheckoutTokenStore } from "@/misc/states/checkoutTokenStore";
+import { useCheckoutIdStore } from "@/misc/states/checkoutIdStore";
 import { Spinner } from "@/components/core/Spinner";
 
 type Props = {
@@ -25,7 +25,7 @@ type Props = {
  */
 export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
-  const checkoutToken = useCheckoutTokenStore((state) => state.value);
+  const checkoutToken = useCheckoutIdStore((state) => state.value);
 
   const isCheckoutTokenLoading =
     checkoutToken.kind === "Loading" || checkoutToken.kind === "NotAsked";
@@ -297,7 +297,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                           />
 
                           <div className="flow-root">
-                            <Link href="/cart">
+                            <Link href="/checkout/cart">
                               <CartButton />
                             </Link>
                           </div>

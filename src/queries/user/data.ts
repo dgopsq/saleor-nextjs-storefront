@@ -7,6 +7,8 @@ import {
   GenericUserFragment,
 } from "@/__generated__/graphql";
 import { AddressForm } from "@/components/core/AddressForm";
+import { isDeepEqual, omit } from "@/misc/object";
+import { CheckoutId } from "@/queries/checkout/data";
 import jwt_decode from "jwt-decode";
 import * as z from "zod";
 
@@ -48,7 +50,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
-  checkoutTokens: Array<string>;
+  checkoutIds: Array<CheckoutId>;
   addresses: Array<Address>;
 };
 
@@ -105,7 +107,7 @@ export function parseUser(input: GenericUserFragment): User {
     email,
     firstName,
     lastName,
-    checkoutTokens: checkouts?.edges?.map((edge) => edge?.node?.token) ?? [],
+    checkoutIds: checkouts?.edges?.map((edge) => edge?.node?.id) ?? [],
     addresses: input.addresses.map((rawAddress) => {
       const addressFragment = getFragmentData(
         GenericAddressFragmentDoc,
@@ -171,4 +173,27 @@ export function addressToAddressInput(input: Address): AddressInput {
     countryArea: input.countryArea,
     phone: input.phone,
   };
+}
+
+/**
+ *
+ */
+export function comparableAddress(
+  input: Address
+): Omit<
+  Address,
+  "id" | "isDefaultBillingAddress" | "isDefaultShippingAddress"
+> {
+  return omit(input, [
+    "id",
+    "isDefaultBillingAddress",
+    "isDefaultShippingAddress",
+  ]);
+}
+
+/**
+ *
+ */
+export function areAddressEqual(a: Address, b: Address): boolean {
+  return isDeepEqual(comparableAddress(a), comparableAddress(b));
 }

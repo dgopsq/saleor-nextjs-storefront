@@ -1,6 +1,5 @@
 "use client";
 
-import { ProductDescription } from "@/components/products/ProductDescription";
 import { ProductImages } from "@/components/products/ProductImages";
 import { parseProduct } from "@/queries/products/data";
 import { formatPrice, formatSingleProductPrice } from "@/misc/currencies";
@@ -18,6 +17,7 @@ import {
 import { ProductVariants } from "@/components/products/ProductVariants";
 import { useRouter } from "next/navigation";
 import { publicConfig } from "@/misc/config";
+import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
 
 /**
  *
@@ -144,7 +144,7 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
               <h3 className="sr-only">Description</h3>
 
               {product.description ? (
-                <ProductDescription description={product.description} />
+                <EditorJSRenderer data={product.description} />
               ) : null}
             </div>
 

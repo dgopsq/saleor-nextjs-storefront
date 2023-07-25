@@ -2,7 +2,7 @@
 
 import { AddProductToCartDocument } from "@/__generated__/graphql";
 import { Button } from "@/components/core/Button";
-import { useCheckoutToken } from "@/misc/states/checkoutTokenStore";
+import { useCheckoutId } from "@/misc/states/checkoutIdStore";
 import { useMutation } from "@apollo/client";
 import { useCallback } from "react";
 
@@ -14,19 +14,19 @@ type Props = {
  *
  */
 export const AddToCartButton: React.FC<Props> = ({ variantId }) => {
-  const checkoutToken = useCheckoutToken();
+  const checkoutId = useCheckoutId();
   const [addToCart, { loading }] = useMutation(AddProductToCartDocument);
 
   const handleAddToCart = useCallback(() => {
-    if (!loading)
+    if (!loading && checkoutId !== null)
       addToCart({
         variables: {
-          checkoutToken,
+          checkoutId,
           variantId,
         },
         refetchQueries: ["GetCheckoutInfo"],
       });
-  }, [addToCart, checkoutToken, variantId, loading]);
+  }, [addToCart, checkoutId, variantId, loading]);
 
   return (
     <Button

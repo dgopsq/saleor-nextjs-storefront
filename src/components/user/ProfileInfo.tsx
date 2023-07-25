@@ -7,6 +7,7 @@ import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { ChangeInfoForm } from "@/components/core/ChangeInfoForm";
+import { SectionHeading } from "@/components/core/Headings";
 
 export const ProfileInfo: React.FC = () => {
   const [updateUser, { loading: updateUserLoading, data: updateData }] =
@@ -47,7 +48,7 @@ export const ProfileInfo: React.FC = () => {
   return (
     <>
       <div>
-        <h3 className="text-xl font-semibold">Personal informations</h3>
+        <SectionHeading>Personal informations</SectionHeading>
 
         <div className="mt-8">
           <ChangeInfoForm

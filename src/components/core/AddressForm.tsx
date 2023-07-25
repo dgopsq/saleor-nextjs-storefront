@@ -3,8 +3,9 @@
 import { CountryCode } from "@/__generated__/graphql";
 import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
+import { classNames } from "@/misc/styles";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useImperativeHandle, useMemo } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,7 +23,7 @@ const AddressFormSchema = z.object({
   city: z.string().trim().min(1),
   postalCode: z.string().trim().min(1),
   country: z.nativeEnum(CountryCode),
-  countryArea: z.string().trim().min(1),
+  countryArea: z.string().trim().optional(),
   phone: z.string().trim().optional(),
 });
 
@@ -37,13 +38,15 @@ export type AddressFormRef = {
 
 type Props = {
   initialValues?: Partial<AddressForm>;
+  compact?: boolean;
+  asyncErrors?: Array<{ field?: string | null; message?: string | null }>;
 };
 
 /**
  *
  */
 export const AddressForm = forwardRef<AddressFormRef, Props>(
-  ({ initialValues }, ref) => {
+  ({ initialValues, compact, asyncErrors }, ref) => {
     const stableInitialValues = useMemo<AddressForm>(
       () => ({
         firstName: "",
@@ -77,6 +80,17 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
       values: stableInitialValues,
     });
 
+    const asyncErrorsMap = useMemo(() => {
+      const map = new Map<string, string>();
+
+      if (asyncErrors)
+        asyncErrors.forEach(({ field, message }) => {
+          if (field && message) map.set(field, message);
+        });
+
+      return map;
+    }, [asyncErrors]);
+
     useImperativeHandle<AddressFormRef, Pick<AddressFormRef, "getValues">>(
       ref,
       () => ({
@@ -88,14 +102,26 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
       [getValues, trigger]
     );
 
+    const retrieveFieldError = useCallback(
+      (field: keyof AddressForm) => {
+        return errors[field]?.message || asyncErrorsMap.get(field);
+      },
+      [errors, asyncErrorsMap]
+    );
+
     return (
-      <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
+      <div
+        className={classNames(
+          "grid grid-cols-1 sm:grid-cols-6",
+          compact ? "gap-x-4 gap-y-4" : "gap-x-6 gap-y-8"
+        )}
+      >
         <div className="sm:col-span-3">
           <Field
             id="firstName"
             label="First name"
             register={register("firstName")}
-            error={errors.firstName?.message}
+            error={retrieveFieldError("firstName")}
           />
         </div>
 
@@ -104,34 +130,16 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
             id="lastName"
             label="Last name"
             register={register("lastName")}
-            error={errors.lastName?.message}
-          />
-        </div>
-
-        <div className="sm:col-span-3">
-          <Field
-            id="companyNamy"
-            label="Company name"
-            register={register("companyName")}
-            error={errors.companyName?.message}
+            error={retrieveFieldError("lastName")}
           />
         </div>
 
         <div className="col-span-full">
           <Field
             id="streetAddress1"
-            label="Street address 1"
+            label="Address"
             register={register("streetAddress1")}
-            error={errors.streetAddress1?.message}
-          />
-        </div>
-
-        <div className="col-span-full">
-          <Field
-            id="streetAddress2"
-            label="Street address 2"
-            register={register("streetAddress2")}
-            error={errors.streetAddress2?.message}
+            error={retrieveFieldError("streetAddress1")}
           />
         </div>
 
@@ -140,7 +148,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
             id="city"
             label="City"
             register={register("city")}
-            error={errors.city?.message}
+            error={retrieveFieldError("city")}
           />
         </div>
 
@@ -164,7 +172,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
             id="countryArea"
             label="Country area"
             register={register("countryArea")}
-            error={errors.countryArea?.message}
+            error={retrieveFieldError("countryArea")}
           />
         </div>
 
@@ -173,7 +181,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
             id="postalCode"
             label="Postal code"
             register={register("postalCode")}
-            error={errors.postalCode?.message}
+            error={retrieveFieldError("postalCode")}
           />
         </div>
       </div>
