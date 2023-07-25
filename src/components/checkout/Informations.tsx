@@ -5,7 +5,6 @@ import {
   UpdateCheckoutEmailDocument,
   UpdateCheckoutShippingAddressDocument,
 } from "@/__generated__/graphql";
-import { CheckoutAddAddress } from "@/components/checkout/CheckoutAddAddress";
 import { CheckoutAddressUser } from "@/components/checkout/CheckoutAddressUser";
 import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 import { CheckoutEmail } from "@/components/checkout/CheckoutEmail";
@@ -18,13 +17,17 @@ import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { classNames } from "@/misc/styles";
 import {
   Address,
+  addressToAddressForm,
   addressToAddressInput,
   areAddressEqual,
 } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { P, match } from "ts-pattern";
+import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
+import { logger } from "@/misc/logger";
+import { errorToast } from "@/components/core/Notifications";
 
 /**
  *
@@ -34,6 +37,8 @@ export const Informations: React.FC = () => {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [addShippingAddress, setAddShippingAddress] = useState(false);
   const [addBillingAddress, setAddBillingAddress] = useState(false);
+  const guestShippingAddressFormRef = useRef<AddressFormRef>(null);
+  const guestBillingAddressFormRef = useRef<AddressFormRef>(null);
 
   const userInfo = useUserInfo();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
@@ -41,10 +46,16 @@ export const Informations: React.FC = () => {
   const [updateEmail, { loading: loadingUpdateEmail }] = useMutation(
     UpdateCheckoutEmailDocument
   );
-  const [updateShippingAddress, { loading: loadingUpdateShippingAddress }] =
-    useMutation(UpdateCheckoutShippingAddressDocument);
-  const [updateBillingAddress, { loading: loadingUpdateBillingAddress }] =
-    useMutation(UpdateCheckoutBillingAddressDocument);
+
+  const [
+    updateShippingAddress,
+    { loading: loadingUpdateShippingAddress, data: updateShippingAddressData },
+  ] = useMutation(UpdateCheckoutShippingAddressDocument);
+
+  const [
+    updateBillingAddress,
+    { loading: loadingUpdateBillingAddress, data: updateBillingAddressData },
+  ] = useMutation(UpdateCheckoutBillingAddressDocument);
 
   const handleEmailUpdate = useCallback(
     (email: string) => {
@@ -95,14 +106,74 @@ export const Informations: React.FC = () => {
     ]
   );
 
-  const canContinue =
-    !!data?.billingAddress && !!data?.shippingAddress && !!data?.email;
+  const canContinue = userInfo
+    ? !!data?.billingAddress && !!data?.shippingAddress && !!data?.email
+    : true;
 
   const checkoutRefreshing =
     checkoutInfoLoading ||
     loadingUpdateEmail ||
     loadingUpdateShippingAddress ||
     loadingUpdateBillingAddress;
+
+  // Handle the guest "continue" button.
+  const handleGuestContinue = useCallback<() => Promise<boolean>>(async () => {
+    const shippingAddress =
+      (await guestShippingAddressFormRef.current?.getValues()) ?? null;
+
+    const billingAddress = billingSameAsShipping
+      ? shippingAddress
+      : (await guestBillingAddressFormRef.current?.getValues()) ?? null;
+
+    if (!shippingAddress || !billingAddress || !data) return false;
+
+    const shippingQuery = updateShippingAddress({
+      variables: {
+        checkoutId: data.id,
+        address: shippingAddress,
+      },
+    });
+
+    const billingQuery = updateBillingAddress({
+      variables: {
+        checkoutId: data.id,
+        address: billingAddress,
+      },
+    });
+
+    const [shippingQueryRes, billingQueryRes] = await Promise.all([
+      shippingQuery,
+      billingQuery,
+    ] as const);
+
+    const shippingQueryHasErrors =
+      !!shippingQueryRes.errors?.length ||
+      !!shippingQueryRes.data?.checkoutShippingAddressUpdate?.errors.length;
+
+    const billingQueryHasErrors =
+      !!billingQueryRes.errors?.length ||
+      !!billingQueryRes.data?.checkoutBillingAddressUpdate?.errors.length;
+
+    if (shippingQueryHasErrors || billingQueryHasErrors) {
+      logger.warn("Errors while updating the guest checkout addresses.");
+      errorToast("An error occurred while setting addresses.");
+    }
+
+    return !shippingQueryHasErrors && !billingQueryHasErrors;
+  }, [
+    data,
+    billingSameAsShipping,
+    updateShippingAddress,
+    updateBillingAddress,
+  ]);
+
+  const handleContinue = useCallback(async () => {
+    const canContinue = userInfo ? true : await handleGuestContinue();
+
+    if (!canContinue) return;
+
+    router.push("/checkout/shipping");
+  }, [router, userInfo, handleGuestContinue]);
 
   useEffect(() => {
     const billingAddress = data?.billingAddress ?? null;
@@ -114,6 +185,22 @@ export const Informations: React.FC = () => {
 
     if (!isSameAddress) setBillingSameAsShipping(false);
   }, [data, setBillingSameAsShipping]);
+
+  const guestShippingAddressInitialValues = useMemo(
+    () =>
+      data?.shippingAddress
+        ? addressToAddressForm(data.shippingAddress)
+        : undefined,
+    [data]
+  );
+
+  const guestBillingAddressInitialValues = useMemo(
+    () =>
+      data?.billingAddress
+        ? addressToAddressForm(data.billingAddress)
+        : undefined,
+    [data]
+  );
 
   if (!data) return <LoadingSpinner />;
 
@@ -139,91 +226,95 @@ export const Informations: React.FC = () => {
               !userInfo ? "mt-12" : ""
             )}
           >
-            {userInfo ? (
-              <>
-                <div className="flex flex-row items-center gap-4">
-                  <SectionHeading>Shipping address</SectionHeading>
+            <div className="flex flex-row items-center gap-4">
+              <SectionHeading>Shipping address</SectionHeading>
 
-                  {!addShippingAddress ? (
-                    <div>
-                      <TextButton
-                        text="Add new address"
-                        onClick={() => setAddShippingAddress(true)}
-                        variant="primary"
-                      />
-                    </div>
-                  ) : undefined}
+              {!addShippingAddress && userInfo ? (
+                <div>
+                  <TextButton
+                    text="Add new address"
+                    onClick={() => setAddShippingAddress(true)}
+                    variant="primary"
+                  />
                 </div>
+              ) : undefined}
+            </div>
 
-                <div className="mt-8">
-                  {addShippingAddress ? (
-                    <CheckoutAddAddress
-                      onCancel={() => setAddShippingAddress(false)}
-                      onAddressCreated={handleShippingAddressUpdate}
-                    />
-                  ) : (
-                    <CheckoutAddressUser
-                      addresses={userInfo.addresses}
-                      value={data.shippingAddress ?? undefined}
-                      onChange={handleShippingAddressUpdate}
-                      isLoading={loadingUpdateShippingAddress}
-                    />
-                  )}
-                </div>
-              </>
-            ) : undefined}
+            <div className="mt-8">
+              {userInfo ? (
+                <CheckoutAddressUser
+                  addresses={userInfo.addresses}
+                  value={data.shippingAddress ?? undefined}
+                  onChange={handleShippingAddressUpdate}
+                  isLoading={loadingUpdateShippingAddress}
+                  addAddress={addShippingAddress}
+                  onCancelAddAddress={() => setAddShippingAddress(false)}
+                />
+              ) : (
+                <AddressForm
+                  initialValues={guestShippingAddressInitialValues}
+                  ref={guestShippingAddressFormRef}
+                  asyncErrors={
+                    updateShippingAddressData?.checkoutShippingAddressUpdate
+                      ?.errors ?? undefined
+                  }
+                />
+              )}
+            </div>
           </div>
 
           <div className="mt-12">
-            {userInfo ? (
-              <>
-                <div className="flex flex-row items-center gap-4">
-                  <SectionHeading>Billing address</SectionHeading>
+            <div className="flex flex-row items-center gap-4">
+              <SectionHeading>Billing address</SectionHeading>
 
-                  {!addBillingAddress && !billingSameAsShipping ? (
+              {!addBillingAddress && !billingSameAsShipping && userInfo ? (
+                <div>
+                  <TextButton
+                    text="Add new address"
+                    onClick={() => setAddBillingAddress(true)}
+                    variant="primary"
+                  />
+                </div>
+              ) : undefined}
+            </div>
+
+            <div className="mt-8">
+              {match([billingSameAsShipping, userInfo])
+                .with([true, P._], () => (
+                  <div className="flex flex-row items-center gap-4">
+                    <span>Same as the shipping address.</span>
+
                     <div>
                       <TextButton
-                        text="Add new address"
-                        onClick={() => setAddBillingAddress(true)}
+                        text="Change"
+                        onClick={() => setBillingSameAsShipping(false)}
                         variant="primary"
                       />
                     </div>
-                  ) : undefined}
-                </div>
-
-                <div className="mt-8">
-                  {match([billingSameAsShipping, addBillingAddress])
-                    .with([true, P._], () => (
-                      <div className="flex flex-row items-center gap-4">
-                        <span>Same as the shipping address.</span>
-
-                        <div>
-                          <TextButton
-                            text="Change"
-                            onClick={() => setBillingSameAsShipping(false)}
-                            variant="primary"
-                          />
-                        </div>
-                      </div>
-                    ))
-                    .with([false, false], () => (
-                      <CheckoutAddressUser
-                        addresses={userInfo.addresses}
-                        value={data.billingAddress ?? undefined}
-                        onChange={handleBillingAddressUpdate}
-                        isLoading={loadingUpdateBillingAddress}
-                      />
-                    ))
-                    .with([false, true], () => (
-                      <CheckoutAddAddress
-                        onCancel={() => setAddBillingAddress(false)}
-                        onAddressCreated={handleBillingAddressUpdate}
-                      />
-                    ))
-                    .otherwise(() => null)}
-                </div>
-              </>
-            ) : undefined}
+                  </div>
+                ))
+                .with([false, P.not(P.nullish)], ([_, userInfo]) => (
+                  <CheckoutAddressUser
+                    addresses={userInfo.addresses}
+                    value={data.billingAddress ?? undefined}
+                    onChange={handleBillingAddressUpdate}
+                    isLoading={loadingUpdateBillingAddress}
+                    addAddress={addBillingAddress}
+                    onCancelAddAddress={() => setAddBillingAddress(false)}
+                  />
+                ))
+                .with([false, P.nullish], () => (
+                  <AddressForm
+                    initialValues={guestBillingAddressInitialValues}
+                    ref={guestBillingAddressFormRef}
+                    asyncErrors={
+                      updateBillingAddressData?.checkoutBillingAddressUpdate
+                        ?.errors ?? undefined
+                    }
+                  />
+                ))
+                .otherwise(() => null)}
+            </div>
           </div>
         </section>
 
@@ -239,7 +330,7 @@ export const Informations: React.FC = () => {
             isLoading={checkoutRefreshing}
             isDisabled={!canContinue}
             ctaText="Continue to shipping"
-            onCtaClick={() => router.push("/checkout/shipping")}
+            onCtaClick={handleContinue}
             onCartEditClick={() => router.push("/checkout")}
           />
         </section>

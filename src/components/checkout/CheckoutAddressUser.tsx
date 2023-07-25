@@ -1,3 +1,4 @@
+import { CheckoutAddAddress } from "@/components/checkout/CheckoutAddAddress";
 import { RadioIsland } from "@/components/core/RadioIsland";
 import { SingleAddress } from "@/components/core/SingleAddress";
 import { Address, areAddressEqual } from "@/queries/user/data";
@@ -8,6 +9,8 @@ type Props = {
   onChange?: (address: Address) => void;
   value?: Address;
   isLoading?: boolean;
+  addAddress?: boolean;
+  onCancelAddAddress?: () => void;
 };
 
 /**
@@ -18,6 +21,8 @@ export const CheckoutAddressUser: React.FC<Props> = ({
   onChange,
   value,
   isLoading,
+  addAddress,
+  onCancelAddAddress,
 }) => {
   const addressesRender = useMemo(
     () =>
@@ -45,9 +50,14 @@ export const CheckoutAddressUser: React.FC<Props> = ({
     [addresses, onChange, isLoading, value]
   );
 
-  return (
+  return !addAddress ? (
     <div className={isLoading ? "opacity-75 cursor-not-allowed" : undefined}>
       <ul className="flex flex-col gap-4">{addressesRender}</ul>
     </div>
+  ) : (
+    <CheckoutAddAddress
+      onCancel={onCancelAddAddress}
+      onAddressCreated={onChange}
+    />
   );
 };
