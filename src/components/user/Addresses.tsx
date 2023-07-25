@@ -1,7 +1,6 @@
 "use client";
 
 import { SingleAddress } from "@/components/core/SingleAddress";
-import { PageHeading } from "@/components/core/Headings";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -15,8 +14,6 @@ export const Addresses: React.FC = () => {
 
   return (
     <div className="">
-      <PageHeading>Addresses</PageHeading>
-
       <div className="mt-8">
         <ul className="flex flex-col gap-4">
           {userInfo?.addresses?.map((address) => (

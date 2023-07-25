@@ -1,4 +1,3 @@
-import { PageHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { ChangeEmail } from "@/components/user/ChangeEmail";
 import { ChangePassword } from "@/components/user/ChangePassword";
@@ -9,10 +8,6 @@ export default async function Page() {
   return (
     <>
       <div>
-        <PageHeading>Profile</PageHeading>
-      </div>
-
-      <div className="mt-8">
         <Island variant="solid">
           <ProfileInfo />
         </Island>
