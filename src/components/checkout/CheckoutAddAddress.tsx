@@ -7,7 +7,7 @@ import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { Button } from "@/components/core/Button";
 import { Address, parseAddress } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
-import { useCallback, useRef } from "react";
+import { FormEventHandler, useCallback, useRef } from "react";
 
 type Props = {
   onCancel?: () => void;
@@ -50,8 +50,16 @@ export const CheckoutAddAddress: React.FC<Props> = ({
     }
   }, [createAddress, onCancel, onAddressCreated]);
 
+  const handleFormSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
+    (e) => {
+      e.preventDefault();
+      handleSubmit();
+    },
+    [handleSubmit]
+  );
+
   return (
-    <div>
+    <form onSubmit={handleFormSubmit}>
       <AddressForm
         ref={formRef}
         asyncErrors={data?.accountAddressCreate?.errors}
@@ -73,12 +81,13 @@ export const CheckoutAddAddress: React.FC<Props> = ({
           <Button
             variant="primary"
             size="medium"
+            type="submit"
             text="Create address"
             onClick={handleSubmit}
             isLoading={loading}
           />
         </div>
       </div>
-    </div>
+    </form>
   );
 };

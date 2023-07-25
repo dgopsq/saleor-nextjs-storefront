@@ -46,7 +46,7 @@ export const CheckoutSummary: React.FC<Props> = ({
       {ctaText ? (
         <div className="mt-8">
           <Button
-            type="button"
+            type="submit"
             variant="primary"
             size="large"
             text={ctaText}

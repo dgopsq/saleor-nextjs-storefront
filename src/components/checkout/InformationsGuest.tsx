@@ -15,7 +15,13 @@ import { classNames } from "@/misc/styles";
 import { addressToAddressForm } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { logger } from "@/misc/logger";
 import { errorToast } from "@/components/core/Notifications";
@@ -146,79 +152,91 @@ export const InformationsGuest: React.FC = () => {
     [data]
   );
 
+  const handleFormSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
+    (e) => {
+      e.preventDefault();
+      handleContinue();
+    },
+    [handleContinue]
+  );
+
   if (!data) return <LoadingSpinner />;
 
   return (
     <div className="bg-white w-full">
       <CheckoutSteps currentStep={0} />
-
-      <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
-        <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <div className="border-b border-gray-100 pb-12">
-            <EmailForm ref={emailFormRef} initialValues={emailInitialValues} />
-          </div>
-
-          <div className="border-b border-gray-100 pb-12 mt-12">
-            <SectionHeading>Shipping address</SectionHeading>
-
-            <div className="mt-8">
-              <AddressForm
-                initialValues={shippingAddressInitialValues}
-                ref={shippingAddressFormRef}
-                asyncErrors={
-                  updateShippingAddressData?.checkoutShippingAddressUpdate
-                    ?.errors
-                }
+      <form className="w-full" onSubmit={handleFormSubmit}>
+        <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+          <section aria-labelledby="cart-heading" className="lg:col-span-7">
+            <div className="border-b border-gray-100 pb-12">
+              <EmailForm
+                ref={emailFormRef}
+                initialValues={emailInitialValues}
               />
             </div>
-          </div>
 
-          <div className="mt-12">
-            <SectionHeading>Billing address</SectionHeading>
+            <div className="border-b border-gray-100 pb-12 mt-12">
+              <SectionHeading>Shipping address</SectionHeading>
 
-            <div className="mt-8">
-              {billingSameAsShipping ? (
-                <div className="flex flex-row items-center gap-4">
-                  <span>Same as the shipping address.</span>
-
-                  <div>
-                    <TextButton
-                      text="Change"
-                      onClick={() => setBillingSameAsShipping(false)}
-                      variant="primary"
-                    />
-                  </div>
-                </div>
-              ) : (
+              <div className="mt-8">
                 <AddressForm
-                  initialValues={billingAddressInitialValues}
-                  ref={billingAddressFormRef}
+                  initialValues={shippingAddressInitialValues}
+                  ref={shippingAddressFormRef}
                   asyncErrors={
-                    updateBillingAddressData?.checkoutBillingAddressUpdate
+                    updateShippingAddressData?.checkoutShippingAddressUpdate
                       ?.errors
                   }
                 />
-              )}
+              </div>
             </div>
-          </div>
-        </section>
 
-        <section
-          aria-labelledby="summary-heading"
-          className={classNames(
-            "mt-16 lg:col-span-5 lg:mt-0",
-            checkoutRefreshing ? "opacity-50" : ""
-          )}
-        >
-          <CheckoutSummary
-            checkout={data}
-            isLoading={checkoutRefreshing}
-            ctaText="Continue to shipping"
-            onCtaClick={handleContinue}
-            onCartEditClick={() => router.push("/checkout")}
-          />
-        </section>
-      </div>
+            <div className="mt-12">
+              <SectionHeading>Billing address</SectionHeading>
+
+              <div className="mt-8">
+                {billingSameAsShipping ? (
+                  <div className="flex flex-row items-center gap-4">
+                    <span>Same as the shipping address.</span>
+
+                    <div>
+                      <TextButton
+                        text="Change"
+                        onClick={() => setBillingSameAsShipping(false)}
+                        variant="primary"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <AddressForm
+                    initialValues={billingAddressInitialValues}
+                    ref={billingAddressFormRef}
+                    asyncErrors={
+                      updateBillingAddressData?.checkoutBillingAddressUpdate
+                        ?.errors
+                    }
+                  />
+                )}
+              </div>
+            </div>
+          </section>
+
+          <section
+            aria-labelledby="summary-heading"
+            className={classNames(
+              "mt-16 lg:col-span-5 lg:mt-0",
+              checkoutRefreshing ? "opacity-50" : ""
+            )}
+          >
+            <CheckoutSummary
+              checkout={data}
+              isLoading={checkoutRefreshing}
+              ctaText="Continue to shipping"
+              onCtaClick={handleContinue}
+              onCartEditClick={() => router.push("/checkout")}
+            />
+          </section>
+        </div>
+      </form>
     </div>
   );
 };
