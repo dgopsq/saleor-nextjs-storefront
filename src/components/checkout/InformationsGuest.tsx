@@ -20,6 +20,7 @@ import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { logger } from "@/misc/logger";
 import { errorToast } from "@/components/core/Notifications";
 import { EmailForm, EmailFormRef } from "@/components/core/EmailForm";
+import { publicConfig } from "@/misc/config";
 
 /**
  *
@@ -121,6 +122,14 @@ export const InformationsGuest: React.FC = () => {
     updateEmail,
   ]);
 
+  const emailInitialValues = useMemo(
+    () =>
+      data?.email && data.email !== publicConfig.defaultCheckoutEmail
+        ? { email: data.email }
+        : undefined,
+    [data]
+  );
+
   const shippingAddressInitialValues = useMemo(
     () =>
       data?.shippingAddress
@@ -146,10 +155,7 @@ export const InformationsGuest: React.FC = () => {
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
           <div className="border-b border-gray-100 pb-12">
-            <EmailForm
-              ref={emailFormRef}
-              initialValues={{ email: data.email ?? undefined }}
-            />
+            <EmailForm ref={emailFormRef} initialValues={emailInitialValues} />
           </div>
 
           <div className="border-b border-gray-100 pb-12 mt-12">

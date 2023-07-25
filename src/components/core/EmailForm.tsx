@@ -64,8 +64,8 @@ export const EmailForm = forwardRef<EmailFormRef, Props>(
     return (
       <div>
         <Field
-          id="firstName"
-          label="First name"
+          id="email"
+          label="Email"
           register={register("email")}
           error={errors.email?.message}
         />
