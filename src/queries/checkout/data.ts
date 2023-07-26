@@ -94,6 +94,7 @@ export type Checkout = {
 export type Order = {
   id: string;
   lines: Array<ProductVariant>;
+  number: string;
   totalPrice: {
     amount: number;
     currency: string;
@@ -261,6 +262,7 @@ export function parseOrder(input: GenericOrderFragment): Order {
 
   return {
     id: input.id,
+    number: input.number,
     lines: variants,
     totalPrice: input.total
       ? {

@@ -100,6 +100,7 @@ fragment GenericCheckoutInfo on Checkout {
 fragment GenericOrder on Order {
   id
   isPaid
+  number
   invoices {
     id
     url

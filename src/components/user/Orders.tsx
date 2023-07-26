@@ -5,6 +5,7 @@ import {
   GenericOrderFragmentDoc,
   GetMyOrdersDocument,
 } from "@/__generated__/graphql";
+import { PageHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { SingleOrder } from "@/components/core/SingleOrder";
@@ -44,5 +45,11 @@ export const Orders: React.FC = () => {
 
   if (loading) return <LoadingSpinner />;
 
-  return <ul>{ordersRenderer}</ul>;
+  return (
+    <>
+      <PageHeading>Orders</PageHeading>
+
+      <ul className="mt-8">{ordersRenderer}</ul>
+    </>
+  );
 };

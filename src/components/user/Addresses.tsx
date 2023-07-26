@@ -5,6 +5,7 @@ import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Island } from "@/components/core/Island";
+import { PageHeading } from "@/components/core/Headings";
 
 /**
  *
@@ -14,7 +15,9 @@ export const Addresses: React.FC = () => {
 
   return (
     <div>
-      <ul className="flex flex-col gap-4">
+      <PageHeading>Addresses</PageHeading>
+
+      <ul className="mt-8 flex flex-col gap-4">
         {userInfo?.addresses?.map((address) => (
           <li key={address.id} className="lg:col-span-3">
             <Link
