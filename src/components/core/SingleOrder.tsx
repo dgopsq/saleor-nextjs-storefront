@@ -1,22 +1,10 @@
 import { TextButton } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
+import { KeyValue } from "@/components/core/KeyValue";
 import { formatDateFull } from "@/misc/date";
-import { Order, OrderStatus } from "@/queries/checkout/data";
+import { Order } from "@/queries/checkout/data";
 import Image from "next/image";
 import { useMemo } from "react";
-import { match } from "ts-pattern";
-
-const OrderDetail: React.FC<{ label: string; value: string }> = ({
-  label,
-  value,
-}) => {
-  return (
-    <>
-      <span className="font-semibold text-sm">{label}:</span>{" "}
-      <span className="text-sm">{value}</span>
-    </>
-  );
-};
 
 type Props = {
   order: Order;
@@ -29,7 +17,7 @@ type Props = {
 export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
   const imagesRenderer = useMemo(() => {
     return order.lines.slice(0, 3).reduce((acc, line) => {
-      const image = line.images[0];
+      const image = line.variant?.images[0] ?? null;
 
       if (!image) return acc;
 
@@ -51,18 +39,11 @@ export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
 
         <ul className="mt-4 flex flex-col gap-1">
           <li>
-            <OrderDetail
-              label="Status"
-              value={match(order.status)
-                .with(OrderStatus.Fulfilled, () => "Complete")
-                .with(OrderStatus.Returned, () => "Refunded")
-                .with(OrderStatus.Canceled, () => "Canceled")
-                .otherwise(() => "In progress")}
-            />
+            <KeyValue label="Status" value={order.statusDisplay} />
           </li>
 
           <li>
-            <OrderDetail
+            <KeyValue
               label="Created at"
               value={formatDateFull(new Date(order.createdAt))}
             />

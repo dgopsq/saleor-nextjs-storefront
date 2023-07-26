@@ -31,12 +31,12 @@ export enum OrderStatus {
 /**
  *
  */
-export type CheckoutId = string | number;
+export type CheckoutId = string;
 
 /**
  *
  */
-type CheckoutItem = {
+export type CheckoutItem = {
   id: string;
   variant: ProductVariant;
   product: CheckoutProduct;
@@ -109,14 +109,18 @@ export type Checkout = {
  */
 export type Order = {
   id: string;
-  lines: Array<ProductVariant>;
+  lines: Array<CheckoutItem>;
   createdAt: string;
   status: OrderStatus;
+  statusDisplay: string;
   number: string;
   totalPrice: {
     amount: number;
     currency: string;
   } | null;
+  shippingAddress: Address | null;
+  billingAddress: Address | null;
+  shippingMethods: Array<DeliveryMethod>;
 };
 
 /**
@@ -270,25 +274,58 @@ export function validateShippingStep(checkout: Checkout): boolean {
  *
  */
 export function parseOrder(input: GenericOrderFragment): Order {
-  const variants = input.lines.reduce((acc, line) => {
+  const lines = input.lines.reduce((acc, line) => {
     if (!line.variant) return acc;
 
-    const variant = parseVariant(line.variant);
+    return [
+      ...acc,
+      {
+        id: line.id,
+        variant: parseVariant(line.variant),
+        product: parseCheckoutProductVariant(line.variant),
+        quantity: line.quantity,
+      },
+    ];
+  }, [] as Array<CheckoutItem>);
 
-    return [...acc, variant];
-  }, [] as Array<ProductVariant>);
+  const shippingAddressFragment = getFragmentData(
+    GenericAddressFragmentDoc,
+    input.shippingAddress
+  );
+
+  const billingAddressFragment = getFragmentData(
+    GenericAddressFragmentDoc,
+    input.billingAddress
+  );
+
+  const shippingMethods = input.shippingMethods.map((rawShippingMethod) => {
+    const shippingMethodFragment = getFragmentData(
+      GenericShippingMethodFragmentDoc,
+      rawShippingMethod
+    );
+
+    return parseShippingMethod(shippingMethodFragment);
+  });
 
   return {
     id: input.id,
     number: input.number,
     status: input.status,
+    statusDisplay: input.statusDisplay,
     createdAt: new Date(input.created).toISOString(),
-    lines: variants,
+    lines,
     totalPrice: input.total
       ? {
           amount: input.total.gross.amount,
           currency: input.total.gross.currency,
         }
       : null,
+    shippingAddress: shippingAddressFragment
+      ? parseAddress(shippingAddressFragment)
+      : null,
+    billingAddress: billingAddressFragment
+      ? parseAddress(billingAddressFragment)
+      : null,
+    shippingMethods,
   };
 }

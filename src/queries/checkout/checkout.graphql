@@ -103,14 +103,17 @@ fragment GenericOrder on Order {
   number
   created
   status
+  statusDisplay
   invoices {
     id
     url
     externalUrl
   }
   lines {
+    id
     variant {
       ...GenericProductVariant
+      ...CheckoutProduct
     }
     quantity
   }
@@ -119,6 +122,15 @@ fragment GenericOrder on Order {
       currency
       amount
     }
+  }
+  shippingAddress {
+    ...GenericAddress
+  }
+  billingAddress {
+    ...GenericAddress
+  }
+  shippingMethods {
+    ...GenericShippingMethod
   }
 }
 

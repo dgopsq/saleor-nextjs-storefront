@@ -3,20 +3,15 @@ import { QuantitySelect } from "@/components/products/QuantitySelect";
 import { formatPrice } from "@/misc/currencies";
 import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
-import { CheckoutProduct } from "@/queries/checkout/data";
-import { ProductVariant, generateProductUrl } from "@/queries/products/data";
+import { CheckoutItem } from "@/queries/checkout/data";
+import { generateProductUrl } from "@/queries/products/data";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
 const priceFallback = "-";
 
-export type CartProduct = {
-  id: string;
-  variant: ProductVariant;
-  product: CheckoutProduct;
-  quantity: number;
-};
+export type CartProduct = CheckoutItem;
 
 type Props = {
   products: Array<CartProduct>;
@@ -152,7 +147,9 @@ export const CartProducts: React.FC<Props> = ({
                     <QuantitySelect
                       value={line.quantity}
                       onChange={(value) =>
-                        onProductUpdate?.(line.variant.id, value)
+                        line.variant
+                          ? onProductUpdate?.(line.variant.id, value)
+                          : null
                       }
                       variant={line.variant}
                       allowRemove

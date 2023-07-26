@@ -41,7 +41,7 @@ export const CheckoutAddressUser: React.FC<Props> = ({
               className="w-full h-full flex flex-row"
             >
               <RadioIsland isSelected={isSelected}>
-                <SingleAddress address={address} selected={isSelected} />
+                <SingleAddress address={address} />
               </RadioIsland>
             </button>
           </li>

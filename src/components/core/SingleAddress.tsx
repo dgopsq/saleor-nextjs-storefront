@@ -4,7 +4,7 @@ import { Address } from "@/queries/user/data";
 type Props = {
   address: Address;
   showDefaultBadges?: boolean;
-  selected?: boolean;
+  multiline?: boolean;
 };
 
 /**
@@ -13,6 +13,7 @@ type Props = {
 export const SingleAddress: React.FC<Props> = ({
   address,
   showDefaultBadges,
+  multiline,
 }) => {
   const {
     firstName,
@@ -31,13 +32,29 @@ export const SingleAddress: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col justify-between gap-4 lg:flex-row text-left">
-      <div className="flex flex-row items-center gap-2">
-        <div className="text-sm font-semibold">
-          {firstName} {lastName}
-        </div>
+      {!multiline ? (
+        <div className="flex flex-row items-center gap-2">
+          <div className="text-sm font-semibold">
+            {firstName} {lastName}
+          </div>
 
-        <div className="text-sm text-gray-700">{`${streetAddress1}, ${city} (${countryArea}), ${postalCode}, ${country}`}</div>
-      </div>
+          <div className="text-sm text-gray-700">{`${streetAddress1}, ${city} (${countryArea}), ${postalCode}, ${country}`}</div>
+        </div>
+      ) : (
+        <div className="flex flex-row items-center gap-2">
+          <ul className="flex flex-col gap-2">
+            <li className="text-sm font-semibold">
+              {firstName} {lastName}
+            </li>
+
+            <li className="text-sm text-gray-700">{streetAddress1}</li>
+
+            <li className="text-sm text-gray-700">{`${city} (${countryArea}), ${postalCode}`}</li>
+
+            <li className="text-sm text-gray-700">{country}</li>
+          </ul>
+        </div>
+      )}
 
       {showDefaultBadges && hasDefaultAddresses ? (
         <div className="flex flex-row gap-2">
