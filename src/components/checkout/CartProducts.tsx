@@ -1,5 +1,5 @@
 import { Island } from "@/components/core/Island";
-import { Select } from "@/components/core/Select";
+import { QuantitySelect } from "@/components/products/QuantitySelect";
 import { formatPrice } from "@/misc/currencies";
 import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
@@ -10,8 +10,6 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 const priceFallback = "-";
-
-const qtyRange = Array.from({ length: 20 }, (_, index) => index);
 
 export type CartProduct = {
   id: string;
@@ -151,17 +149,12 @@ export const CartProducts: React.FC<Props> = ({
               {!compact ? (
                 <div className="basis-auto shrink-0 grow-0 flex flex-col  justify-between items-end mt-4 sm:mt-0">
                   <div>
-                    <Select
+                    <QuantitySelect
                       value={line.quantity}
                       onChange={(value) =>
                         onProductUpdate?.(line.variant.id, value)
                       }
-                      options={qtyRange.map((value) => ({
-                        id: value.toString(),
-                        label: value.toString(),
-                        value,
-                      }))}
-                      parseValue={parseInt}
+                      variant={line.variant}
                     />
                   </div>
                 </div>

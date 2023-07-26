@@ -18,8 +18,8 @@ import { ProductVariants } from "@/components/products/ProductVariants";
 import { useRouter } from "next/navigation";
 import { publicConfig } from "@/misc/config";
 import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
-import { Select, SelectItem } from "@/components/core/Select";
 import { Label } from "@/components/core/Label";
+import { QuantitySelect } from "@/components/products/QuantitySelect";
 
 /**
  *
@@ -121,18 +121,6 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
     router.replace(newUrl);
   }, [currentVariantId, router, defaultVariantId]);
 
-  const qtyOptions = useMemo<Array<SelectItem<number>>>(() => {
-    const qty = productVariant?.quantityAvailable ?? 0;
-    const limit = productVariant?.quantityLimitPerCustomer ?? null;
-    const computedQty = limit !== null ? Math.min(qty, limit) : qty;
-
-    return Array.from({ length: computedQty }, (_, i) => i + 1).map((i) => ({
-      id: i.toString(),
-      label: i.toString(),
-      value: i,
-    }));
-  }, [productVariant]);
-
   if (!product || !currentVariantId) return null;
 
   return (
@@ -175,17 +163,16 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
             ) : undefined}
 
             <form className="mt-6">
-              {publicConfig.showProductQuantitySelect ? (
+              {publicConfig.showProductQuantitySelect && productVariant ? (
                 <div>
                   <Label htmlFor="quantitySelect">Quantity</Label>
 
                   <div className="mt-2">
-                    <Select<number>
+                    <QuantitySelect
                       id="quantitySelect"
-                      options={qtyOptions}
-                      onChange={setQty}
+                      variant={productVariant}
                       value={qty}
-                      parseValue={parseInt}
+                      onChange={setQty}
                     />
                   </div>
                 </div>
