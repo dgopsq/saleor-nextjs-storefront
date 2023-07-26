@@ -42,9 +42,9 @@ query GetMe {
   }
 }
 
-query GetMyOrders {
+query GetMyOrders($first: Int!, $after: String) {
   me {
-    orders {
+    orders(first: $first, after: $after) {
       edges {
         node {
           ...GenericOrder

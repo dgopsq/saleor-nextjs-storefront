@@ -107,7 +107,7 @@ fragment GenericOrder on Order {
   }
   lines {
     variant {
-      id
+      ...GenericProductVariant
     }
     quantity
   }

@@ -20,7 +20,8 @@ export const Addresses: React.FC = () => {
             <li key={address.id} className="lg:col-span-3">
               <Link
                 className="h-full"
-                href={`/account/addresses/${address.id}`}
+                href="/account/addresses/[id]"
+                as={`/account/addresses/${address.id}`}
               >
                 <Island variant="outline">
                   <SingleAddress address={address} showDefaultBadges />

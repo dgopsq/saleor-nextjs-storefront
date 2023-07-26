@@ -3,6 +3,7 @@ import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
   GenericCheckoutInfoFragment,
+  GenericOrderFragment,
   GenericShippingMethodFragment,
   GenericShippingMethodFragmentDoc,
 } from "@/__generated__/graphql";
@@ -85,6 +86,18 @@ export type Checkout = {
   shippingMethods: Array<DeliveryMethod>;
   deliveryMethod: DeliveryMethod | null;
   availablePaymentGateways: Array<PaymentGateway>;
+};
+
+/**
+ *
+ */
+export type Order = {
+  id: string;
+  lines: Array<ProductVariant>;
+  totalPrice: {
+    amount: number;
+    currency: string;
+  } | null;
 };
 
 /**
@@ -232,4 +245,28 @@ export function validateInformationsStep(checkout: Checkout): boolean {
 export function validateShippingStep(checkout: Checkout): boolean {
   const { deliveryMethod } = checkout;
   return !!deliveryMethod;
+}
+
+/**
+ *
+ */
+export function parseOrder(input: GenericOrderFragment): Order {
+  const variants = input.lines.reduce((acc, line) => {
+    if (!line.variant) return acc;
+
+    const variant = parseVariant(line.variant);
+
+    return [...acc, variant];
+  }, [] as Array<ProductVariant>);
+
+  return {
+    id: input.id,
+    lines: variants,
+    totalPrice: input.total
+      ? {
+          amount: input.total.gross.amount,
+          currency: input.total.gross.currency,
+        }
+      : null,
+  };
 }
