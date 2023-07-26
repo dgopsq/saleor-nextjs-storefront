@@ -101,6 +101,8 @@ fragment GenericOrder on Order {
   id
   isPaid
   number
+  created
+  status
   invoices {
     id
     url

@@ -11,7 +11,6 @@ import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { SingleOrder } from "@/components/core/SingleOrder";
 import { parseOrder } from "@/queries/checkout/data";
 import { useQuery } from "@apollo/client";
-import Link from "next/link";
 import { useMemo } from "react";
 
 /**
@@ -22,7 +21,7 @@ export const Orders: React.FC = () => {
     variables: { first: 10 },
   });
 
-  const parserOrders = useMemo(() => {
+  const parsedOrders = useMemo(() => {
     return (
       data?.me?.orders?.edges.map((o) => {
         const orderFragment = getFragmentData(GenericOrderFragmentDoc, o?.node);
@@ -31,17 +30,17 @@ export const Orders: React.FC = () => {
     );
   }, [data]);
 
+  console.log(parsedOrders);
+
   const ordersRenderer = useMemo(() => {
-    return parserOrders.map((order) => (
+    return parsedOrders.map((order) => (
       <li key={order.id}>
-        <Link href="/account/orders/[id]" as={`/account/orders/${order.id}`}>
-          <Island variant="outline">
-            <SingleOrder order={order} />
-          </Island>
-        </Link>
+        <Island variant="outline">
+          <SingleOrder order={order} />
+        </Island>
       </li>
     ));
-  }, [parserOrders]);
+  }, [parsedOrders]);
 
   if (loading) return <LoadingSpinner />;
 

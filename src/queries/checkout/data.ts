@@ -6,11 +6,27 @@ import {
   GenericOrderFragment,
   GenericShippingMethodFragment,
   GenericShippingMethodFragmentDoc,
+  OrderStatus as BaseOrderStatus,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
 import { ProductVariant, parseVariant } from "@/queries/products/data";
 import { Address, parseAddress } from "@/queries/user/data";
+
+/**
+ *
+ */
+export enum OrderStatus {
+  Canceled = BaseOrderStatus.Canceled,
+  Draft = BaseOrderStatus.Draft,
+  Expired = BaseOrderStatus.Expired,
+  Fulfilled = BaseOrderStatus.Fulfilled,
+  PartiallyFulfilled = BaseOrderStatus.PartiallyFulfilled,
+  PartiallyReturned = BaseOrderStatus.PartiallyReturned,
+  Returned = BaseOrderStatus.Returned,
+  Unconfirmed = BaseOrderStatus.Unconfirmed,
+  Unfulfilled = BaseOrderStatus.Unfulfilled,
+}
 
 /**
  *
@@ -94,6 +110,8 @@ export type Checkout = {
 export type Order = {
   id: string;
   lines: Array<ProductVariant>;
+  createdAt: string;
+  status: OrderStatus;
   number: string;
   totalPrice: {
     amount: number;
@@ -263,6 +281,8 @@ export function parseOrder(input: GenericOrderFragment): Order {
   return {
     id: input.id,
     number: input.number,
+    status: input.status,
+    createdAt: new Date(input.created).toISOString(),
     lines: variants,
     totalPrice: input.total
       ? {
