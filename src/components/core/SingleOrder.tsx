@@ -1,3 +1,4 @@
+import { TextButton } from "@/components/core/Button";
 import { Island } from "@/components/core/Island";
 import { formatDateFull } from "@/misc/date";
 import { Order, OrderStatus } from "@/queries/checkout/data";
@@ -19,12 +20,13 @@ const OrderDetail: React.FC<{ label: string; value: string }> = ({
 
 type Props = {
   order: Order;
+  onDetailsClick?: () => void;
 };
 
 /**
  *
  */
-export const SingleOrder: React.FC<Props> = ({ order }) => {
+export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
   const imagesRenderer = useMemo(() => {
     return order.lines.slice(0, 3).reduce((acc, line) => {
       const image = line.images[0];
@@ -41,7 +43,7 @@ export const SingleOrder: React.FC<Props> = ({ order }) => {
   }, [order]);
 
   return (
-    <div key={order.id} className="flex flex-row justify-between">
+    <div key={order.id} className="flex flex-row justify-between items-center">
       <div>
         <div>
           <span className="font-semibold">Order {order.number}</span>
@@ -66,6 +68,16 @@ export const SingleOrder: React.FC<Props> = ({ order }) => {
             />
           </li>
         </ul>
+
+        {onDetailsClick ? (
+          <div className="mt-4">
+            <TextButton
+              variant="primary"
+              text="More details..."
+              onClick={onDetailsClick}
+            />
+          </div>
+        ) : undefined}
       </div>
 
       <div>

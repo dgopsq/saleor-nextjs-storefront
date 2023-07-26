@@ -89,4 +89,11 @@ export const publicConfig = {
    */
   showProductQuantitySelect:
     process.env.NEXT_PUBLIC_SHOW_PRODUCT_QUANTITY_SELECT === "true",
+
+  /**
+   *
+   */
+  lastOrdersShowed: parseInt(
+    process.env.NEXT_PUBLIC_LAST_ORDERS_SHOWED ?? "15"
+  ),
 };
