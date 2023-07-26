@@ -99,9 +99,24 @@ fragment GenericCheckoutInfo on Checkout {
 
 fragment GenericOrder on Order {
   id
-  created
-  updatedAt
-  status
+  isPaid
+  invoices {
+    id
+    url
+    externalUrl
+  }
+  lines {
+    variant {
+      id
+    }
+    quantity
+  }
+  total {
+    gross {
+      currency
+      amount
+    }
+  }
 }
 
 query GetCheckoutInfo($checkoutId: ID!) {

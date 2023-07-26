@@ -42,6 +42,18 @@ query GetMe {
   }
 }
 
+query GetMyOrders {
+  me {
+    orders {
+      edges {
+        node {
+          ...GenericOrder
+        }
+      }
+    }
+  }
+}
+
 mutation CreateAccount($account: AccountRegisterInput!) {
   accountRegister(input: $account) {
     requiresConfirmation
