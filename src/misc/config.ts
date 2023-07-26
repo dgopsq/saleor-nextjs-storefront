@@ -83,4 +83,10 @@ export const publicConfig = {
    */
   stripeGatewayId:
     process.env.NEXT_PUBLIC_STRIPE_GATEWAY_ID || "app.saleor.stripe",
+
+  /**
+   *
+   */
+  showProductQuantitySelect:
+    process.env.NEXT_PUBLIC_SHOW_PRODUCT_QUANTITY_SELECT === "true",
 };

@@ -1,3 +1,4 @@
+import { Label } from "@/components/core/Label";
 import { classNames } from "@/misc/styles";
 import { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
@@ -30,12 +31,7 @@ export const Field = <T extends string>({
 }: Props<T>) => {
   return (
     <>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium leading-6 text-gray-900"
-      >
-        {label}
-      </label>
+      <Label htmlFor={id}>{label}</Label>
 
       <div className="mt-2">
         <input

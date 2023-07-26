@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { publicConfig } from "@/misc/config";
 import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
 import { Select, SelectItem } from "@/components/core/Select";
+import { Label } from "@/components/core/Label";
 
 /**
  *
@@ -174,14 +175,21 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
             ) : undefined}
 
             <form className="mt-6">
-              <div>
-                <Select<number>
-                  options={qtyOptions}
-                  onChange={setQty}
-                  value={qty}
-                  parseValue={parseInt}
-                />
-              </div>
+              {publicConfig.showProductQuantitySelect ? (
+                <div>
+                  <Label htmlFor="quantitySelect">Quantity</Label>
+
+                  <div className="mt-2">
+                    <Select<number>
+                      id="quantitySelect"
+                      options={qtyOptions}
+                      onChange={setQty}
+                      value={qty}
+                      parseValue={parseInt}
+                    />
+                  </div>
+                </div>
+              ) : undefined}
 
               {currentVariantId ? (
                 <div className="mt-6">
