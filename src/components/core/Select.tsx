@@ -1,4 +1,4 @@
-type SelectItem<T extends string | number> = {
+export type SelectItem<T extends string | number> = {
   id: string;
   value: T;
   label: string;

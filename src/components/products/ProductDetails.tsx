@@ -18,6 +18,7 @@ import { ProductVariants } from "@/components/products/ProductVariants";
 import { useRouter } from "next/navigation";
 import { publicConfig } from "@/misc/config";
 import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
+import { Select, SelectItem } from "@/components/core/Select";
 
 /**
  *
@@ -51,6 +52,8 @@ type Props = {
  */
 export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
   useSuspenseQuery(GetProductDocument, { variables: { slug } });
+  const [qty, setQty] = useState(1);
+
   const router = useRouter();
 
   const { data: detailedData, complete: detailedComplete } = useFragment({
@@ -117,6 +120,18 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
     router.replace(newUrl);
   }, [currentVariantId, router, defaultVariantId]);
 
+  const qtyOptions = useMemo<Array<SelectItem<number>>>(() => {
+    const qty = productVariant?.quantityAvailable ?? 0;
+    const limit = productVariant?.quantityLimitPerCustomer ?? null;
+    const computedQty = limit !== null ? Math.min(qty, limit) : qty;
+
+    return Array.from({ length: computedQty }, (_, i) => i + 1).map((i) => ({
+      id: i.toString(),
+      label: i.toString(),
+      value: i,
+    }));
+  }, [productVariant]);
+
   if (!product || !currentVariantId) return null;
 
   return (
@@ -159,11 +174,20 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
             ) : undefined}
 
             <form className="mt-6">
-              <div className="mt-10 flex">
-                {currentVariantId ? (
-                  <AddToCartButton variantId={currentVariantId} />
-                ) : undefined}
+              <div>
+                <Select<number>
+                  options={qtyOptions}
+                  onChange={setQty}
+                  value={qty}
+                  parseValue={parseInt}
+                />
               </div>
+
+              {currentVariantId ? (
+                <div className="mt-6">
+                  <AddToCartButton qty={qty} variantId={currentVariantId} />
+                </div>
+              ) : undefined}
             </form>
           </div>
         </div>

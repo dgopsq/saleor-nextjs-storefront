@@ -38,6 +38,8 @@ export type ProductVariant = {
   price: Price | null;
   discount: Price | null;
   attributes: Array<ProductAttribute>;
+  quantityAvailable: number | null;
+  quantityLimitPerCustomer: number | null;
 };
 
 /**
@@ -86,10 +88,16 @@ export type ProductListItem = {
 export function parseVariant(
   input: FragmentType<typeof GenericProductVariantFragmentDoc>
 ): ProductVariant {
-  const { id, sku, name, media, pricing, attributes } = getFragmentData(
-    GenericProductVariantFragmentDoc,
-    input
-  );
+  const {
+    id,
+    sku,
+    name,
+    media,
+    pricing,
+    attributes,
+    quantityAvailable,
+    quantityLimitPerCustomer,
+  } = getFragmentData(GenericProductVariantFragmentDoc, input);
 
   return {
     id,
@@ -107,6 +115,8 @@ export function parseVariant(
       ? parsePrice(pricing.discount.gross)
       : null,
     attributes: parseAttributes(attributes),
+    quantityAvailable: quantityAvailable ?? null,
+    quantityLimitPerCustomer: quantityLimitPerCustomer ?? null,
   };
 }
 

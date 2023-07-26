@@ -123,10 +123,10 @@ mutation CreateCheckout($channel: String!, $email: String!) {
   }
 }
 
-mutation AddProductToCart($checkoutId: ID!, $variantId: ID!) {
+mutation AddProductToCart($checkoutId: ID!, $variantId: ID!, $quantity: Int!) {
   checkoutLinesAdd(
     id: $checkoutId
-    lines: [{ quantity: 1, variantId: $variantId }]
+    lines: [{ quantity: $quantity, variantId: $variantId }]
   ) {
     checkout {
       ...GenericCheckoutInfo
