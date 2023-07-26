@@ -1,0 +1,37 @@
+import { PageHeading } from "@/components/core/Headings";
+import { Island } from "@/components/core/Island";
+import { ChangeEmail } from "@/components/user/ChangeEmail";
+import { ChangePassword } from "@/components/user/ChangePassword";
+import { EmailConfirmation } from "@/components/user/EmailConfirmation";
+import { ProfileInfo } from "@/components/user/ProfileInfo";
+
+/**
+ *
+ */
+export const Profile: React.FC = () => (
+  <>
+    <div>
+      <PageHeading>Profile</PageHeading>
+    </div>
+
+    <div className="mt-8">
+      <Island variant="outline">
+        <ProfileInfo />
+      </Island>
+    </div>
+
+    <div className="mt-8">
+      <Island variant="outline">
+        <ChangePassword />
+      </Island>
+    </div>
+
+    <div className="mt-8">
+      <Island variant="outline">
+        <ChangeEmail />
+      </Island>
+    </div>
+
+    <EmailConfirmation />
+  </>
+);

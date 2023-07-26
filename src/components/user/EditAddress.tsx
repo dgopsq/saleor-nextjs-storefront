@@ -9,6 +9,7 @@ import {
 } from "@/__generated__/graphql";
 import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { Button } from "@/components/core/Button";
+import { PageHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { logger } from "@/misc/logger";
@@ -178,12 +179,13 @@ export const EditAddress = ({ id }: Props) => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold">Edit address</h3>
+      <PageHeading>Edit address</PageHeading>
 
       <div className="mt-8 pb-16 border-b border-gray-100">
         <AddressForm
           ref={addressFormRef}
           initialValues={addressToAddressForm(parseAddress(data))}
+          asyncErrors={updateData?.accountAddressUpdate?.errors ?? []}
         />
 
         <div className="bg-gray-50 rounded-lg mt-16">

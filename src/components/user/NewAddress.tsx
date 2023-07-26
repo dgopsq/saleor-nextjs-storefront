@@ -3,6 +3,7 @@
 import { UserCreateAddressDocument } from "@/__generated__/graphql";
 import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { Button } from "@/components/core/Button";
+import { PageHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
@@ -46,10 +47,13 @@ export const NewAddress: React.FC = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold">Add new address</h3>
+      <PageHeading>Add new address</PageHeading>
 
       <div className="mt-8 pb-16 border-b border-gray-100">
-        <AddressForm ref={addressFormRef} />
+        <AddressForm
+          ref={addressFormRef}
+          asyncErrors={createData?.accountAddressCreate?.errors ?? []}
+        />
       </div>
 
       <div className="mt-16 flex justify-end">

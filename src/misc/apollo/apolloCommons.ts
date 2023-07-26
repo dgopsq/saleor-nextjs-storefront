@@ -7,4 +7,7 @@ export const commonApolloTypePolicies: TypePolicies = {
   Product: {
     keyFields: ["slug"],
   },
+  Order: {
+    keyFields: ["number"],
+  },
 };

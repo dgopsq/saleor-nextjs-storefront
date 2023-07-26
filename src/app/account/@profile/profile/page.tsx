@@ -1,31 +1,5 @@
-import { Island } from "@/components/core/Island";
-import { ChangeEmail } from "@/components/user/ChangeEmail";
-import { ChangePassword } from "@/components/user/ChangePassword";
-import { EmailConfirmation } from "@/components/user/EmailConfirmation";
-import { ProfileInfo } from "@/components/user/ProfileInfo";
+import { Profile } from "@/components/user/Profile";
 
 export default async function Page() {
-  return (
-    <>
-      <div>
-        <Island variant="outline">
-          <ProfileInfo />
-        </Island>
-      </div>
-
-      <div className="mt-8">
-        <Island variant="outline">
-          <ChangePassword />
-        </Island>
-      </div>
-
-      <div className="mt-8">
-        <Island variant="outline">
-          <ChangeEmail />
-        </Island>
-      </div>
-
-      <EmailConfirmation />
-    </>
-  );
+  return <Profile />;
 }

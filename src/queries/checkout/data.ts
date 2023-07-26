@@ -3,8 +3,10 @@ import {
   CheckoutProductFragmentDoc,
   GenericAddressFragmentDoc,
   GenericCheckoutInfoFragment,
+  GenericOrderFragment,
   GenericShippingMethodFragment,
   GenericShippingMethodFragmentDoc,
+  OrderStatus as BaseOrderStatus,
 } from "@/__generated__/graphql";
 import { Price, parsePrice } from "@/queries/common/data/price";
 import { Weight, parseWeight } from "@/queries/common/data/weight";
@@ -14,12 +16,27 @@ import { Address, parseAddress } from "@/queries/user/data";
 /**
  *
  */
-export type CheckoutId = string | number;
+export enum OrderStatus {
+  Canceled = BaseOrderStatus.Canceled,
+  Draft = BaseOrderStatus.Draft,
+  Expired = BaseOrderStatus.Expired,
+  Fulfilled = BaseOrderStatus.Fulfilled,
+  PartiallyFulfilled = BaseOrderStatus.PartiallyFulfilled,
+  PartiallyReturned = BaseOrderStatus.PartiallyReturned,
+  Returned = BaseOrderStatus.Returned,
+  Unconfirmed = BaseOrderStatus.Unconfirmed,
+  Unfulfilled = BaseOrderStatus.Unfulfilled,
+}
 
 /**
  *
  */
-type CheckoutItem = {
+export type CheckoutId = string;
+
+/**
+ *
+ */
+export type CheckoutItem = {
   id: string;
   variant: ProductVariant;
   product: CheckoutProduct;
@@ -85,6 +102,25 @@ export type Checkout = {
   shippingMethods: Array<DeliveryMethod>;
   deliveryMethod: DeliveryMethod | null;
   availablePaymentGateways: Array<PaymentGateway>;
+};
+
+/**
+ *
+ */
+export type Order = {
+  id: string;
+  lines: Array<CheckoutItem>;
+  createdAt: string;
+  status: OrderStatus;
+  statusDisplay: string;
+  number: string;
+  totalPrice: {
+    amount: number;
+    currency: string;
+  } | null;
+  shippingAddress: Address | null;
+  billingAddress: Address | null;
+  shippingMethods: Array<DeliveryMethod>;
 };
 
 /**
@@ -232,4 +268,64 @@ export function validateInformationsStep(checkout: Checkout): boolean {
 export function validateShippingStep(checkout: Checkout): boolean {
   const { deliveryMethod } = checkout;
   return !!deliveryMethod;
+}
+
+/**
+ *
+ */
+export function parseOrder(input: GenericOrderFragment): Order {
+  const lines = input.lines.reduce((acc, line) => {
+    if (!line.variant) return acc;
+
+    return [
+      ...acc,
+      {
+        id: line.id,
+        variant: parseVariant(line.variant),
+        product: parseCheckoutProductVariant(line.variant),
+        quantity: line.quantity,
+      },
+    ];
+  }, [] as Array<CheckoutItem>);
+
+  const shippingAddressFragment = getFragmentData(
+    GenericAddressFragmentDoc,
+    input.shippingAddress
+  );
+
+  const billingAddressFragment = getFragmentData(
+    GenericAddressFragmentDoc,
+    input.billingAddress
+  );
+
+  const shippingMethods = input.shippingMethods.map((rawShippingMethod) => {
+    const shippingMethodFragment = getFragmentData(
+      GenericShippingMethodFragmentDoc,
+      rawShippingMethod
+    );
+
+    return parseShippingMethod(shippingMethodFragment);
+  });
+
+  return {
+    id: input.id,
+    number: input.number,
+    status: input.status,
+    statusDisplay: input.statusDisplay,
+    createdAt: new Date(input.created).toISOString(),
+    lines,
+    totalPrice: input.total
+      ? {
+          amount: input.total.gross.amount,
+          currency: input.total.gross.currency,
+        }
+      : null,
+    shippingAddress: shippingAddressFragment
+      ? parseAddress(shippingAddressFragment)
+      : null,
+    billingAddress: billingAddressFragment
+      ? parseAddress(billingAddressFragment)
+      : null,
+    shippingMethods,
+  };
 }
