@@ -12,12 +12,12 @@ export default async function Layout(props: {
     return <div className="max-w-lg w-full mx-a mt-10">{props.auth}</div>;
 
   return (
-    <div className="w-full">
-      <div>
+    <div className="w-full md:grid grid-cols-8 gap-x-8">
+      <div className="col-span-2">
         <ProfileMenu />
       </div>
 
-      <div className="mt-8">{props.profile}</div>
+      <div className="mt-8 md:mt-0 col-span-6">{props.profile}</div>
     </div>
   );
 }

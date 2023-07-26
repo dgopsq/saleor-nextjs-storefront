@@ -6,6 +6,7 @@ import {
   GetMyOrdersDocument,
 } from "@/__generated__/graphql";
 import { Island } from "@/components/core/Island";
+import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { SingleOrder } from "@/components/core/SingleOrder";
 import { parseOrder } from "@/queries/checkout/data";
 import { useQuery } from "@apollo/client";
@@ -16,7 +17,7 @@ import { useMemo } from "react";
  *
  */
 export const Orders: React.FC = () => {
-  const { data } = useQuery(GetMyOrdersDocument, {
+  const { data, loading } = useQuery(GetMyOrdersDocument, {
     variables: { first: 10 },
   });
 
@@ -40,6 +41,8 @@ export const Orders: React.FC = () => {
       </li>
     ));
   }, [parserOrders]);
+
+  if (loading) return <LoadingSpinner />;
 
   return <ul>{ordersRenderer}</ul>;
 };
