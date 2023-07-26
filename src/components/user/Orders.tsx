@@ -48,7 +48,7 @@ export const Orders: React.FC = () => {
     <>
       <PageHeading>Orders</PageHeading>
 
-      <ul className="mt-8">{ordersRenderer}</ul>
+      <ul className="mt-8 flex flex-col gap-4">{ordersRenderer}</ul>
     </>
   );
 };
