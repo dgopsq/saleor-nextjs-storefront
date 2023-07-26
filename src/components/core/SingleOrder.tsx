@@ -33,7 +33,7 @@ export const SingleOrder: React.FC<Props> = ({ order }) => {
 
       return [
         ...acc,
-        <Island key={line.id} variant="solid">
+        <Island key={line.id} variant="solid-darker">
           <Image src={image.url} alt={image.alt ?? ""} width={80} height={80} />
         </Island>,
       ];
