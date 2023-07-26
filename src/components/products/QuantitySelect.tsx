@@ -7,6 +7,7 @@ type Props = {
   variant: ProductVariant;
   value: number;
   onChange: (value: number) => void;
+  allowRemove?: boolean;
 };
 
 /**
@@ -17,18 +18,23 @@ export const QuantitySelect: React.FC<Props> = ({
   variant,
   value,
   onChange,
+  allowRemove,
 }) => {
   const qtyOptions = useMemo<Array<SelectItem<number>>>(() => {
     const qty = variant?.quantityAvailable ?? 0;
     const limit = variant?.quantityLimitPerCustomer ?? null;
     const computedQty = limit !== null ? Math.min(qty, limit) : qty;
 
-    return Array.from({ length: computedQty }, (_, i) => i + 1).map((i) => ({
+    const optionsValues = Array.from({ length: computedQty }, (_, i) => i + 1);
+
+    if (allowRemove) optionsValues.unshift(0);
+
+    return optionsValues.map((i) => ({
       id: i.toString(),
       label: i.toString(),
       value: i,
     }));
-  }, [variant]);
+  }, [variant, allowRemove]);
 
   return (
     <Select<number>

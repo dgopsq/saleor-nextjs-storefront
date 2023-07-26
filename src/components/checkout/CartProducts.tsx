@@ -155,6 +155,7 @@ export const CartProducts: React.FC<Props> = ({
                         onProductUpdate?.(line.variant.id, value)
                       }
                       variant={line.variant}
+                      allowRemove
                     />
                   </div>
                 </div>
