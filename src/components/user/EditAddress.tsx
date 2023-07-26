@@ -185,6 +185,7 @@ export const EditAddress = ({ id }: Props) => {
         <AddressForm
           ref={addressFormRef}
           initialValues={addressToAddressForm(parseAddress(data))}
+          asyncErrors={updateData?.accountAddressUpdate?.errors ?? []}
         />
 
         <div className="bg-gray-50 rounded-lg mt-16">

@@ -43,11 +43,11 @@ export const SingleOrder: React.FC<Props> = ({ order }) => {
   return (
     <div key={order.id} className="flex flex-row justify-between">
       <div>
-        <ul className="flex flex-col gap-2">
-          <li>
-            <OrderDetail label="Order number" value={order.number} />
-          </li>
+        <div>
+          <span className="font-semibold">Order {order.number}</span>
+        </div>
 
+        <ul className="mt-4 flex flex-col gap-1">
           <li>
             <OrderDetail
               label="Status"

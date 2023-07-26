@@ -50,7 +50,10 @@ export const NewAddress: React.FC = () => {
       <PageHeading>Add new address</PageHeading>
 
       <div className="mt-8 pb-16 border-b border-gray-100">
-        <AddressForm ref={addressFormRef} />
+        <AddressForm
+          ref={addressFormRef}
+          asyncErrors={createData?.accountAddressCreate?.errors ?? []}
+        />
       </div>
 
       <div className="mt-16 flex justify-end">
