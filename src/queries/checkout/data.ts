@@ -84,6 +84,7 @@ export type PaymentGateway = {
 export type Checkout = {
   id: string;
   email: string | null;
+  isShippingRequired: boolean;
   lines: Array<CheckoutItem>;
   subtotalPrice: {
     amount: number;
@@ -157,6 +158,7 @@ export function parseGenericCheckoutInfo(
   return {
     id,
     email: email ?? null,
+    isShippingRequired: input.isShippingRequired,
     lines: lines.map((line) => ({
       id: line.id,
       variant: parseVariant(line.variant),
