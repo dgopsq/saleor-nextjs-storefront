@@ -209,8 +209,15 @@ export function parseAllProducts(
 /**
  *
  */
-export const getAllProductsVariables = (): GetProductsQueryVariables => ({
+export const getAllProductsVariables = (
+  options: {
+    cursor?: string;
+  } = {
+    cursor: undefined,
+  }
+): GetProductsQueryVariables => ({
   first: publicConfig.productsPageSize,
+  after: options.cursor,
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });
 

@@ -7,7 +7,7 @@ import {
   parseAllProducts,
 } from "@/queries/products/data";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { useMemo } from "react";
+import { useMemo, useTransition } from "react";
 
 const baseVariables = getAllProductsVariables();
 
@@ -17,11 +17,37 @@ type Props = Record<string, never>;
  *
  */
 export const AllProducts: React.FC<Props> = () => {
-  const { data } = useSuspenseQuery(GetProductsDocument, {
+  const [nextDataLoading, nextDataTransition] = useTransition();
+
+  const { data, fetchMore } = useSuspenseQuery(GetProductsDocument, {
     variables: baseVariables,
   });
 
-  const products = useMemo(() => (data ? parseAllProducts(data) : []), [data]);
+  const parsedProducts = useMemo(() => {
+    return parseAllProducts(data);
+  }, [data]);
 
-  return <Products products={products} />;
+  const handleShowMore = useMemo(() => {
+    const hasNextPage = data?.products?.pageInfo?.hasNextPage ?? false;
+    const nextCursor = data?.products?.pageInfo?.endCursor ?? null;
+
+    return hasNextPage && nextCursor
+      ? () =>
+          nextDataTransition(() => {
+            fetchMore({
+              variables: getAllProductsVariables({ cursor: nextCursor }),
+            });
+          })
+      : undefined;
+  }, [data, fetchMore, nextDataTransition]);
+
+  console.log("parsedProducts", parsedProducts.length);
+
+  return (
+    <Products
+      products={parsedProducts}
+      onShowMore={handleShowMore}
+      showMoreLoading={nextDataLoading}
+    />
+  );
 };

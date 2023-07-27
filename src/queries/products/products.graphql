@@ -106,6 +106,7 @@ query GetProducts(
       node {
         ...PreviewProduct
       }
+      cursor
     }
     pageInfo {
       hasNextPage
