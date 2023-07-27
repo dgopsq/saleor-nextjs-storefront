@@ -1,4 +1,4 @@
-import { Button } from "@/components/core/Button";
+import { ShowMoreButton } from "@/components/products/ShowMoreButton";
 import { SingleProduct } from "@/components/products/SingleProduct";
 import { ProductListItem, generateProductUrl } from "@/queries/products/data";
 import Link from "next/link";
@@ -34,12 +34,10 @@ export const Products: React.FC<Props> = ({
       {onShowMore ? (
         <div className="w-full mt-24 flex flex-row justify-center">
           <div>
-            <Button
-              variant="secondary"
-              size="large"
-              text="Show more"
+            <ShowMoreButton
               onClick={onShowMore}
               isLoading={showMoreLoading}
+              triggerOnVisible
             />
           </div>
         </div>
