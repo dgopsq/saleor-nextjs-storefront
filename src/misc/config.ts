@@ -96,4 +96,9 @@ export const publicConfig = {
   lastOrdersShowed: parseInt(
     process.env.NEXT_PUBLIC_LAST_ORDERS_SHOWED ?? "15"
   ),
+
+  /**
+   *
+   */
+  homepageUrl: process.env.NEXT_PUBLIC_HOMEPAGE_URL || "http://localhost:3000",
 };
