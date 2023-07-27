@@ -10,6 +10,8 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
   HomeIcon as BaseHomeIcon,
+  TruckIcon,
+  KeyIcon,
 } from "@heroicons/react/24/outline";
 
 type BaseIconPublicProps = {
@@ -102,4 +104,18 @@ export const CloseIcon: React.FC<BaseIconPublicProps> = (props) => (
  */
 export const HomeIcon: React.FC<BaseIconPublicProps> = (props) => (
   <BaseIcon Icon={BaseHomeIcon} {...props} />
+);
+
+/**
+ *
+ */
+export const ShippingIcon: React.FC<BaseIconPublicProps> = (props) => (
+  <BaseIcon Icon={TruckIcon} {...props} />
+);
+
+/**
+ *
+ */
+export const AccountIcon: React.FC<BaseIconPublicProps> = (props) => (
+  <BaseIcon Icon={KeyIcon} {...props} />
 );

@@ -1,6 +1,6 @@
 "use client";
 
-import { CartIcon, HomeIcon, ProfileIcon } from "@/components/core/Icon";
+import { AccountIcon, CartIcon, ShippingIcon } from "@/components/core/Icon";
 import { TabsMenu } from "@/components/core/TabsMenu";
 import { useSelectedLayoutSegment } from "next/navigation";
 /**
@@ -16,13 +16,13 @@ export const ProfileMenu: React.FC = () => {
           id: "profile",
           label: "Profile",
           href: "/account/profile",
-          Icon: ProfileIcon,
+          Icon: AccountIcon,
         },
         {
           id: "addresses",
           label: "Addresses",
           href: "/account/addresses",
-          Icon: HomeIcon,
+          Icon: ShippingIcon,
         },
         {
           id: "orders",
