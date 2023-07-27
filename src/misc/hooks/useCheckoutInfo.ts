@@ -1,7 +1,10 @@
+import { getFragmentData } from "@/__generated__";
 import {
   GenericCheckoutInfoFragmentDoc,
+  GenericShippingMethodFragmentDoc,
   GetCheckoutInfoDocument,
   UpdateCheckoutBillingAddressDocument,
+  UpdateCheckoutDeliveryMethodDocument,
   UpdateCheckoutShippingAddressDocument,
 } from "@/__generated__/graphql";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
@@ -70,6 +73,29 @@ export function useCheckoutInfo(): UseCheckoutInfoReturn {
         },
       });
   }, [userInfo, data, complete, client]);
+
+  // Set the delivery method to the cheapest one available.
+  // FIXME: This could be buggy or prone to create errors.
+  useEffect(() => {
+    if (!complete) return;
+
+    const parsedMethods = data.shippingMethods.map((method) => {
+      return getFragmentData(GenericShippingMethodFragmentDoc, method);
+    });
+
+    const cheapestMethod = parsedMethods.reduce((prev, next) => {
+      return prev && prev.price.amount > next.price.amount ? next : prev;
+    }, parsedMethods[0] ?? null);
+
+    if (cheapestMethod)
+      client.mutate({
+        mutation: UpdateCheckoutDeliveryMethodDocument,
+        variables: {
+          deliveryMethodId: cheapestMethod.id,
+          checkoutId: data.id,
+        },
+      });
+  }, [data, complete, client]);
 
   // FIXME: This is potentially a bottleneck, as it will be called on every
   // render. Consider using a context to store the parsed user data.
