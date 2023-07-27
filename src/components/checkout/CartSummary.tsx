@@ -1,6 +1,6 @@
+import { QuestionIcon } from "@/components/core/Icon";
 import { formatPrice } from "@/misc/currencies";
 import { Checkout } from "@/queries/checkout/data";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   checkout: Checkout;
@@ -35,7 +35,7 @@ export const CartSummary: React.FC<Props> = ({ checkout }) => {
               <span className="sr-only">
                 Learn more about how shipping is calculated
               </span>
-              <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
+              <QuestionIcon className="h-5 w-5" />
             </a>
           </dt>
           <dd className="text-sm font-medium text-gray-900">

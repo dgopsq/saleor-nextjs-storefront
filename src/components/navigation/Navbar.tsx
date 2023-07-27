@@ -2,11 +2,6 @@
 
 import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import { classNames } from "@/misc/styles";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,6 +10,7 @@ import { CartButton } from "@/components/checkout/CartButton";
 import { UserButton } from "@/components/user/UserButton";
 import { useCheckoutIdStore } from "@/misc/states/checkoutIdStore";
 import { Spinner } from "@/components/core/Spinner";
+import { CloseIcon, HamburgerIcon, SearchIcon } from "@/components/core/Icon";
 
 type Props = {
   categories: Array<Category>;
@@ -67,7 +63,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close menu</span>
-                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                    <CloseIcon className="h-6 w-6" />
                   </button>
                 </div>
 
@@ -250,7 +246,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                       onClick={() => setOpen(true)}
                     >
                       <span className="sr-only">Open menu</span>
-                      <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                      <HamburgerIcon className="h-6 w-6" />
                     </button>
 
                     {/* Search */}
@@ -259,10 +255,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                       className="ml-2 p-2 text-gray-400 hover:text-gray-500"
                     >
                       <span className="sr-only">Search</span>
-                      <MagnifyingGlassIcon
-                        className="h-6 w-6"
-                        aria-hidden="true"
-                      />
+                      <SearchIcon className="h-6 w-6" />
                     </a>
                   </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
+import { FailureIcon, SuccessIcon } from "@/components/core/Icon";
 import { Transition } from "@headlessui/react";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { toast, useToaster } from "react-hot-toast";
 import { match } from "ts-pattern";
@@ -46,16 +46,10 @@ export const Notifications = () => {
                     <div className="flex-shrink-0">
                       {match(toast.type)
                         .with("success", () => (
-                          <CheckCircleIcon
-                            className="h-6 w-6 text-green-400"
-                            aria-hidden="true"
-                          />
+                          <SuccessIcon className="h-6 w-6 text-green-400" />
                         ))
                         .with("error", () => (
-                          <XCircleIcon
-                            className="h-6 w-6 text-red-400"
-                            aria-hidden="true"
-                          />
+                          <FailureIcon className="h-6 w-6 text-red-400" />
                         ))
                         .otherwise(() => undefined)}
                     </div>

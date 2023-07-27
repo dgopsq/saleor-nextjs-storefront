@@ -1,11 +1,7 @@
 "use client";
 
+import { CartIcon, HomeIcon, ProfileIcon } from "@/components/core/Icon";
 import { TabsMenu } from "@/components/core/TabsMenu";
-import {
-  HomeIcon,
-  ShoppingCartIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
 import { useSelectedLayoutSegment } from "next/navigation";
 /**
  *
@@ -20,7 +16,7 @@ export const ProfileMenu: React.FC = () => {
           id: "profile",
           label: "Profile",
           href: "/account/profile",
-          Icon: UserIcon,
+          Icon: ProfileIcon,
         },
         {
           id: "addresses",
@@ -32,7 +28,7 @@ export const ProfileMenu: React.FC = () => {
           id: "orders",
           label: "Orders",
           href: "/account/orders",
-          Icon: ShoppingCartIcon,
+          Icon: CartIcon,
         },
       ]}
       active={selectedProfileSegment ?? undefined}

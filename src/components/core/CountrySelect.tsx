@@ -1,7 +1,7 @@
 import { CountryCode } from "@/__generated__/graphql";
+import { CheckIcon, UpDownIcon } from "@/components/core/Icon";
 import { classNames } from "@/misc/styles";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 
 function countryCodeToName(countryCode?: CountryCode): string | null {
@@ -46,10 +46,7 @@ export const CountrySelect: React.FC<Props> = ({
                 </span>
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon
-                  className="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
+                <UpDownIcon className="h-5 w-5 text-gray-400" />
               </span>
             </Listbox.Button>
 
@@ -96,7 +93,7 @@ export const CountrySelect: React.FC<Props> = ({
                               "absolute inset-y-0 right-0 flex items-center pr-4"
                             )}
                           >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            <CheckIcon className="h-5 w-5" />
                           </span>
                         ) : null}
                       </>
