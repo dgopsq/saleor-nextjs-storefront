@@ -65,7 +65,7 @@ export const Payment: React.FC = () => {
         >
           <CheckoutSummary
             checkout={data}
-            onCartEditClick={() => router.push("/checkout")}
+            onCartEditClick={() => router.push("/cart")}
           />
         </section>
       </div>

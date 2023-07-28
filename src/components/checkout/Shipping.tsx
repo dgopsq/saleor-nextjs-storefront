@@ -84,7 +84,7 @@ export const Shipping: React.FC = () => {
             isLoading={checkoutRefreshing}
             isDisabled={!canContinue}
             onCtaClick={() => router.push("/checkout/payment")}
-            onCartEditClick={() => router.push("/checkout")}
+            onCartEditClick={() => router.push("/cart")}
           />
         </section>
       </div>

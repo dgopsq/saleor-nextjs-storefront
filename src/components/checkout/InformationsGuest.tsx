@@ -232,7 +232,7 @@ export const InformationsGuest: React.FC = () => {
               isLoading={checkoutRefreshing}
               ctaText="Continue to shipping"
               onCtaClick={handleContinue}
-              onCartEditClick={() => router.push("/checkout")}
+              onCartEditClick={() => router.push("/cart")}
             />
           </section>
         </div>

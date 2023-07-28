@@ -188,7 +188,7 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
             isDisabled={!canContinue}
             ctaText="Continue to shipping"
             onCtaClick={() => router.push("/checkout/shipping")}
-            onCartEditClick={() => router.push("/checkout")}
+            onCartEditClick={() => router.push("/cart")}
           />
         </section>
       </div>
