@@ -28,7 +28,7 @@ function appendVariantToUrl(params: {
   variantId: string;
   url: string;
   defaultVariantId?: string;
-}): string {
+}): `?${string}` | null {
   const parsedUrl = new URL(params.url);
   const isDefaultVariant = params.variantId === params.defaultVariantId;
 
@@ -40,7 +40,7 @@ function appendVariantToUrl(params: {
       params.variantId
     );
 
-  return parsedUrl.toString();
+  return parsedUrl.searchParams.size > 0 ? `?${parsedUrl.searchParams}` : null;
 }
 
 type Props = {
@@ -112,14 +112,15 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
   useEffect(() => {
     if (!currentVariantId) return;
 
-    const newUrl = appendVariantToUrl({
+    const maybeNewQs = appendVariantToUrl({
       variantId: currentVariantId,
       url: window.location.href,
       defaultVariantId: defaultVariantId ?? undefined,
     });
 
-    router.replace(newUrl);
-  }, [currentVariantId, router, defaultVariantId]);
+    if (maybeNewQs) router.replace(`/products/${slug}${maybeNewQs}`);
+    else router.replace(`/products/${slug}`);
+  }, [currentVariantId, router, defaultVariantId, slug]);
 
   if (!product || !currentVariantId) return null;
 

@@ -1,7 +1,7 @@
+import { ProductLink } from "@/components/core/ProductLink";
 import { ShowMoreButton } from "@/components/products/ShowMoreButton";
 import { SingleProduct } from "@/components/products/SingleProduct";
-import { ProductListItem, generateProductUrl } from "@/queries/products/data";
-import Link from "next/link";
+import { ProductListItem } from "@/queries/products/data";
 
 type Props = {
   products: Array<ProductListItem>;
@@ -20,15 +20,11 @@ export const Products: React.FC<Props> = ({
   return (
     <>
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:gap-x-8">
-        {products.map(({ id, slug }) => {
-          const productUrl = generateProductUrl({ product: { slug: slug } });
-
-          return (
-            <Link key={id} href={productUrl}>
-              <SingleProduct slug={slug} />
-            </Link>
-          );
-        })}
+        {products.map(({ id, slug }) => (
+          <ProductLink key={id} product={{ slug }}>
+            <SingleProduct slug={slug} />
+          </ProductLink>
+        ))}
       </div>
 
       {onShowMore ? (

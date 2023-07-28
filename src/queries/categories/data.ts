@@ -90,13 +90,6 @@ export function parsePopulatedCategories(
 /**
  *
  */
-export function generateCategoryUrl(category: Category): string {
-  return `/categories/${category.slug}`;
-}
-
-/**
- *
- */
 export const getCategoryProductsVariables = (
   categorySlug: string
 ): GetCategoryProductsQueryVariables => ({

@@ -3,14 +3,15 @@
 import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import { classNames } from "@/misc/styles";
-import Link from "next/link";
 import Image from "next/image";
-import { Category, generateCategoryUrl } from "@/queries/categories/data";
+import { Category } from "@/queries/categories/data";
 import { CartButton } from "@/components/checkout/CartButton";
 import { UserButton } from "@/components/user/UserButton";
 import { useCheckoutIdStore } from "@/misc/states/checkoutIdStore";
 import { Spinner } from "@/components/core/Spinner";
 import { CloseIcon, HamburgerIcon, SearchIcon } from "@/components/core/Icon";
+import Link from "next/link";
+import { Route } from "next";
 
 type Props = {
   categories: Array<Category>;
@@ -105,7 +106,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                                 {category.children.map((subCategory) => (
                                   <li key={subCategory.name} className="flex">
                                     <Link
-                                      href={generateCategoryUrl(subCategory)}
+                                      href={`/categories/${subCategory.slug}`}
                                       className="text-gray-500"
                                       onClick={() => setOpen(false)}
                                     >
@@ -213,9 +214,10 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                                                   >
                                                     <Popover.Button
                                                       as={Link}
-                                                      href={generateCategoryUrl(
-                                                        subCategory
-                                                      )}
+                                                      href={
+                                                        // FIXME: This is unsafe.
+                                                        `/categories/${subCategory.slug}` as Route
+                                                      }
                                                       className="hover:text-gray-800"
                                                     >
                                                       {subCategory.name}
@@ -290,7 +292,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                           />
 
                           <div className="flow-root">
-                            <Link href="/checkout/cart">
+                            <Link href="/cart">
                               <CartButton />
                             </Link>
                           </div>

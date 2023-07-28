@@ -1,11 +1,12 @@
 import { BaseIconPublicProps } from "@/components/core/Icon";
 import { MenuItem } from "@/components/core/MenuItem";
+import { Route } from "next";
 import Link from "next/link";
 
 type TabItem<T extends string> = {
   id: T;
   label: string;
-  href: string;
+  href: Route;
   Icon?: React.FC<BaseIconPublicProps>;
 };
 

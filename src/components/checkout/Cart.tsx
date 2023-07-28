@@ -19,6 +19,8 @@ export const Cart: React.FC = () => {
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
 
+  const canContinue = data && data.lines.length > 0;
+
   if (!data) return <LoadingSpinner />;
 
   // This will be `true` while re-fetching the checkout
@@ -27,11 +29,11 @@ export const Cart: React.FC = () => {
 
   return (
     <div className="bg-white w-full">
-      <PageHeading>Cart</PageHeading>
-
-      <div className="mt-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+      <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <div>
+          <PageHeading>Cart</PageHeading>
+
+          <div className="mt-8">
             <CartProducts
               products={data.lines}
               onProductUpdate={updateProduct}
@@ -60,6 +62,7 @@ export const Cart: React.FC = () => {
                 size="large"
                 text="Checkout"
                 isLoading={checkoutRefreshing}
+                isDisabled={!canContinue}
                 onClick={() => router.push("/checkout/informations")}
               />
             </div>

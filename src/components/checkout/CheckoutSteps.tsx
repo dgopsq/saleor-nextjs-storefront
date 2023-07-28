@@ -1,3 +1,4 @@
+import { Route } from "next";
 import Link from "next/link";
 
 function formatStepIndex(index: number) {
@@ -7,7 +8,7 @@ function formatStepIndex(index: number) {
 
 type Step = {
   name: string;
-  route: string;
+  route: Route;
 };
 
 const steps: Array<Step> = [

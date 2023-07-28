@@ -1,12 +1,11 @@
 import { Island } from "@/components/core/Island";
+import { ProductLink } from "@/components/core/ProductLink";
 import { QuantitySelect } from "@/components/products/QuantitySelect";
 import { formatPrice } from "@/misc/currencies";
 import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
 import { CheckoutItem } from "@/queries/checkout/data";
-import { generateProductUrl } from "@/queries/products/data";
 import Image from "next/image";
-import Link from "next/link";
 import { useMemo } from "react";
 
 const priceFallback = "-";
@@ -65,12 +64,7 @@ export const CartProducts: React.FC<Props> = ({
           >
             <div className="flex-shrink-0">
               {imageUrl ? (
-                <Link
-                  href={generateProductUrl({
-                    product: line.product,
-                    variantId: line.variant.id,
-                  })}
-                >
+                <ProductLink product={line.product} variantId={line.variant.id}>
                   <Island variant="solid-darker" noPadding>
                     <Image
                       src={imageUrl}
@@ -83,18 +77,13 @@ export const CartProducts: React.FC<Props> = ({
                       height={150}
                     />
                   </Island>
-                </Link>
+                </ProductLink>
               ) : undefined}
             </div>
 
             <div className="ml-4 flex flex-1 flex-row gap-4 justify-between sm:ml-6">
               <div className="grow-0 basis-full overflow-hidden">
-                <Link
-                  href={generateProductUrl({
-                    product: line.product,
-                    variantId: line.variant.id,
-                  })}
-                >
+                <ProductLink product={line.product} variantId={line.variant.id}>
                   <div>
                     <span
                       className={classNames(
@@ -116,7 +105,7 @@ export const CartProducts: React.FC<Props> = ({
                         .join(", ")}`}
                     </p>
                   ))}
-                </Link>
+                </ProductLink>
 
                 <div className="mt-2 flex flex-row items-center">
                   <p

@@ -231,22 +231,3 @@ export const getSingleProductVariables = (
   filters: { slugs: [slug] },
   sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
 });
-
-/**
- *
- */
-export function generateProductUrl(params: {
-  product: Pick<Product, "slug">;
-  variantId?: string;
-}): string {
-  const baseProductUrl = `/products/${params.product.slug}`;
-  const queryParams = new URLSearchParams();
-
-  if (params.variantId)
-    queryParams.set(publicConfig.variantIdQueryParam, params.variantId);
-
-  const queryString = queryParams.toString();
-  const computedQs = queryString ? `?${queryString}` : "";
-
-  return `${baseProductUrl}${computedQs}`;
-}
