@@ -313,3 +313,16 @@ mutation CheckoutComplete($checkoutId: ID!) {
     }
   }
 }
+
+mutation CheckoutAttach($checkoutId: ID!) {
+  checkoutCustomerAttach(id: $checkoutId) {
+    checkout {
+      ...GenericCheckoutInfo
+    }
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
