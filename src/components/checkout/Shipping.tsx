@@ -6,6 +6,7 @@ import { CheckoutSteps } from "@/components/checkout/CheckoutSteps";
 import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 import { SectionHeading } from "@/components/core/Headings";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
+import { useCheckoutGuard } from "@/misc/hooks/useCheckoutGuard";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { classNames } from "@/misc/styles";
 import {
@@ -22,6 +23,7 @@ import { useCallback, useEffect, useMemo } from "react";
 export const Shipping: React.FC = () => {
   const router = useRouter();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
+  const { showCheckout } = useCheckoutGuard();
 
   const [updateDeliveryMethod, { loading: loadingUpdateDeliveryMethod }] =
     useMutation(UpdateCheckoutDeliveryMethodDocument);
@@ -52,7 +54,8 @@ export const Shipping: React.FC = () => {
     if (!informationsStepValid) router.push("/checkout");
   }, [router, informationsStepValid]);
 
-  if (!data || !informationsStepValid) return <LoadingSpinner />;
+  if (!data || !informationsStepValid || !showCheckout)
+    return <LoadingSpinner />;
 
   return (
     <div className="bg-white w-full">

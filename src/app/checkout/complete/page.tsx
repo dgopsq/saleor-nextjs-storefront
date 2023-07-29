@@ -1,3 +1,5 @@
+import { CheckoutComplete } from "@/components/checkout/CheckoutComplete";
+
 export default async function Page() {
-  return <>🥬 C O M P L E T E 🥦</>;
+  return <CheckoutComplete />;
 }

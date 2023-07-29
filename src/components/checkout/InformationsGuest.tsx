@@ -28,6 +28,7 @@ import { errorToast } from "@/components/core/Notifications";
 import { EmailForm, EmailFormRef } from "@/components/core/EmailForm";
 import { publicConfig } from "@/misc/config";
 import Link from "next/link";
+import { useGuestOrderAccountStore } from "@/misc/states/guestOrderAccount";
 
 /**
  *
@@ -38,6 +39,9 @@ export const InformationsGuest: React.FC = () => {
   const shippingAddressFormRef = useRef<AddressFormRef>(null);
   const billingAddressFormRef = useRef<AddressFormRef>(null);
   const emailFormRef = useRef<EmailFormRef>(null);
+  const setGuestOrderAccount = useGuestOrderAccountStore(
+    (state) => state.setValue
+  );
 
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
 
@@ -119,6 +123,15 @@ export const InformationsGuest: React.FC = () => {
       return;
     }
 
+    // Set the in-memory guest signup informations
+    // for later, in case the user decides to create an account.
+    // Here we are using the billing informations.
+    setGuestOrderAccount({
+      email,
+      firstName: billingAddress.firstName,
+      lastName: billingAddress.lastName,
+    });
+
     router.push("/checkout/shipping");
   }, [
     router,
@@ -127,6 +140,7 @@ export const InformationsGuest: React.FC = () => {
     updateShippingAddress,
     updateBillingAddress,
     updateEmail,
+    setGuestOrderAccount,
   ]);
 
   const emailInitialValues = useMemo(

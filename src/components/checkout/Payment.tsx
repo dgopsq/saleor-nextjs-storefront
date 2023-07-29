@@ -13,6 +13,7 @@ import {
   validateShippingStep,
 } from "@/queries/checkout/data";
 import { useRouter } from "next/navigation";
+import { useCheckoutGuard } from "@/misc/hooks/useCheckoutGuard";
 
 /**
  *
@@ -20,6 +21,7 @@ import { useRouter } from "next/navigation";
 export const Payment: React.FC = () => {
   const router = useRouter();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
+  const { showCheckout } = useCheckoutGuard();
 
   const checkoutRefreshing = checkoutInfoLoading;
 
@@ -37,7 +39,7 @@ export const Payment: React.FC = () => {
     if (!informationsStepValid || !shippingStepValid) router.push("/checkout");
   }, [router, informationsStepValid, shippingStepValid]);
 
-  if (!data || !informationsStepValid || !shippingStepValid)
+  if (!data || !informationsStepValid || !shippingStepValid || !showCheckout)
     return <LoadingSpinner />;
 
   return (

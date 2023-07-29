@@ -24,17 +24,25 @@ export type SignupForm = z.infer<typeof SignupFormSchema>;
 type Props = {
   onSubmit: (data: SignupForm) => void;
   isLoading?: boolean;
+  initialValues?: Partial<SignupForm>;
 };
 
 /**
  *
  */
-export const SignupForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
+export const SignupForm: React.FC<Props> = ({
+  onSubmit,
+  isLoading,
+  initialValues,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupForm>({ resolver: zodResolver(SignupFormSchema) });
+  } = useForm<SignupForm>({
+    resolver: zodResolver(SignupFormSchema),
+    defaultValues: initialValues,
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

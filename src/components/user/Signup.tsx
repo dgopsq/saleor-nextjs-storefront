@@ -9,10 +9,15 @@ import Link from "next/link";
 import { useCallback } from "react";
 import { P, match } from "ts-pattern";
 
+type Props = {
+  hideLoginLink?: boolean;
+  initialValues?: Partial<SignupForm>;
+};
+
 /**
  *
  */
-export const Signup: React.FC = () => {
+export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
   const [createAccount, { loading, error, data }] = useMutation(
     CreateAccountDocument
   );
@@ -51,12 +56,18 @@ export const Signup: React.FC = () => {
         .otherwise(() => null)}
 
       <div>
-        <SignupForm onSubmit={handleSubmit} isLoading={loading} />
+        <SignupForm
+          onSubmit={handleSubmit}
+          isLoading={loading}
+          initialValues={initialValues}
+        />
       </div>
 
-      <div className="mt-2">
-        <Link href="/account/login">Login</Link>
-      </div>
+      {!hideLoginLink ? (
+        <div className="mt-2">
+          <Link href="/account/login">Login</Link>
+        </div>
+      ) : undefined}
     </div>
   );
 };
