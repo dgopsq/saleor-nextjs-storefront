@@ -98,6 +98,12 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
     if (!isSameAddress) setBillingSameAsShipping(false);
   }, [data, setBillingSameAsShipping]);
 
+  useEffect(() => {
+    if (!userInfo) return;
+
+    if (userInfo.addresses.length === 0) setAddShippingAddress(true);
+  }, [userInfo]);
+
   if (!data) return <LoadingSpinner />;
 
   return (

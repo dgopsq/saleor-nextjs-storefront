@@ -1,4 +1,5 @@
 import { CheckoutAddAddress } from "@/components/checkout/CheckoutAddAddress";
+import { EmptyText } from "@/components/core/EmptyText";
 import { RadioIsland } from "@/components/core/RadioIsland";
 import { SingleAddress } from "@/components/core/SingleAddress";
 import { Address, areAddressEqual } from "@/queries/user/data";
@@ -52,6 +53,10 @@ export const CheckoutAddressUser: React.FC<Props> = ({
 
   return !addAddress ? (
     <div className={isLoading ? "opacity-75 cursor-not-allowed" : undefined}>
+      {addresses.length === 0 ? (
+        <EmptyText>No addresses found.</EmptyText>
+      ) : undefined}
+
       <ul className="flex flex-col gap-4">{addressesRender}</ul>
     </div>
   ) : (
