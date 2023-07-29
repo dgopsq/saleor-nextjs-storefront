@@ -27,6 +27,7 @@ import { logger } from "@/misc/logger";
 import { errorToast } from "@/components/core/Notifications";
 import { EmailForm, EmailFormRef } from "@/components/core/EmailForm";
 import { publicConfig } from "@/misc/config";
+import Link from "next/link";
 
 /**
  *
@@ -173,6 +174,18 @@ export const InformationsGuest: React.FC = () => {
                 ref={emailFormRef}
                 initialValues={emailInitialValues}
               />
+
+              <div className="mt-4">
+                <span className="text-sm text-gray-500">
+                  Already have an account?{" "}
+                  <Link
+                    className="text-indigo-600 hover:underline"
+                    href="/account/login"
+                  >
+                    Login here
+                  </Link>
+                </span>
+              </div>
             </div>
 
             <div className="border-b border-gray-100 pb-12 mt-12">
