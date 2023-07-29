@@ -5,6 +5,7 @@ import {
   GenericOrderFragmentDoc,
   GetMyOrdersDocument,
 } from "@/__generated__/graphql";
+import { EmptyText } from "@/components/core/EmptyText";
 import { PageHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
@@ -54,7 +55,13 @@ export const Orders: React.FC = () => {
     <>
       <PageHeading>Orders</PageHeading>
 
-      <ul className="mt-8 flex flex-col gap-4">{ordersRenderer}</ul>
+      <div className="mt-8">
+        {parsedOrders.length <= 0 ? (
+          <EmptyText>No orders found.</EmptyText>
+        ) : undefined}
+
+        <ul className="flex flex-col gap-4">{ordersRenderer}</ul>
+      </div>
     </>
   );
 };
