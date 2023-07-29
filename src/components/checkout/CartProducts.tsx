@@ -1,3 +1,4 @@
+import { EmptyText } from "@/components/core/EmptyText";
 import { Island } from "@/components/core/Island";
 import { ProductLink } from "@/components/core/ProductLink";
 import { QuantitySelect } from "@/components/products/QuantitySelect";
@@ -43,7 +44,7 @@ export const CartProducts: React.FC<Props> = ({
   if (products.length === 0)
     return (
       <div>
-        <p className="text-gray-400">Your cart is empty.</p>
+        <EmptyText>Your cart is empty.</EmptyText>
       </div>
     );
 

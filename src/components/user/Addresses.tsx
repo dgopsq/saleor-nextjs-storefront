@@ -7,6 +7,7 @@ import { Island } from "@/components/core/Island";
 import { PageHeading } from "@/components/core/Headings";
 import { TextButton } from "@/components/core/Button";
 import { useRouter } from "next/navigation";
+import { EmptyText } from "@/components/core/EmptyText";
 
 /**
  *
@@ -32,6 +33,10 @@ export const Addresses: React.FC = () => {
       </div>
 
       <ul className="mt-8 flex flex-col gap-4">
+        {!userInfo?.addresses?.length ? (
+          <EmptyText>No addresses found.</EmptyText>
+        ) : undefined}
+
         {userInfo?.addresses?.map((address) => (
           <li key={address.id} className="lg:col-span-3">
             <Link
