@@ -1,13 +1,13 @@
 "use client";
 
 import { CreateAccountDocument } from "@/__generated__/graphql";
-import { ErrorAlert, SuccessAlert } from "@/components/core/Alert";
+import { PageHeading } from "@/components/core/Headings";
+import { Link } from "@/components/core/Link";
+import { errorToast, successToast } from "@/components/core/Notifications";
 import { SignupForm } from "@/components/core/SignupForm";
 import { publicConfig } from "@/misc/config";
 import { useMutation } from "@apollo/client";
-import Link from "next/link";
-import { useCallback } from "react";
-import { P, match } from "ts-pattern";
+import { useCallback, useEffect } from "react";
 
 type Props = {
   hideLoginLink?: boolean;
@@ -18,9 +18,7 @@ type Props = {
  *
  */
 export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
-  const [createAccount, { loading, error, data }] = useMutation(
-    CreateAccountDocument
-  );
+  const [createAccount, { loading, data }] = useMutation(CreateAccountDocument);
 
   const handleSubmit = useCallback(
     (values: SignupForm) => {
@@ -33,29 +31,19 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
     [createAccount]
   );
 
-  const signupErrors = data?.accountRegister?.errors ?? [];
+  useEffect(() => {
+    if (!data?.accountRegister) return;
+
+    if (data?.accountRegister.errors.length > 0)
+      errorToast("Something went wrong, please try again.");
+    else successToast("Account created successfully, check your email.");
+  }, [data]);
 
   return (
     <div className="w-full">
-      {match([signupErrors, error, data])
-        .with(
-          P.union([P.not([]), P._, P._], [P._, P.not(P.nullish), P._]),
-          () => (
-            <div className="mb-10">
-              <ErrorAlert
-                text={`Something went wrong, our team is investigatint the issue.`}
-              />
-            </div>
-          )
-        )
-        .with([[], P.nullish, P.not(P.nullish)], () => (
-          <div className="mb-10">
-            <SuccessAlert text="Signup successful!" />
-          </div>
-        ))
-        .otherwise(() => null)}
+      <PageHeading>Signup</PageHeading>
 
-      <div>
+      <div className="mt-10">
         <SignupForm
           onSubmit={handleSubmit}
           isLoading={loading}
@@ -64,8 +52,11 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
       </div>
 
       {!hideLoginLink ? (
-        <div className="mt-2">
-          <Link href="/account/login">Login</Link>
+        <div className="mt-8 flex flex-row justify-center">
+          <p className="text-sm text-gray-600 text-center">
+            Already have an account?{" "}
+            <Link href="/account/login">Login here</Link>
+          </p>
         </div>
       ) : undefined}
     </div>

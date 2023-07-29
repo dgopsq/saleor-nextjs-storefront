@@ -6,16 +6,16 @@ import {
   CreateTokenDocument,
   GenericUserFragmentDoc,
 } from "@/__generated__/graphql";
-import { ErrorAlert, SuccessAlert } from "@/components/core/Alert";
+import { PageHeading } from "@/components/core/Headings";
+import { Link } from "@/components/core/Link";
 import { LoginForm } from "@/components/core/LoginForm";
+import { errorToast, successToast } from "@/components/core/Notifications";
 import { publicConfig } from "@/misc/config";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
-import Link from "next/link";
-import { useCallback } from "react";
-import { P, match } from "ts-pattern";
+import { useCallback, useEffect } from "react";
 
 /**
  *
@@ -91,34 +91,29 @@ export const Login: React.FC = () => {
     [createAccount, checkout, checkoutAttach]
   );
 
-  const signupErrors = data?.tokenCreate?.errors ?? [];
+  useEffect(() => {
+    if (!data?.tokenCreate) return;
+
+    if (data.tokenCreate.errors.length)
+      errorToast("Something went wrong, please try again.");
+    else successToast("Login successful, redirecting to your account.");
+  }, [data]);
 
   return (
     <div className="w-full">
-      {match([signupErrors, error, data])
-        .with(
-          P.union([P.not([]), P._, P._], [P._, P.not(P.nullish), P._]),
-          () => (
-            <div className="mb-10">
-              <ErrorAlert
-                text={`Something went wrong, our team is investigatint the issue.`}
-              />
-            </div>
-          )
-        )
-        .with([[], P.nullish, P.not(P.nullish)], () => (
-          <div className="mb-10">
-            <SuccessAlert text="Login successful!" />
-          </div>
-        ))
-        .otherwise(() => null)}
+      <PageHeading>Login</PageHeading>
 
-      <div>
+      <div className="mt-10">
         <LoginForm onSubmit={handleSubmit} isLoading={loading} />
       </div>
 
       <div className="mt-2">
-        <Link href="/account/signup">Signup</Link>
+        <div className="mt-8 flex flex-row justify-center">
+          <p className="text-sm text-gray-600 text-center">
+            Don&apos;t have an account yet?{" "}
+            <Link href="/account/signup">Signup here</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
