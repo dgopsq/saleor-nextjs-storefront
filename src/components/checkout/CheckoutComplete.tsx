@@ -13,8 +13,6 @@ export const CheckoutComplete: React.FC = () => {
   const user = useUserInfo();
   const guestOrderAccount = useGuestOrderAccountStore(({ value }) => value);
 
-  console.log("CheckoutComplete", { user, guestOrderAccount });
-
   return (
     <>
       <div className="mt-6">

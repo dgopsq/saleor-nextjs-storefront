@@ -41,8 +41,6 @@ export const AllProducts: React.FC<Props> = () => {
       : undefined;
   }, [data, fetchMore, nextDataTransition]);
 
-  console.log("parsedProducts", parsedProducts.length);
-
   return (
     <Products
       products={parsedProducts}

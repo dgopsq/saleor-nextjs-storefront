@@ -38,7 +38,6 @@ export const OrderDetails: React.FC<Props> = ({ number }) => {
 
   const parsedOrder = useMemo(() => {
     if (!complete) return null;
-    console.log("data", data);
     return parseOrder(data);
   }, [data, complete]);
 
