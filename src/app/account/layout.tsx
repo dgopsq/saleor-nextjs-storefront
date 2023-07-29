@@ -9,7 +9,7 @@ export default async function Layout(props: {
   const isLoggedIn = authToken !== null;
 
   if (!isLoggedIn)
-    return <div className="max-w-lg w-full mx-a mt-10">{props.auth}</div>;
+    return <div className="max-w-lg w-full mx-a">{props.auth}</div>;
 
   return (
     <div className="w-full md:grid grid-cols-8 gap-x-8">
