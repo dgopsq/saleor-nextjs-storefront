@@ -6,6 +6,8 @@ import { Fragment } from "react";
 import { toast, useToaster } from "react-hot-toast";
 import { match } from "ts-pattern";
 
+const notificationDuration = 5000;
+
 /**
  *
  */
@@ -74,12 +76,12 @@ export const Notifications = () => {
  *
  */
 export function successToast(message: string) {
-  toast.success(message);
+  toast.success(message, { duration: notificationDuration });
 }
 
 /**
  *
  */
 export function errorToast(message: string) {
-  toast.error(message);
+  toast.error(message, { duration: notificationDuration });
 }

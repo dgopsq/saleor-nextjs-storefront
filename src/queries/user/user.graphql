@@ -198,3 +198,16 @@ mutation UserSetDefaultAddress(
     }
   }
 }
+
+mutation UserConfirmAccount($email: String!, $token: String!) {
+  confirmAccount(email: $email, token: $token) {
+    errors {
+      code
+      message
+      field
+    }
+    user {
+      ...GenericUser
+    }
+  }
+}

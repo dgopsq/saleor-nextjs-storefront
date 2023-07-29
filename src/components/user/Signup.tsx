@@ -6,8 +6,10 @@ import { Link } from "@/components/core/Link";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { SignupForm } from "@/components/core/SignupForm";
 import { publicConfig } from "@/misc/config";
+import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
-import { useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 type Props = {
   hideLoginLink?: boolean;
@@ -18,7 +20,8 @@ type Props = {
  *
  */
 export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
-  const [createAccount, { loading, data }] = useMutation(CreateAccountDocument);
+  const [createAccount, { loading }] = useMutation(CreateAccountDocument);
+  const router = useRouter();
 
   const handleSubmit = useCallback(
     (values: SignupForm) => {
@@ -26,18 +29,28 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
         variables: {
           account: { ...values, redirectUrl: publicConfig.signupRedirectUrl },
         },
+        onCompleted: (data) => {
+          if (!data?.accountRegister) {
+            logger.error("Error while creating the account, response empty.");
+            return;
+          }
+
+          if (data.accountRegister.errors.length > 0) {
+            logger.error(
+              "Errors while creating the account",
+              data.accountRegister.errors
+            );
+
+            errorToast("Something went wrong, please try again.");
+          } else {
+            successToast("Account created successfully, check your email.");
+            router.push("/");
+          }
+        },
       });
     },
-    [createAccount]
+    [createAccount, router]
   );
-
-  useEffect(() => {
-    if (!data?.accountRegister) return;
-
-    if (data?.accountRegister.errors.length > 0)
-      errorToast("Something went wrong, please try again.");
-    else successToast("Account created successfully, check your email.");
-  }, [data]);
 
   return (
     <div className="w-full">

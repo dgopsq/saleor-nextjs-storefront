@@ -10,6 +10,7 @@ import { PageHeading } from "@/components/core/Headings";
 import { Link } from "@/components/core/Link";
 import { LoginForm } from "@/components/core/LoginForm";
 import { errorToast, successToast } from "@/components/core/Notifications";
+import { AccountConfirmation } from "@/components/user/AccountConfirmations";
 import { publicConfig } from "@/misc/config";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { logger } from "@/misc/logger";
@@ -21,8 +22,7 @@ import { useCallback, useEffect } from "react";
  *
  */
 export const Login: React.FC = () => {
-  const [createAccount, { loading, error, data }] =
-    useMutation(CreateTokenDocument);
+  const [createAccount, { loading, data }] = useMutation(CreateTokenDocument);
   const [checkoutAttach] = useMutation(CheckoutAttachDocument);
   const checkout = useCheckoutInfo();
 
@@ -100,21 +100,25 @@ export const Login: React.FC = () => {
   }, [data]);
 
   return (
-    <div className="w-full">
-      <PageHeading>Login</PageHeading>
+    <>
+      <div className="w-full">
+        <PageHeading>Login</PageHeading>
 
-      <div className="mt-10">
-        <LoginForm onSubmit={handleSubmit} isLoading={loading} />
-      </div>
+        <div className="mt-10">
+          <LoginForm onSubmit={handleSubmit} isLoading={loading} />
+        </div>
 
-      <div className="mt-2">
-        <div className="mt-8 flex flex-row justify-center">
-          <p className="text-sm text-gray-600 text-center">
-            Don&apos;t have an account yet?{" "}
-            <Link href="/account/signup">Signup here</Link>
-          </p>
+        <div className="mt-2">
+          <div className="mt-8 flex flex-row justify-center">
+            <p className="text-sm text-gray-600 text-center">
+              Don&apos;t have an account yet?{" "}
+              <Link href="/account/signup">Signup here</Link>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+
+      <AccountConfirmation />
+    </>
   );
 };

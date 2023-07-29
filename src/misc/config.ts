@@ -49,7 +49,8 @@ export const publicConfig = {
    *
    */
   signupRedirectUrl:
-    process.env.NEXT_PUBLIC_SIGNUP_REDIRECT_URL || "http://localhost:3000",
+    process.env.NEXT_PUBLIC_SIGNUP_REDIRECT_URL ||
+    "http://localhost:3000/account/login",
 
   /**
    *
