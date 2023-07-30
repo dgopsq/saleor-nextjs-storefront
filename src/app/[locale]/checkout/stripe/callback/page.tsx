@@ -1,6 +1,6 @@
 import { P, match } from "ts-pattern";
 import Stripe from "stripe";
-import { getStoredCheckoutIdServer } from "@/app/account/@auth/login/actions";
+import { getStoredCheckoutIdServer } from "@/app/[locale]/account/@auth/login/actions";
 import { getApolloClient } from "@/misc/apollo/apollo";
 import {
   CheckoutCompleteDocument,

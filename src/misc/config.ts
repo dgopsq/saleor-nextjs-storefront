@@ -102,4 +102,9 @@ export const publicConfig = {
    *
    */
   homepageUrl: process.env.NEXT_PUBLIC_HOMEPAGE_URL || "http://localhost:3000",
+
+  /**
+   *
+   */
+  defaultLocale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "en",
 };
