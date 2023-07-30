@@ -14,6 +14,7 @@ import { AccountConfirmation } from "@/components/user/AccountConfirmations";
 import { publicConfig } from "@/misc/config";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { logger } from "@/misc/logger";
+import { signupRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import { useCallback, useEffect } from "react";
@@ -112,7 +113,7 @@ export const Login: React.FC = () => {
           <div className="mt-8 flex flex-row justify-center">
             <p className="text-sm text-gray-600 text-center">
               Don&apos;t have an account yet?{" "}
-              <Link href="/account/signup">Signup here</Link>
+              <Link href={signupRoute}>Signup here</Link>
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { PageHeading } from "@/components/core/Headings";
 import { TextButton } from "@/components/core/Button";
 import { useRouter } from "next/navigation";
 import { EmptyText } from "@/components/core/EmptyText";
+import { generateAddressRoute } from "@/misc/navigation";
 
 /**
  *
@@ -39,11 +40,7 @@ export const Addresses: React.FC = () => {
 
         {userInfo?.addresses?.map((address) => (
           <li key={address.id} className="lg:col-span-3">
-            <Link
-              className="h-full"
-              href="/account/addresses/[id]"
-              as={`/account/addresses/${address.id}`}
-            >
+            <Link className="h-full" href={generateAddressRoute(address.id)}>
               <Island variant="outline">
                 <SingleAddress address={address} showDefaultBadges />
               </Island>

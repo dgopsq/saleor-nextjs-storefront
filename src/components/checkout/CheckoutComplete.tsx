@@ -4,6 +4,7 @@ import { Island } from "@/components/core/Island";
 import { Link } from "@/components/core/Link";
 import { Signup } from "@/components/user/Signup";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
+import { homeRoute, ordersRoute } from "@/misc/navigation";
 import { useGuestOrderAccountStore } from "@/misc/states/guestOrderAccount";
 
 /**
@@ -45,8 +46,8 @@ export const CheckoutComplete: React.FC = () => {
           <div className="mt-14">
             <p className="text-md text-gray-500">
               Keep track of your order in your{" "}
-              <Link href="/account/orders">Profile Page</Link> or{" "}
-              <Link href="/">Continue your shopping</Link>.
+              <Link href={ordersRoute}>Profile Page</Link> or{" "}
+              <Link href={homeRoute}>Continue your shopping</Link>.
             </p>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { SignupForm } from "@/components/core/SignupForm";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
+import { loginRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -67,8 +68,7 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
       {!hideLoginLink ? (
         <div className="mt-8 flex flex-row justify-center">
           <p className="text-sm text-gray-600 text-center">
-            Already have an account?{" "}
-            <Link href="/account/login">Login here</Link>
+            Already have an account? <Link href={loginRoute}>Login here</Link>
           </p>
         </div>
       ) : undefined}

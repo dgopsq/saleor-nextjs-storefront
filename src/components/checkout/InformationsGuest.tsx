@@ -29,6 +29,7 @@ import { EmailForm, EmailFormRef } from "@/components/core/EmailForm";
 import { publicConfig } from "@/misc/config";
 import Link from "next/link";
 import { useGuestOrderAccountStore } from "@/misc/states/guestOrderAccount";
+import { loginRoute } from "@/misc/navigation";
 
 /**
  *
@@ -194,7 +195,7 @@ export const InformationsGuest: React.FC = () => {
                   Already have an account?{" "}
                   <Link
                     className="text-indigo-600 hover:underline"
-                    href="/account/login"
+                    href={loginRoute}
                   >
                     Login here
                   </Link>
