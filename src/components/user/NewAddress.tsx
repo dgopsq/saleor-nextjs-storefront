@@ -6,6 +6,7 @@ import { Button } from "@/components/core/Button";
 import { PageHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
+import { addressesRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
@@ -34,7 +35,7 @@ export const NewAddress: React.FC = () => {
   useEffect(() => {
     if (createData?.accountAddressCreate?.user) {
       successToast("The address has been created.");
-      router.push("/account/addresses");
+      router.push(addressesRoute);
     } else if (createData?.accountAddressCreate?.errors.length) {
       logger.error(
         "Address create errors",

@@ -20,6 +20,7 @@ import { publicConfig } from "@/misc/config";
 import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
 import { Label } from "@/components/core/Label";
 import { QuantitySelect } from "@/components/products/QuantitySelect";
+import { productsRoute } from "@/misc/navigation";
 
 /**
  *
@@ -118,8 +119,8 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
       defaultVariantId: defaultVariantId ?? undefined,
     });
 
-    if (maybeNewQs) router.replace(`/products/${slug}${maybeNewQs}`);
-    else router.replace(`/products/${slug}`);
+    if (maybeNewQs) router.replace(`${productsRoute}${slug}${maybeNewQs}`);
+    else router.replace(`${productsRoute}/${slug}`);
   }, [currentVariantId, router, defaultVariantId, slug]);
 
   if (!product || !currentVariantId) return null;

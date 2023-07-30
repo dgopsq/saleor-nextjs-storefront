@@ -29,7 +29,11 @@ import { EmailForm, EmailFormRef } from "@/components/core/EmailForm";
 import { publicConfig } from "@/misc/config";
 import Link from "next/link";
 import { useGuestOrderAccountStore } from "@/misc/states/guestOrderAccount";
-import { loginRoute } from "@/misc/navigation";
+import {
+  cartRoute,
+  checkoutShippingRoute,
+  loginRoute,
+} from "@/misc/navigation";
 
 /**
  *
@@ -133,7 +137,7 @@ export const InformationsGuest: React.FC = () => {
       lastName: billingAddress.lastName,
     });
 
-    router.push("/checkout/shipping");
+    router.push(checkoutShippingRoute);
   }, [
     router,
     data,
@@ -260,7 +264,7 @@ export const InformationsGuest: React.FC = () => {
               isLoading={checkoutRefreshing}
               ctaText="Continue to shipping"
               onCtaClick={handleContinue}
-              onCartEditClick={() => router.push("/cart")}
+              onCartEditClick={() => router.push(cartRoute)}
             />
           </section>
         </div>

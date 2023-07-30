@@ -2,8 +2,6 @@
  * Routes
  */
 
-import { publicConfig } from "@/misc/config";
-
 export const homeRoute = "/";
 export const cartRoute = "/cart";
 export const productsRoute = "/products";
@@ -18,16 +16,10 @@ export const checkoutCompleteRoute = "/checkout/complete";
 export const accountRoute = "/account";
 export const loginRoute = "/account/login";
 export const signupRoute = "/account/signup";
+export const profileRoute = "/account/profile";
 export const addressesRoute = "/account/addresses";
+export const newAddressRoute = "/account/addresses/new";
 export const ordersRoute = "/account/orders";
-
-/**
- *
- */
-export const generateSingleProductRoute = (slug: string, variantId?: string) =>
-  `${productsRoute}/${slug}${
-    variantId ? `?${publicConfig.variantIdQueryParam}=${variantId}` : ""
-  }`;
 
 /**
  *

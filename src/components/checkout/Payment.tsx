@@ -14,6 +14,7 @@ import {
 } from "@/queries/checkout/data";
 import { useRouter } from "next/navigation";
 import { useCheckoutGuard } from "@/misc/hooks/useCheckoutGuard";
+import { cartRoute, checkoutRoute } from "@/misc/navigation";
 
 /**
  *
@@ -36,7 +37,8 @@ export const Payment: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!informationsStepValid || !shippingStepValid) router.push("/checkout");
+    if (!informationsStepValid || !shippingStepValid)
+      router.push(checkoutRoute);
   }, [router, informationsStepValid, shippingStepValid]);
 
   if (!data || !informationsStepValid || !shippingStepValid || !showCheckout)
@@ -67,7 +69,7 @@ export const Payment: React.FC = () => {
         >
           <CheckoutSummary
             checkout={data}
-            onCartEditClick={() => router.push("/cart")}
+            onCartEditClick={() => router.push(cartRoute)}
           />
         </section>
       </div>

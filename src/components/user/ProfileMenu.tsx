@@ -8,6 +8,7 @@ import {
 } from "@/components/core/Icon";
 import { MenuItem } from "@/components/core/MenuItem";
 import { TabsMenu } from "@/components/core/TabsMenu";
+import { addressesRoute, ordersRoute, profileRoute } from "@/misc/navigation";
 import { logout } from "@/misc/user";
 import { useSelectedLayoutSegment } from "next/navigation";
 /**
@@ -23,19 +24,19 @@ export const ProfileMenu: React.FC = () => {
           {
             id: "profile",
             label: "Profile",
-            href: "/account/profile",
+            href: profileRoute,
             Icon: AccountIcon,
           },
           {
             id: "addresses",
             label: "Addresses",
-            href: "/account/addresses",
+            href: addressesRoute,
             Icon: ShippingIcon,
           },
           {
             id: "orders",
             label: "Orders",
-            href: "/account/orders",
+            href: ordersRoute,
             Icon: CartIcon,
           },
         ]}

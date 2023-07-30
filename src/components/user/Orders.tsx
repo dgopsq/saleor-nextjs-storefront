@@ -11,6 +11,7 @@ import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { SingleOrder } from "@/components/core/SingleOrder";
 import { publicConfig } from "@/misc/config";
+import { generateOrderRoute } from "@/misc/navigation";
 import { parseOrder } from "@/queries/checkout/data";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
@@ -40,9 +41,7 @@ export const Orders: React.FC = () => {
         <Island variant="outline">
           <SingleOrder
             order={order}
-            onDetailsClick={() =>
-              router.push(`/account/orders/${order.number}`)
-            }
+            onDetailsClick={() => router.push(generateOrderRoute(order.number))}
           />
         </Island>
       </li>

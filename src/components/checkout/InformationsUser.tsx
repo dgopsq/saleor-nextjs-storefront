@@ -21,6 +21,7 @@ import {
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { cartRoute, checkoutShippingRoute } from "@/misc/navigation";
 
 type Props = {
   userInfo: User;
@@ -193,8 +194,8 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
             isLoading={checkoutRefreshing}
             isDisabled={!canContinue}
             ctaText="Continue to shipping"
-            onCtaClick={() => router.push("/checkout/shipping")}
-            onCartEditClick={() => router.push("/cart")}
+            onCtaClick={() => router.push(checkoutShippingRoute)}
+            onCartEditClick={() => router.push(cartRoute)}
           />
         </section>
       </div>

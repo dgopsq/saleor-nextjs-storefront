@@ -8,7 +8,7 @@ import { PageHeading } from "@/components/core/Headings";
 import { TextButton } from "@/components/core/Button";
 import { useRouter } from "next/navigation";
 import { EmptyText } from "@/components/core/EmptyText";
-import { generateAddressRoute } from "@/misc/navigation";
+import { generateAddressRoute, newAddressRoute } from "@/misc/navigation";
 
 /**
  *
@@ -28,7 +28,7 @@ export const Addresses: React.FC = () => {
           <TextButton
             text="Add new"
             variant="primary"
-            onClick={() => router.push("/account/addresses/new")}
+            onClick={() => router.push(newAddressRoute)}
           />
         </div>
       </div>

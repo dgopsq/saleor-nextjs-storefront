@@ -13,6 +13,7 @@ import { PageHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { logger } from "@/misc/logger";
+import { addressesRoute } from "@/misc/navigation";
 import { addressToAddressForm, parseAddress } from "@/queries/user/data";
 import { useFragment, useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
@@ -164,7 +165,7 @@ export const EditAddress = ({ id }: Props) => {
   useEffect(() => {
     if (deleteData?.accountAddressDelete?.user) {
       successToast("The address has been deleted.");
-      router.push("/account/addresses");
+      router.push(addressesRoute);
     } else if (deleteData?.accountAddressDelete?.errors.length) {
       logger.error(
         "Address delete errors",

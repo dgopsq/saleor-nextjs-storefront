@@ -8,6 +8,7 @@ import { Island } from "@/components/core/Island";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
+import { checkoutInformationsRoute } from "@/misc/navigation";
 import { classNames } from "@/misc/styles";
 import { useRouter } from "next/navigation";
 
@@ -63,7 +64,7 @@ export const Cart: React.FC = () => {
                 text="Checkout"
                 isLoading={checkoutRefreshing}
                 isDisabled={!canContinue}
-                onClick={() => router.push("/checkout/informations")}
+                onClick={() => router.push(checkoutInformationsRoute)}
               />
             </div>
           </Island>

@@ -8,6 +8,11 @@ import { SectionHeading } from "@/components/core/Headings";
 import { LoadingSpinner } from "@/components/core/LoadingSpinner";
 import { useCheckoutGuard } from "@/misc/hooks/useCheckoutGuard";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
+import {
+  cartRoute,
+  checkoutPaymentRoute,
+  checkoutRoute,
+} from "@/misc/navigation";
 import { classNames } from "@/misc/styles";
 import {
   DeliveryMethod,
@@ -51,7 +56,7 @@ export const Shipping: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!informationsStepValid) router.push("/checkout");
+    if (!informationsStepValid) router.push(checkoutRoute);
   }, [router, informationsStepValid]);
 
   if (!data || !informationsStepValid || !showCheckout)
@@ -86,8 +91,8 @@ export const Shipping: React.FC = () => {
             ctaText="Continue to payment"
             isLoading={checkoutRefreshing}
             isDisabled={!canContinue}
-            onCtaClick={() => router.push("/checkout/payment")}
-            onCartEditClick={() => router.push("/cart")}
+            onCtaClick={() => router.push(checkoutPaymentRoute)}
+            onCartEditClick={() => router.push(cartRoute)}
           />
         </section>
       </div>

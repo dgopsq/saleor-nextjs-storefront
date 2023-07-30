@@ -1,4 +1,5 @@
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
+import { cartRoute } from "@/misc/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,7 +14,7 @@ export function useCheckoutGuard(): UseCheckoutGuardReturn {
 
   useEffect(() => {
     if (checkout.data && checkout.data.lines.length <= 0)
-      router.replace("/cart");
+      router.replace(cartRoute);
   }, [checkout, router]);
 
   return { showCheckout: !!checkout.data && checkout.data.lines.length > 0 };

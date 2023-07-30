@@ -7,7 +7,7 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { SignupForm } from "@/components/core/SignupForm";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
-import { loginRoute } from "@/misc/navigation";
+import { homeRoute, loginRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -45,7 +45,7 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
             errorToast("Something went wrong, please try again.");
           } else {
             successToast("Account created successfully, check your email.");
-            router.push("/");
+            router.push(homeRoute);
           }
         },
       });
