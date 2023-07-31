@@ -11,6 +11,7 @@ import { TabsMenu } from "@/components/core/TabsMenu";
 import { addressesRoute, ordersRoute, profileRoute } from "@/misc/navigation";
 import { logout } from "@/misc/user";
 import { useSelectedLayoutSegment } from "next/navigation";
+
 /**
  *
  */
