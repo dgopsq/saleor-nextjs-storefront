@@ -6,12 +6,14 @@ import { SectionHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
  *
  */
 export const ChangePassword: React.FC = () => {
+  const t = useTranslations("User");
   const [changePassword, { loading, data }] = useMutation(
     UserPasswordChangeDocument
   );
@@ -31,16 +33,16 @@ export const ChangePassword: React.FC = () => {
 
   useEffect(() => {
     if (data?.passwordChange?.user)
-      successToast("Password changed successfully");
+      successToast(t("Password changed successfully"));
     else if (data?.passwordChange?.errors.length) {
       logger.error("Password change errors", data.passwordChange.errors);
-      errorToast("Something went wrong while changing your password");
+      errorToast(t("Something went wrong while changing your password"));
     }
-  }, [data]);
+  }, [data, t]);
 
   return (
     <div className="w-full">
-      <SectionHeading>Password</SectionHeading>
+      <SectionHeading>{t("Password")}</SectionHeading>
 
       <div className="mt-8">
         <ChangePasswordForm onSubmit={handleSubmit} isLoading={loading} />
