@@ -1,5 +1,11 @@
 {
   "Products": {
     "Show more": "Show more"
+  },
+  "User": {
+    "Profile": "Profile",
+    "Addresses": "Addresses",
+    "Orders": "Orders",
+    "Logout": "Logout"
   }
 }
