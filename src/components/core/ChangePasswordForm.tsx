@@ -5,25 +5,22 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "@/components/core/Field";
 import { Button } from "@/components/core/Button";
+import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 /**
  *
  */
-const ChangePasswordFormSchema = z
-  .object({
-    oldPassword: z.string().min(8).max(50),
-    newPassword: z.string().min(8).max(50),
-    repeatNewPassword: z.string().min(8).max(50),
-  })
-  .refine((data) => data.newPassword === data.repeatNewPassword, {
-    message: "Passwords do not match",
-    path: ["repeatNewPassword"],
-  });
+const changePasswordFormSchema = z.object({
+  oldPassword: z.string().min(8).max(50),
+  newPassword: z.string().min(8).max(50),
+  repeatNewPassword: z.string().min(8).max(50),
+});
 
 /**
  *
  */
-export type ChangePasswordForm = z.infer<typeof ChangePasswordFormSchema>;
+export type ChangePasswordForm = z.infer<typeof changePasswordFormSchema>;
 
 type Props = {
   onSubmit: (data: ChangePasswordForm) => void;
@@ -37,12 +34,26 @@ export const ChangePasswordForm: React.FC<Props> = ({
   onSubmit,
   isLoading,
 }) => {
+  const t = useTranslations("User");
+
+  const refinedSchema = useMemo(
+    () =>
+      changePasswordFormSchema.refine(
+        (data) => data.newPassword === data.repeatNewPassword,
+        {
+          message: t("Passwords do not match"),
+          path: ["repeatNewPassword"],
+        }
+      ),
+    [t]
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ChangePasswordForm>({
-    resolver: zodResolver(ChangePasswordFormSchema),
+    resolver: zodResolver(refinedSchema),
   });
 
   return (
@@ -51,7 +62,7 @@ export const ChangePasswordForm: React.FC<Props> = ({
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
           <div className="md:col-span-3">
             <Field
-              label="Current password"
+              label={t("Current password")}
               id="oldPassword"
               register={register("oldPassword")}
               type="password"
@@ -65,7 +76,7 @@ export const ChangePasswordForm: React.FC<Props> = ({
           <div className="md:col-span-3">
             <Field
               id="newPassword"
-              label="New password"
+              label={t("New password")}
               register={register("newPassword")}
               type="password"
               error={errors.newPassword?.message}
@@ -75,7 +86,7 @@ export const ChangePasswordForm: React.FC<Props> = ({
           <div className="md:col-span-3">
             <Field
               id="repeatNewPassword"
-              label="Repeat new password"
+              label={t("Repeat new password")}
               register={register("repeatNewPassword")}
               type="password"
               error={errors.repeatNewPassword?.message}
@@ -89,7 +100,7 @@ export const ChangePasswordForm: React.FC<Props> = ({
           <Button
             variant="primary"
             size="medium"
-            text="Change password"
+            text={t("Change password")}
             type="submit"
             isLoading={isLoading}
           />

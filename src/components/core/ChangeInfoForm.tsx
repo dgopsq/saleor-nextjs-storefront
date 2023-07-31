@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 /**
  *
  */
-const ChangeInfoFormSchema = z.object({
+const changeInfoFormSchema = z.object({
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(1).max(50),
 });
@@ -19,7 +19,7 @@ const ChangeInfoFormSchema = z.object({
 /**
  *
  */
-export type ChangeInfoForm = z.infer<typeof ChangeInfoFormSchema>;
+export type ChangeInfoForm = z.infer<typeof changeInfoFormSchema>;
 
 type Props = {
   onSubmit: (data: ChangeInfoForm) => void;
@@ -50,7 +50,7 @@ export const ChangeInfoForm: React.FC<Props> = ({
     formState: { errors },
     handleSubmit,
   } = useForm<ChangeInfoForm>({
-    resolver: zodResolver(ChangeInfoFormSchema),
+    resolver: zodResolver(changeInfoFormSchema),
     values: stableInitialValues,
   });
 

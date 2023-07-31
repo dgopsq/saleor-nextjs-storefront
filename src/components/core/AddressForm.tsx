@@ -14,7 +14,7 @@ const defaultCountry = CountryCode.It;
 /**
  *
  */
-const AddressFormSchema = z.object({
+const addressFormSchema = z.object({
   firstName: z.string().trim().min(1),
   lastName: z.string().trim().min(1),
   companyName: z.string().trim().optional(),
@@ -30,7 +30,7 @@ const AddressFormSchema = z.object({
 /**
  *
  */
-export type AddressForm = z.infer<typeof AddressFormSchema>;
+export type AddressForm = z.infer<typeof addressFormSchema>;
 
 export type AddressFormRef = {
   getValues: () => Promise<AddressForm | null>;
@@ -71,7 +71,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
       getValues,
       trigger,
     } = useForm<AddressForm>({
-      resolver: zodResolver(AddressFormSchema),
+      resolver: zodResolver(addressFormSchema),
       mode: "onChange",
 
       // We want this form to initialize values

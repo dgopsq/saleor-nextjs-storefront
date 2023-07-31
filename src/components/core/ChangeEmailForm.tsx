@@ -5,11 +5,12 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "@/components/core/Field";
 import { Button } from "@/components/core/Button";
+import { useTranslations } from "next-intl";
 
 /**
  *
  */
-const ChangeEmailFormSchema = z.object({
+const changeEmailFormSchema = z.object({
   oldPassword: z.string().min(8).max(50),
   newEmail: z.string().email(),
 });
@@ -17,7 +18,7 @@ const ChangeEmailFormSchema = z.object({
 /**
  *
  */
-export type ChangeEmailForm = z.infer<typeof ChangeEmailFormSchema>;
+export type ChangeEmailForm = z.infer<typeof changeEmailFormSchema>;
 
 type Props = {
   onSubmit: (data: ChangeEmailForm) => void;
@@ -28,12 +29,13 @@ type Props = {
  *
  */
 export const ChangeEmailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
+  const t = useTranslations("User");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ChangeEmailForm>({
-    resolver: zodResolver(ChangeEmailFormSchema),
+    resolver: zodResolver(changeEmailFormSchema),
   });
 
   return (
@@ -43,7 +45,7 @@ export const ChangeEmailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           <div className="md:col-span-3">
             <Field
               id="oldPassword"
-              label="Current password"
+              label={t("Current password")}
               register={register("oldPassword")}
               type="password"
               error={errors.oldPassword?.message}
@@ -53,7 +55,7 @@ export const ChangeEmailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           <div className="md:col-span-3">
             <Field
               id="newEmail"
-              label="New email"
+              label={t("New email")}
               register={register("newEmail")}
               type="email"
               error={errors.newEmail?.message}
@@ -67,7 +69,7 @@ export const ChangeEmailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
           <Button
             variant="primary"
             size="medium"
-            text="Change email"
+            text={t("Change email")}
             type="submit"
             isLoading={isLoading}
           />

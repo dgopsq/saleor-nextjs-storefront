@@ -16,7 +16,14 @@
     "There was an error updating your profile.": "There was an error updating your profile.",
     "First name": "First name",
     "Last name": "Last name",
-    "Change info": "Change info"
+    "Change info": "Change info",
+    "Passwords do not match": "Passwords do not match",
+    "Current password": "Current password",
+    "New password": "New password",
+    "Repeat new password": "Repeat new password",
+    "Change password": "Change password",
+    "New email": "New email",
+    "Change email": "Change email"
   },
   "Form": {
     "invalid_type": "Invalid value",
