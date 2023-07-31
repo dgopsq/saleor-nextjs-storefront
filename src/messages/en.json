@@ -10,6 +10,30 @@
     "No addresses found.": "No addresses found.",
     "Add new": "Add new",
     "Default billing": "Default billing",
-    "Default shipping": "Default shipping"
+    "Default shipping": "Default shipping",
+    "Personal informations": "Personal informations",
+    "Your profile has been updated.": "Your profile has been updated.",
+    "There was an error updating your profile.": "There was an error updating your profile.",
+    "First name": "First name",
+    "Last name": "Last name",
+    "Change info": "Change info"
+  },
+  "Form": {
+    "invalid_type": "Invalid value",
+    "invalid_literal": "Invalid value",
+    "custom": "Invalid value",
+    "invalid_union": "Invalid value",
+    "invalid_union_discriminator": "Invalid value",
+    "invalid_enum_value": "Invalid value",
+    "unrecognized_keys": "Invalid value",
+    "invalid_arguments": "Invalid value",
+    "invalid_return_type": "Invalid value",
+    "invalid_date": "Invalid date",
+    "invalid_string": "Invalid value",
+    "too_small": "The value is too small / short",
+    "too_big": "The value is too big / long",
+    "invalid_intersection_types": "Invalid value",
+    "not_multiple_of": "Invalid value",
+    "not_finite": "Invalid value"
   }
 }

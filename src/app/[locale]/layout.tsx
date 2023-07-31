@@ -1,3 +1,4 @@
+import { FormBootstrap } from "@/components/core/Bootstrap";
 import { NextIntlClientProvider, useLocale, useMessages } from "next-intl";
 import { notFound } from "next/navigation";
 
@@ -21,6 +22,7 @@ export default function Layout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <FormBootstrap />
       {children}
     </NextIntlClientProvider>
   );
