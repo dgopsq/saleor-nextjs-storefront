@@ -9,6 +9,7 @@ import { TextButton } from "@/components/core/Button";
 import { useRouter } from "next/navigation";
 import { EmptyText } from "@/components/core/EmptyText";
 import { generateAddressRoute, newAddressRoute } from "@/misc/navigation";
+import { useTranslations } from "next-intl";
 
 /**
  *
@@ -16,17 +17,18 @@ import { generateAddressRoute, newAddressRoute } from "@/misc/navigation";
 export const Addresses: React.FC = () => {
   const userInfo = useUserInfo();
   const router = useRouter();
+  const t = useTranslations("User");
 
   return (
     <div>
       <div className="flex flex-row items-center gap-5">
         <div>
-          <PageHeading>Addresses</PageHeading>
+          <PageHeading>{t("Addresses")}</PageHeading>
         </div>
 
         <div>
           <TextButton
-            text="Add new"
+            text={t("Add new")}
             variant="primary"
             onClick={() => router.push(newAddressRoute)}
           />
@@ -35,7 +37,7 @@ export const Addresses: React.FC = () => {
 
       <ul className="mt-8 flex flex-col gap-4">
         {!userInfo?.addresses?.length ? (
-          <EmptyText>No addresses found.</EmptyText>
+          <EmptyText>{t("No addresses found.")}</EmptyText>
         ) : undefined}
 
         {userInfo?.addresses?.map((address) => (

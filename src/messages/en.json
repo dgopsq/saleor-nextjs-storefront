@@ -6,6 +6,10 @@
     "Profile": "Profile",
     "Addresses": "Addresses",
     "Orders": "Orders",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "No addresses found.": "No addresses found.",
+    "Add new": "Add new",
+    "Default billing": "Default billing",
+    "Default shipping": "Default shipping"
   }
 }
