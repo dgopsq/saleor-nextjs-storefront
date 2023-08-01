@@ -50,6 +50,8 @@ export type Product = {
   slug: string;
   name: string;
   description: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
   images: Array<ProductImage>;
   prices: {
     from: Price | null;
@@ -129,14 +131,22 @@ export function parseProduct(
 ): Product {
   const { id, name, slug, media, pricing } = previewProductFragment;
 
-  const { description, defaultVariant, variants, attributes } =
-    detailedProductFragment;
+  const {
+    description,
+    defaultVariant,
+    variants,
+    attributes,
+    seoTitle,
+    seoDescription,
+  } = detailedProductFragment;
 
   return {
     id,
     name,
     slug,
     description: description ?? null,
+    seoTitle: seoTitle ?? null,
+    seoDescription: seoDescription ?? null,
     images: media
       ? media?.map((media) => ({
           id: media.id,

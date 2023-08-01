@@ -40,6 +40,8 @@ fragment GenericProductVariant on ProductVariant {
 
 fragment DetailedProduct on Product {
   description
+  seoTitle
+  seoDescription
   defaultVariant {
     ...GenericProductVariant
   }
@@ -120,5 +122,15 @@ query GetProduct($slug: String!) {
   product(slug: $slug) {
     ...PreviewProduct
     ...DetailedProduct
+  }
+}
+
+query GetProductMeta($slug: String!) {
+  product(slug: $slug) {
+    slug
+    name
+    description
+    seoTitle
+    seoDescription
   }
 }
