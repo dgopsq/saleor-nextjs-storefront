@@ -41,10 +41,10 @@ export const ProfileInfo: React.FC = () => {
 
   useEffect(() => {
     if (updateData?.accountUpdate?.user)
-      successToast(t("Your profile has been updated."));
+      successToast(t("Your profile has been updated"));
     else if (updateData?.accountUpdate?.errors.length) {
       logger.error("Profile update errors", updateData.accountUpdate.errors);
-      errorToast(t("There was an error updating your profile."));
+      errorToast(t("There was an error updating your profile"));
     }
   }, [updateData, t]);
 

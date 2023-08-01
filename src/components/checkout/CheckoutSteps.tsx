@@ -1,5 +1,7 @@
 import { Route } from "next";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useMemo } from "react";
 
 function formatStepIndex(index: number) {
   const step = index + 1;
@@ -11,12 +13,6 @@ type Step = {
   route: Route;
 };
 
-const steps: Array<Step> = [
-  { name: "Informations", route: "/checkout/informations" },
-  { name: "Shipping", route: "/checkout/shipping" },
-  { name: "Payment", route: "/checkout/payment" },
-];
-
 type Props = {
   currentStep: number;
 };
@@ -25,8 +21,18 @@ type Props = {
  *
  */
 export const CheckoutSteps: React.FC<Props> = ({ currentStep }) => {
+  const t = useTranslations("Checkout");
+  const steps: Array<Step> = useMemo(
+    () => [
+      { name: t("Informations"), route: "/checkout/informations" },
+      { name: t("Shipping"), route: "/checkout/shipping" },
+      { name: t("Payment"), route: "/checkout/payment" },
+    ],
+    [t]
+  );
+
   return (
-    <nav aria-label="Progress">
+    <nav>
       <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
         {steps.map((step, index) => (
           <li key={step.name} className="md:flex-1">

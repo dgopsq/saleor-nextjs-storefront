@@ -10,12 +10,14 @@ import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 import { useProductUpdate } from "@/misc/hooks/useProductUpdate";
 import { checkoutInformationsRoute } from "@/misc/navigation";
 import { classNames } from "@/misc/styles";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 /**
  *
  */
 export const Cart: React.FC = () => {
+  const t = useTranslations("Checkout");
   const router = useRouter();
   const { updateProduct, loading: updateProductLoading } = useProductUpdate();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
@@ -32,7 +34,7 @@ export const Cart: React.FC = () => {
     <div className="bg-white w-full">
       <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <PageHeading>Cart</PageHeading>
+          <PageHeading>{t("Cart")}</PageHeading>
 
           <div className="mt-8">
             <CartProducts
@@ -50,7 +52,7 @@ export const Cart: React.FC = () => {
           )}
         >
           <Island variant="solid">
-            <SectionHeading>Total</SectionHeading>
+            <SectionHeading>{t("Total")}</SectionHeading>
 
             <div>
               <CartSummary checkout={data} />
@@ -61,7 +63,7 @@ export const Cart: React.FC = () => {
                 type="button"
                 variant="primary"
                 size="large"
-                text="Checkout"
+                text={t("Checkout")}
                 isLoading={checkoutRefreshing}
                 isDisabled={!canContinue}
                 onClick={() => router.push(checkoutInformationsRoute)}

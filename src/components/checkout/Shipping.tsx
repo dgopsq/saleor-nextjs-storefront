@@ -19,6 +19,7 @@ import {
   validateInformationsStep,
 } from "@/queries/checkout/data";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 
@@ -26,6 +27,7 @@ import { useCallback, useEffect, useMemo } from "react";
  *
  */
 export const Shipping: React.FC = () => {
+  const t = useTranslations("Checkout");
   const router = useRouter();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
   const { showCheckout } = useCheckoutGuard();
@@ -68,7 +70,7 @@ export const Shipping: React.FC = () => {
 
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <SectionHeading>Shipping methods</SectionHeading>
+          <SectionHeading>{t("Shipping methods")}</SectionHeading>
 
           <div className="mt-8">
             <CheckoutDeliveryMethod
@@ -88,7 +90,7 @@ export const Shipping: React.FC = () => {
         >
           <CheckoutSummary
             checkout={data}
-            ctaText="Continue to payment"
+            ctaText={t("Continue to payment")}
             isLoading={checkoutRefreshing}
             isDisabled={!canContinue}
             onCtaClick={() => router.push(checkoutPaymentRoute)}

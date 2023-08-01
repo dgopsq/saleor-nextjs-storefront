@@ -58,7 +58,7 @@ export const Orders: React.FC = () => {
 
       <div className="mt-8">
         {parsedOrders.length <= 0 ? (
-          <EmptyText>{t("No orders found.")}</EmptyText>
+          <EmptyText>{t("No orders found")}</EmptyText>
         ) : undefined}
 
         <ul className="flex flex-col gap-4">{ordersRenderer}</ul>

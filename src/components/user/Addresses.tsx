@@ -37,7 +37,7 @@ export const Addresses: React.FC = () => {
 
       <ul className="mt-8 flex flex-col gap-4">
         {!userInfo?.addresses?.length ? (
-          <EmptyText>{t("No addresses found.")}</EmptyText>
+          <EmptyText>{t("No addresses found")}</EmptyText>
         ) : undefined}
 
         {userInfo?.addresses?.map((address) => (

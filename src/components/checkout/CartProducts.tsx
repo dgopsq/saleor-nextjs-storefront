@@ -46,7 +46,7 @@ export const CartProducts: React.FC<Props> = ({
   if (products.length === 0)
     return (
       <div>
-        <EmptyText>{t("Your cart is empty.")}</EmptyText>
+        <EmptyText>{t("Your cart is empty")}</EmptyText>
       </div>
     );
 
