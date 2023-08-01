@@ -119,7 +119,7 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
       defaultVariantId: defaultVariantId ?? undefined,
     });
 
-    if (maybeNewQs) router.replace(`${productsRoute}${slug}${maybeNewQs}`);
+    if (maybeNewQs) router.replace(`${productsRoute}/${slug}${maybeNewQs}`);
     else router.replace(`${productsRoute}/${slug}`);
   }, [currentVariantId, router, defaultVariantId, slug]);
 
