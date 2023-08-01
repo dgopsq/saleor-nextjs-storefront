@@ -6,6 +6,7 @@ import { formatPrice } from "@/misc/currencies";
 import { UseProductUpdateReturn } from "@/misc/hooks/useProductUpdate";
 import { classNames } from "@/misc/styles";
 import { CheckoutItem } from "@/queries/checkout/data";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useMemo } from "react";
 
@@ -27,6 +28,7 @@ export const CartProducts: React.FC<Props> = ({
   onProductUpdate,
   compact,
 }) => {
+  const t = useTranslations("Checkout");
   const imageSize = useMemo(
     () => (compact ? "sm:h-28 sm:w-28" : "sm:h-40 sm:w-40"),
     [compact]
@@ -44,7 +46,7 @@ export const CartProducts: React.FC<Props> = ({
   if (products.length === 0)
     return (
       <div>
-        <EmptyText>Your cart is empty.</EmptyText>
+        <EmptyText>{t("Your cart is empty.")}</EmptyText>
       </div>
     );
 

@@ -4,12 +4,14 @@ import { UserConfirmAccountDocument } from "@/__generated__/graphql";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 /**
  *
  */
 export const AccountConfirmation: React.FC = () => {
+  const t = useTranslations("User");
   const [confirmAccount, { data }] = useMutation(UserConfirmAccountDocument);
 
   useEffect(() => {
@@ -24,12 +26,12 @@ export const AccountConfirmation: React.FC = () => {
 
   useEffect(() => {
     if (data?.confirmAccount?.user)
-      successToast("Account confirmed successfully, you can now login!");
+      successToast(t("Account confirmed successfully, you can now login!"));
     else if (data?.confirmAccount?.errors.length) {
       logger.error("Account confirmation errors", data.confirmAccount.errors);
-      errorToast("Something went wrong while confirming your account.");
+      errorToast(t("Something went wrong while confirming your account"));
     }
-  }, [data]);
+  }, [data, t]);
 
   return null;
 };

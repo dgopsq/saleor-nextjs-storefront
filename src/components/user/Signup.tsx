@@ -9,6 +9,7 @@ import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
 import { homeRoute, loginRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
@@ -21,6 +22,7 @@ type Props = {
  *
  */
 export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
+  const t = useTranslations("User");
   const [createAccount, { loading }] = useMutation(CreateAccountDocument);
   const router = useRouter();
 
@@ -42,20 +44,20 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
               data.accountRegister.errors
             );
 
-            errorToast("Something went wrong, please try again.");
+            errorToast(t("Something went wrong, please try again"));
           } else {
-            successToast("Account created successfully, check your email.");
+            successToast(t("Account created successfully, check your email"));
             router.push(homeRoute);
           }
         },
       });
     },
-    [createAccount, router]
+    [createAccount, router, t]
   );
 
   return (
     <div className="w-full">
-      <PageHeading>Signup</PageHeading>
+      <PageHeading>{t("Signup")}</PageHeading>
 
       <div className="mt-10">
         <SignupForm
@@ -68,7 +70,8 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
       {!hideLoginLink ? (
         <div className="mt-8 flex flex-row justify-center">
           <p className="text-sm text-gray-600 text-center">
-            Already have an account? <Link href={loginRoute}>Login here</Link>
+            {t("Already have an account?") + " "}
+            <Link href={loginRoute}>{t("Login here")}</Link>
           </p>
         </div>
       ) : undefined}

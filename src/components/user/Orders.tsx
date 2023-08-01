@@ -14,6 +14,7 @@ import { publicConfig } from "@/misc/config";
 import { generateOrderRoute } from "@/misc/navigation";
 import { parseOrder } from "@/queries/checkout/data";
 import { useQuery } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
@@ -21,6 +22,7 @@ import { useMemo } from "react";
  *
  */
 export const Orders: React.FC = () => {
+  const t = useTranslations("User");
   const router = useRouter();
   const { data, loading } = useQuery(GetMyOrdersDocument, {
     variables: { first: publicConfig.lastOrdersShowed },
@@ -52,11 +54,11 @@ export const Orders: React.FC = () => {
 
   return (
     <>
-      <PageHeading>Orders</PageHeading>
+      <PageHeading>{t("Orders")}</PageHeading>
 
       <div className="mt-8">
         {parsedOrders.length <= 0 ? (
-          <EmptyText>No orders found.</EmptyText>
+          <EmptyText>{t("No orders found.")}</EmptyText>
         ) : undefined}
 
         <ul className="flex flex-col gap-4">{ordersRenderer}</ul>

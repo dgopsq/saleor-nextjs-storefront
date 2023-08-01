@@ -51,7 +51,30 @@
     "City": "City",
     "Country": "Country",
     "Country area": "Country area",
-    "Postal code": "Postal code"
+    "Postal code": "Postal code",
+    "Email": "Email",
+    "Email changed successfully": "Email changed successfully",
+    "Account confirmed successfully, you can now login!": "Account confirmed successfully, you can now login!",
+    "Something went wrong while confirming your account": "Something went wrong while confirming your account",
+    "Something went wrong, please try again": "Something went wrong, please try again",
+    "Login successful, redirecting to your account": "Login successful, redirecting to your account",
+    "Login": "Login",
+    "Don't have an account yet?": "Don't have an account yet?",
+    "Signup here": "Signup here",
+    "Order": "Order",
+    "Status": "Status",
+    "Created at": "Created at",
+    "Shipping address": "Shipping address",
+    "Billing address": "Billing address",
+    "No orders found.": "No orders found.",
+    "More details...": "More details...",
+    "Account created successfully, check your email": "Account created successfully, check your email",
+    "Signup": "Signup",
+    "Already have an account?": "Already have an account?",
+    "Login here": "Login here"
+  },
+  "Checkout": {
+    "Your cart is empty.": "Your cart is empty."
   },
   "Form": {
     "invalid_type": "Invalid value",

@@ -44,7 +44,7 @@ export const ChangeEmail: React.FC = () => {
 
   return (
     <div className="w-full">
-      <SectionHeading>Email</SectionHeading>
+      <SectionHeading>{t("Email")}</SectionHeading>
 
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">

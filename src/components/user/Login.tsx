@@ -17,12 +17,14 @@ import { logger } from "@/misc/logger";
 import { signupRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
  *
  */
 export const Login: React.FC = () => {
+  const t = useTranslations("User");
   const [createAccount, { loading, data }] = useMutation(CreateTokenDocument);
   const [checkoutAttach] = useMutation(CheckoutAttachDocument);
   const checkout = useCheckoutInfo();
@@ -96,14 +98,14 @@ export const Login: React.FC = () => {
     if (!data?.tokenCreate) return;
 
     if (data.tokenCreate.errors.length)
-      errorToast("Something went wrong, please try again.");
-    else successToast("Login successful, redirecting to your account.");
-  }, [data]);
+      errorToast(t("Something went wrong, please try again"));
+    else successToast(t("Login successful, redirecting to your account"));
+  }, [data, t]);
 
   return (
     <>
       <div className="w-full">
-        <PageHeading>Login</PageHeading>
+        <PageHeading>{t("Login")}</PageHeading>
 
         <div className="mt-10">
           <LoginForm onSubmit={handleSubmit} isLoading={loading} />
@@ -112,8 +114,8 @@ export const Login: React.FC = () => {
         <div className="mt-2">
           <div className="mt-8 flex flex-row justify-center">
             <p className="text-sm text-gray-600 text-center">
-              Don&apos;t have an account yet?{" "}
-              <Link href={signupRoute}>Signup here</Link>
+              {t("Don't have an account yet?") + " "}
+              <Link href={signupRoute}>{t("Signup here")}</Link>
             </p>
           </div>
         </div>
