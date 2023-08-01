@@ -5,6 +5,7 @@ import { Button } from "@/components/core/Button";
 import { errorToast } from "@/components/core/Notifications";
 import { useCheckoutId } from "@/misc/states/checkoutIdStore";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 
 const addToCartErrorsMap: Record<string, string> = {
@@ -20,6 +21,7 @@ type Props = {
  *
  */
 export const AddToCartButton: React.FC<Props> = ({ variantId, qty }) => {
+  const t = useTranslations("Products");
   const checkoutId = useCheckoutId();
   const [addToCart, { loading }] = useMutation(AddProductToCartDocument);
 
@@ -50,7 +52,7 @@ export const AddToCartButton: React.FC<Props> = ({ variantId, qty }) => {
     <Button
       type="button"
       onClick={handleAddToCart}
-      text="Add to cart"
+      text={t("Add to cart")}
       variant="primary"
       size="large"
       isLoading={loading}

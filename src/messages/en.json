@@ -1,6 +1,10 @@
 {
   "Products": {
-    "Show more": "Show more"
+    "Show more": "Show more",
+    "Add to cart": "Add to cart",
+    "Product information": "Product information",
+    "Description": "Description",
+    "Quantity": "Quantity"
   },
   "User": {
     "Profile": "Profile",

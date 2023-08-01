@@ -34,7 +34,7 @@ export const ProductImages: React.FC<Props> = ({ images }) => {
                   <span className="absolute inset-0 overflow-hidden rounded-md p-2">
                     <Image
                       src={image.url}
-                      alt=""
+                      alt={image.alt ?? ""}
                       className="h-full w-full object-cover object-center"
                       width={200}
                       height={200}
