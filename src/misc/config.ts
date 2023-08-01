@@ -107,4 +107,16 @@ export const publicConfig = {
    *
    */
   defaultLocale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "en",
+
+  /**
+   *
+   */
+  seoTitle: process.env.NEXT_PUBLIC_SEO_TITLE || "NextJS + Saleor",
+
+  /**
+   *
+   */
+  seoDescription:
+    process.env.NEXT_PUBLIC_SEO_DESCRIPTION ||
+    "Ecommerce built with NextJS and Saleor.",
 };
