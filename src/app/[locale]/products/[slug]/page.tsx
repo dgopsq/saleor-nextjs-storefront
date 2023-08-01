@@ -43,10 +43,11 @@ export async function generateMetadata(
     variables: { slug: params.slug },
   });
 
-  if (!data.product) return {};
+  const title = data?.product?.seoTitle || data?.product?.name || undefined;
+  const description = data?.product?.seoDescription || undefined;
 
   return {
-    title: data.product.seoTitle || data.product.name || undefined,
-    description: data.product.seoDescription || undefined,
+    title,
+    description,
   };
 }

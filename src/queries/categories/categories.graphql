@@ -35,3 +35,13 @@ query GetCategoryProducts($slug: String!, $first: Int!, $sortBy: ProductOrder) {
     }
   }
 }
+
+query GetCategoryMeta($slug: String!) {
+  category(slug: $slug) {
+    name
+    slug
+    description
+    seoTitle
+    seoDescription
+  }
+}
