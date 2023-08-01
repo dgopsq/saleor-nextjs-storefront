@@ -8,6 +8,7 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { addressesRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -15,6 +16,7 @@ import { useCallback, useEffect, useRef } from "react";
  *
  */
 export const NewAddress: React.FC = () => {
+  const t = useTranslations("User");
   const router = useRouter();
   const addressFormRef = useRef<AddressFormRef>(null);
 
@@ -34,7 +36,7 @@ export const NewAddress: React.FC = () => {
 
   useEffect(() => {
     if (createData?.accountAddressCreate?.user) {
-      successToast("The address has been created.");
+      successToast(t("The address has been created"));
       router.push(addressesRoute);
     } else if (createData?.accountAddressCreate?.errors.length) {
       logger.error(
@@ -42,13 +44,13 @@ export const NewAddress: React.FC = () => {
         createData?.accountAddressCreate.errors
       );
 
-      errorToast("There was an error creating the address.");
+      errorToast(t("There was an error creating the address"));
     }
-  }, [createData, router]);
+  }, [createData, router, t]);
 
   return (
     <div>
-      <PageHeading>Add new address</PageHeading>
+      <PageHeading>{t("Add new address")}</PageHeading>
 
       <div className="mt-8 pb-16 border-b border-gray-100">
         <AddressForm
@@ -60,7 +62,7 @@ export const NewAddress: React.FC = () => {
       <div className="mt-16 flex justify-end">
         <div className="w-48">
           <Button
-            text="Save changes"
+            text={t("Save changes")}
             type="submit"
             variant="primary"
             size="medium"

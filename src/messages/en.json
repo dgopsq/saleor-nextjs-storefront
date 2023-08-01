@@ -43,7 +43,15 @@
     "Default for shipping": "Default for shipping",
     "Default for billing": "Default for billing",
     "Delete": "Delete",
-    "Save changes": "Save changes"
+    "Save changes": "Save changes",
+    "The address has been created": "The address has been created",
+    "There was an error creating the address": "There was an error creating the address",
+    "Add new address": "Add new address",
+    "Address": "Address",
+    "City": "City",
+    "Country": "Country",
+    "Country area": "Country area",
+    "Postal code": "Postal code"
   },
   "Form": {
     "invalid_type": "Invalid value",
