@@ -29,7 +29,6 @@ const makeClient = () => {
   // refresh the token on every request when needed.
   const expiredSignatureErrorLink = onError(
     ({ graphQLErrors, forward, operation }) => {
-      console.log("ERR", graphQLErrors);
       if (graphQLErrors) {
         const isExpiredSignature = graphQLErrors.some((err) => {
           const exceptions = err.extensions?.exception as { code?: string };

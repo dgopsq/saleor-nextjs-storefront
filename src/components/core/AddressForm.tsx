@@ -5,6 +5,7 @@ import { CountrySelect } from "@/components/core/CountrySelect";
 import { Field } from "@/components/core/Field";
 import { classNames } from "@/misc/styles";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,7 +15,7 @@ const defaultCountry = CountryCode.It;
 /**
  *
  */
-const AddressFormSchema = z.object({
+const addressFormSchema = z.object({
   firstName: z.string().trim().min(1),
   lastName: z.string().trim().min(1),
   companyName: z.string().trim().optional(),
@@ -30,7 +31,7 @@ const AddressFormSchema = z.object({
 /**
  *
  */
-export type AddressForm = z.infer<typeof AddressFormSchema>;
+export type AddressForm = z.infer<typeof addressFormSchema>;
 
 export type AddressFormRef = {
   getValues: () => Promise<AddressForm | null>;
@@ -47,6 +48,7 @@ type Props = {
  */
 export const AddressForm = forwardRef<AddressFormRef, Props>(
   ({ initialValues, compact, asyncErrors }, ref) => {
+    const t = useTranslations("User");
     const stableInitialValues = useMemo<AddressForm>(
       () => ({
         firstName: "",
@@ -71,7 +73,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
       getValues,
       trigger,
     } = useForm<AddressForm>({
-      resolver: zodResolver(AddressFormSchema),
+      resolver: zodResolver(addressFormSchema),
       mode: "onChange",
 
       // We want this form to initialize values
@@ -119,7 +121,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
         <div className="sm:col-span-3">
           <Field
             id="firstName"
-            label="First name"
+            label={t("First name")}
             register={register("firstName")}
             error={retrieveFieldError("firstName")}
           />
@@ -128,7 +130,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
         <div className="sm:col-span-3">
           <Field
             id="lastName"
-            label="Last name"
+            label={t("Last name")}
             register={register("lastName")}
             error={retrieveFieldError("lastName")}
           />
@@ -137,7 +139,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
         <div className="col-span-full">
           <Field
             id="streetAddress1"
-            label="Address"
+            label={t("Address")}
             register={register("streetAddress1")}
             error={retrieveFieldError("streetAddress1")}
           />
@@ -146,7 +148,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
         <div className="sm:col-span-3 sm:col-start-1">
           <Field
             id="city"
-            label="City"
+            label={t("City")}
             register={register("city")}
             error={retrieveFieldError("city")}
           />
@@ -158,7 +160,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
             control={control}
             render={({ field, fieldState }) => (
               <CountrySelect
-                label="Country"
+                label={t("Country")}
                 value={field.value}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
@@ -170,7 +172,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
         <div className="sm:col-span-3">
           <Field
             id="countryArea"
-            label="Country area"
+            label={t("Country area")}
             register={register("countryArea")}
             error={retrieveFieldError("countryArea")}
           />
@@ -179,7 +181,7 @@ export const AddressForm = forwardRef<AddressFormRef, Props>(
         <div className="sm:col-span-3">
           <Field
             id="postalCode"
-            label="Postal code"
+            label={t("Postal code")}
             register={register("postalCode")}
             error={retrieveFieldError("postalCode")}
           />

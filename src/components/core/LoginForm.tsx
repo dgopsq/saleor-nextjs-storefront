@@ -5,6 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "@/components/core/Field";
 import { Button } from "@/components/core/Button";
+import { useTranslations } from "next-intl";
 
 /**
  *
@@ -28,6 +29,7 @@ type Props = {
  *
  */
 export const LoginForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
+  const t = useTranslations("User");
   const {
     register,
     handleSubmit,
@@ -39,7 +41,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
       <div className="space-y-6">
         <div>
           <Field
-            label="Email address"
+            label={t("Email")}
             id="email"
             register={register("email")}
             autoComplete="email"
@@ -49,7 +51,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
 
         <div>
           <Field
-            label="Password"
+            label={t("Password")}
             id="password"
             register={register("password")}
             type="password"
@@ -63,7 +65,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
         <Button
           variant="primary"
           size="medium"
-          text="Login"
+          text={t("Login")}
           type="submit"
           isLoading={isLoading}
         />

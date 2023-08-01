@@ -8,12 +8,14 @@ import { publicConfig } from "@/misc/config";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { logger } from "@/misc/logger";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
  *
  */
 export const ChangeEmail: React.FC = () => {
+  const t = useTranslations("User");
   const [changeEmail, { loading, data }] = useMutation(UserEmailChangeDocument);
   const userInfo = useUserInfo();
 
@@ -33,22 +35,22 @@ export const ChangeEmail: React.FC = () => {
 
   useEffect(() => {
     if (data?.requestEmailChange?.user)
-      successToast("Request sent successfully, check your email");
+      successToast(t("Request sent successfully, check your email"));
     else if (data?.requestEmailChange?.errors.length) {
       logger.error("Password change errors", data.requestEmailChange.errors);
-      errorToast("Something went wrong while changing your email");
+      errorToast(t("Something went wrong while changing your email"));
     }
-  }, [data]);
+  }, [data, t]);
 
   return (
     <div className="w-full">
-      <SectionHeading>Email</SectionHeading>
+      <SectionHeading>{t("Email")}</SectionHeading>
 
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
           <div className="md:col-span-3">
             <label className="block text-sm font-medium leading-6 text-gray-900">
-              Current email
+              {t("Current email")}
             </label>
             <div className="mt-2">
               <input

@@ -21,6 +21,8 @@ import {
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { cartRoute, checkoutShippingRoute } from "@/misc/navigation";
+import { useTranslations } from "next-intl";
 
 type Props = {
   userInfo: User;
@@ -30,6 +32,7 @@ type Props = {
  *
  */
 export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
+  const t = useTranslations("Checkout");
   const router = useRouter();
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [addShippingAddress, setAddShippingAddress] = useState(false);
@@ -114,12 +117,12 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
           <div className="border-b border-gray-100 pb-12">
             <div className="flex flex-row items-center gap-4">
-              <SectionHeading>Shipping address</SectionHeading>
+              <SectionHeading>{t("Shipping address")}</SectionHeading>
 
               {!addShippingAddress ? (
                 <div>
                   <TextButton
-                    text="Add new address"
+                    text={t("Add new address")}
                     onClick={() => setAddShippingAddress(true)}
                     variant="primary"
                   />
@@ -141,12 +144,12 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
 
           <div className="mt-12">
             <div className="flex flex-row items-center gap-4">
-              <SectionHeading>Billing address</SectionHeading>
+              <SectionHeading>{t("Billing address")}</SectionHeading>
 
               {!addBillingAddress && !billingSameAsShipping ? (
                 <div>
                   <TextButton
-                    text="Add new address"
+                    text={t("Add new address")}
                     onClick={() => setAddBillingAddress(true)}
                     variant="primary"
                   />
@@ -157,11 +160,11 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
             <div className="mt-8">
               {billingSameAsShipping ? (
                 <div className="flex flex-row items-center gap-4">
-                  <span>Same as the shipping address.</span>
+                  <span>{t("Same as the shipping address")}</span>
 
                   <div>
                     <TextButton
-                      text="Change"
+                      text={t("Change")}
                       onClick={() => setBillingSameAsShipping(false)}
                       variant="primary"
                     />
@@ -192,9 +195,9 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
             checkout={data}
             isLoading={checkoutRefreshing}
             isDisabled={!canContinue}
-            ctaText="Continue to shipping"
-            onCtaClick={() => router.push("/checkout/shipping")}
-            onCartEditClick={() => router.push("/cart")}
+            ctaText={t("Continue to shipping")}
+            onCtaClick={() => router.push(checkoutShippingRoute)}
+            onCartEditClick={() => router.push(cartRoute)}
           />
         </section>
       </div>

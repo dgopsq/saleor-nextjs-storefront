@@ -8,10 +8,13 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { ChangeInfoForm } from "@/components/core/ChangeInfoForm";
 import { SectionHeading } from "@/components/core/Headings";
+import { useTranslations } from "next-intl";
 
 export const ProfileInfo: React.FC = () => {
   const [updateUser, { loading: updateUserLoading, data: updateData }] =
     useMutation(UserUpdateDocument);
+
+  const t = useTranslations("User");
 
   const user = useUserInfo();
 
@@ -38,17 +41,17 @@ export const ProfileInfo: React.FC = () => {
 
   useEffect(() => {
     if (updateData?.accountUpdate?.user)
-      successToast("Your profile has been updated.");
+      successToast(t("Your profile has been updated"));
     else if (updateData?.accountUpdate?.errors.length) {
       logger.error("Profile update errors", updateData.accountUpdate.errors);
-      errorToast("There was an error updating your profile.");
+      errorToast(t("There was an error updating your profile"));
     }
-  }, [updateData]);
+  }, [updateData, t]);
 
   return (
     <>
       <div>
-        <SectionHeading>Personal informations</SectionHeading>
+        <SectionHeading>{t("Personal informations")}</SectionHeading>
 
         <div className="mt-8">
           <ChangeInfoForm

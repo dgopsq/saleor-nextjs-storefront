@@ -8,12 +8,16 @@ import {
 } from "@/components/core/Icon";
 import { MenuItem } from "@/components/core/MenuItem";
 import { TabsMenu } from "@/components/core/TabsMenu";
+import { addressesRoute, ordersRoute, profileRoute } from "@/misc/navigation";
 import { logout } from "@/misc/user";
+import { useTranslations } from "next-intl";
 import { useSelectedLayoutSegment } from "next/navigation";
+
 /**
  *
  */
 export const ProfileMenu: React.FC = () => {
+  const t = useTranslations("User");
   const selectedProfileSegment = useSelectedLayoutSegment("profile");
 
   return (
@@ -22,20 +26,20 @@ export const ProfileMenu: React.FC = () => {
         items={[
           {
             id: "profile",
-            label: "Profile",
-            href: "/account/profile",
+            label: t("Profile"),
+            href: profileRoute,
             Icon: AccountIcon,
           },
           {
             id: "addresses",
-            label: "Addresses",
-            href: "/account/addresses",
+            label: t("Addresses"),
+            href: addressesRoute,
             Icon: ShippingIcon,
           },
           {
             id: "orders",
-            label: "Orders",
-            href: "/account/orders",
+            label: t("Orders"),
+            href: ordersRoute,
             Icon: CartIcon,
           },
         ]}
@@ -46,7 +50,7 @@ export const ProfileMenu: React.FC = () => {
 
       <div className="mt-6">
         <button className="w-full" onClick={logout}>
-          <MenuItem Icon={LogoutIcon}>Logout</MenuItem>
+          <MenuItem Icon={LogoutIcon}>{t("Logout")}</MenuItem>
         </button>
       </div>
     </div>

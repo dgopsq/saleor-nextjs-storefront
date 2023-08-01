@@ -13,8 +13,10 @@ import { PageHeading } from "@/components/core/Headings";
 import { errorToast, successToast } from "@/components/core/Notifications";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { logger } from "@/misc/logger";
+import { addressesRoute } from "@/misc/navigation";
 import { addressToAddressForm, parseAddress } from "@/queries/user/data";
 import { useFragment, useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
@@ -26,6 +28,7 @@ type Props = {
  *
  */
 export const EditAddress = ({ id }: Props) => {
+  const t = useTranslations("User");
   const router = useRouter();
   const userInfo = useUserInfo();
   const maybeFallbackAddressId = useMemo(
@@ -120,20 +123,20 @@ export const EditAddress = ({ id }: Props) => {
 
   useEffect(() => {
     if (updateData?.accountAddressUpdate?.user)
-      successToast("The address has been updated.");
+      successToast(t("The address has been updated"));
     else if (updateData?.accountAddressUpdate?.errors.length) {
       logger.error(
         "Address update errors",
         updateData.accountAddressUpdate.errors
       );
 
-      errorToast("There was an error updating the address.");
+      errorToast(t("There was an error updating the address"));
     }
-  }, [updateData]);
+  }, [updateData, t]);
 
   useEffect(() => {
     if (setDefaultBillingData?.accountSetDefaultAddress?.user)
-      successToast("The address has been set as default for billing.");
+      successToast(t("The address has been set as default for billing"));
     else if (setDefaultBillingData?.accountSetDefaultAddress?.errors.length) {
       logger.error(
         "Address set default billing errors",
@@ -141,14 +144,14 @@ export const EditAddress = ({ id }: Props) => {
       );
 
       errorToast(
-        "There was an error setting the address as default for billing."
+        t("There was an error setting the address as default for billing")
       );
     }
-  }, [setDefaultBillingData]);
+  }, [setDefaultBillingData, t]);
 
   useEffect(() => {
     if (setDefaultShippingData?.accountSetDefaultAddress?.user)
-      successToast("The address has been set as default for shipping.");
+      successToast(t("The address has been set as default for shipping"));
     else if (setDefaultShippingData?.accountSetDefaultAddress?.errors.length) {
       logger.error(
         "Address set default shipping errors",
@@ -156,30 +159,30 @@ export const EditAddress = ({ id }: Props) => {
       );
 
       errorToast(
-        "There was an error setting the address as default for shipping."
+        t("There was an error setting the address as default for shipping")
       );
     }
-  }, [setDefaultShippingData]);
+  }, [setDefaultShippingData, t]);
 
   useEffect(() => {
     if (deleteData?.accountAddressDelete?.user) {
-      successToast("The address has been deleted.");
-      router.push("/account/addresses");
+      successToast(t("The address has been deleted"));
+      router.push(addressesRoute);
     } else if (deleteData?.accountAddressDelete?.errors.length) {
       logger.error(
         "Address delete errors",
         deleteData.accountAddressDelete.errors
       );
 
-      errorToast("There was an error deleting the address.");
+      errorToast(t("There was an error deleting the address"));
     }
-  }, [deleteData, router]);
+  }, [deleteData, router, t]);
 
   if (!data || !complete) return null;
 
   return (
     <div>
-      <PageHeading>Edit address</PageHeading>
+      <PageHeading>{t("Edit address")}</PageHeading>
 
       <div className="mt-8 pb-16 border-b border-gray-100">
         <AddressForm
@@ -191,13 +194,13 @@ export const EditAddress = ({ id }: Props) => {
         <div className="bg-gray-50 rounded-lg mt-16">
           <div className="px-4 py-5 sm:p-6">
             <h3 className="text-base font-semibold leading-6 text-gray-900">
-              Set this address as default
+              {t("Set this address as default")}
             </h3>
 
             <div className="mt-4 flex flex-row items-center gap-4">
               <div>
                 <Button
-                  text="Default for shipping"
+                  text={t("Default for shipping")}
                   type="submit"
                   variant="primary"
                   size="medium"
@@ -209,7 +212,7 @@ export const EditAddress = ({ id }: Props) => {
 
               <div>
                 <Button
-                  text="Default for billing"
+                  text={t("Default for billing")}
                   type="submit"
                   variant="primary"
                   size="medium"
@@ -226,7 +229,7 @@ export const EditAddress = ({ id }: Props) => {
       <div className="mt-16 flex justify-end gap-4">
         <div>
           <Button
-            text="Delete"
+            text={t("Delete")}
             type="submit"
             variant="danger"
             size="medium"
@@ -238,7 +241,7 @@ export const EditAddress = ({ id }: Props) => {
 
         <div>
           <Button
-            text="Save changes"
+            text={t("Save changes")}
             type="submit"
             variant="primary"
             size="medium"

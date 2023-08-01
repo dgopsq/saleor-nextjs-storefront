@@ -1,10 +1,11 @@
 import { default as BaseLink, LinkProps } from "next/link";
+import { PropsWithChildren } from "react";
 
-type Props<T extends string> = LinkProps<T>;
+type Props = PropsWithChildren<LinkProps>;
 
 /**
  *
  */
-export const Link = <T extends string>(props: Props<T>) => {
+export const Link = (props: Props) => {
   return <BaseLink className="text-indigo-600 hover:underline" {...props} />;
 };

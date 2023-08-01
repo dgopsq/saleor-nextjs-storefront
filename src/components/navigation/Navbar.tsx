@@ -12,6 +12,7 @@ import { Spinner } from "@/components/core/Spinner";
 import { CloseIcon, HamburgerIcon, SearchIcon } from "@/components/core/Icon";
 import Link from "next/link";
 import { Route } from "next";
+import { accountRoute, cartRoute, homeRoute } from "@/misc/navigation";
 
 type Props = {
   categories: Array<Category>;
@@ -126,7 +127,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
                     <Link
-                      href="/account"
+                      href={accountRoute}
                       className="-m-2 block p-2 font-medium text-gray-900"
                     >
                       Profile
@@ -148,7 +149,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                 <div className="flex h-20 items-center justify-between">
                   {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
-                    <Link href="/">
+                    <Link href={homeRoute}>
                       <span className="sr-only">Your Company</span>
                       <Image
                         className="h-8 w-auto"
@@ -281,7 +282,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                       ) : (
                         <>
                           <div className="flex space-x-8">
-                            <Link href="/account">
+                            <Link href={accountRoute}>
                               <UserButton />
                             </Link>
                           </div>
@@ -292,7 +293,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                           />
 
                           <div className="flow-root">
-                            <Link href="/cart">
+                            <Link href={cartRoute}>
                               <CartButton />
                             </Link>
                           </div>

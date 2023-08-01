@@ -4,6 +4,7 @@ import { Button, TextButton } from "@/components/core/Button";
 import { SectionHeading } from "@/components/core/Headings";
 import { Island } from "@/components/core/Island";
 import { Checkout } from "@/queries/checkout/data";
+import { useTranslations } from "next-intl";
 
 type Props = {
   checkout: Checkout;
@@ -25,13 +26,19 @@ export const CheckoutSummary: React.FC<Props> = ({
   onCtaClick,
   onCartEditClick,
 }) => {
+  const t = useTranslations("Checkout");
+
   return (
     <Island variant="solid">
       <div className="flex flex-row items-center">
-        <SectionHeading>Order summary</SectionHeading>
+        <SectionHeading>{t("Order summary")}</SectionHeading>
 
         <div className="ml-4">
-          <TextButton variant="primary" text="Edit" onClick={onCartEditClick} />
+          <TextButton
+            variant="primary"
+            text={t("Edit")}
+            onClick={onCartEditClick}
+          />
         </div>
       </div>
 

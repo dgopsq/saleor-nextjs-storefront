@@ -20,6 +20,8 @@ import { publicConfig } from "@/misc/config";
 import { EditorJSRenderer } from "@/components/core/EditorJSRenderer";
 import { Label } from "@/components/core/Label";
 import { QuantitySelect } from "@/components/products/QuantitySelect";
+import { productsRoute } from "@/misc/navigation";
+import { useTranslations } from "next-intl";
 
 /**
  *
@@ -53,6 +55,8 @@ type Props = {
  */
 export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
   useSuspenseQuery(GetProductDocument, { variables: { slug } });
+
+  const t = useTranslations("Products");
   const [qty, setQty] = useState(1);
 
   const router = useRouter();
@@ -118,8 +122,8 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
       defaultVariantId: defaultVariantId ?? undefined,
     });
 
-    if (maybeNewQs) router.replace(`/products/${slug}${maybeNewQs}`);
-    else router.replace(`/products/${slug}`);
+    if (maybeNewQs) router.replace(`${productsRoute}/${slug}${maybeNewQs}`);
+    else router.replace(`${productsRoute}/${slug}`);
   }, [currentVariantId, router, defaultVariantId, slug]);
 
   if (!product || !currentVariantId) return null;
@@ -139,14 +143,14 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
             </h1>
 
             <div className="mt-3">
-              <h2 className="sr-only">Product information</h2>
+              <h2 className="sr-only">{t("Product information")}</h2>
               <p className="text-3xl tracking-tight text-gray-900">
                 {formattedPrice}
               </p>
             </div>
 
             <div className="mt-6">
-              <h3 className="sr-only">Description</h3>
+              <h3 className="sr-only">{t("Description")}</h3>
 
               {product.description ? (
                 <EditorJSRenderer data={product.description} />
@@ -166,7 +170,7 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
             <form className="mt-6">
               {publicConfig.showProductQuantitySelect && productVariant ? (
                 <div>
-                  <Label htmlFor="quantitySelect">Quantity</Label>
+                  <Label htmlFor="quantitySelect">{t("Quantity")}</Label>
 
                   <div className="mt-2">
                     <QuantitySelect

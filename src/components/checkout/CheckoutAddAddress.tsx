@@ -7,6 +7,7 @@ import { AddressForm, AddressFormRef } from "@/components/core/AddressForm";
 import { Button } from "@/components/core/Button";
 import { Address, parseAddress } from "@/queries/user/data";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { FormEventHandler, useCallback, useRef } from "react";
 
 type Props = {
@@ -21,6 +22,7 @@ export const CheckoutAddAddress: React.FC<Props> = ({
   onCancel,
   onAddressCreated,
 }) => {
+  const t = useTranslations("Checkout");
   const formRef = useRef<AddressFormRef>(null);
   const [createAddress, { loading, data }] = useMutation(
     UserCreateAddressDocument
@@ -71,7 +73,7 @@ export const CheckoutAddAddress: React.FC<Props> = ({
           <Button
             variant="secondary"
             size="medium"
-            text="Cancel"
+            text={t("Cancel")}
             onClick={onCancel}
             isDisabled={loading}
           />
@@ -82,7 +84,7 @@ export const CheckoutAddAddress: React.FC<Props> = ({
             variant="primary"
             size="medium"
             type="submit"
-            text="Create address"
+            text={t("Create address")}
             onClick={handleSubmit}
             isLoading={loading}
           />

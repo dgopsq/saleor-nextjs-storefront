@@ -14,8 +14,10 @@ const nextConfig = {
   },
   experimental: {
     serverActions: true,
-    typedRoutes: true,
+    typedRoutes: false,
   },
 };
 
-module.exports = nextConfig;
+const withNextIntl = require("next-intl/plugin")("./src/misc/i18n.ts");
+
+module.exports = withNextIntl(nextConfig);

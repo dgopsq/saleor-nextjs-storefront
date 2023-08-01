@@ -1,5 +1,6 @@
 import { NeutralBadge } from "@/components/core/Badge";
 import { Address } from "@/queries/user/data";
+import { useTranslations } from "next-intl";
 
 type Props = {
   address: Address;
@@ -26,6 +27,8 @@ export const SingleAddress: React.FC<Props> = ({
     isDefaultBillingAddress,
     isDefaultShippingAddress,
   } = address;
+
+  const t = useTranslations("User");
 
   const hasDefaultAddresses =
     isDefaultBillingAddress || isDefaultShippingAddress;
@@ -59,11 +62,11 @@ export const SingleAddress: React.FC<Props> = ({
       {showDefaultBadges && hasDefaultAddresses ? (
         <div className="flex flex-row gap-2">
           {isDefaultBillingAddress ? (
-            <NeutralBadge label="Default billing" />
+            <NeutralBadge label={t("Default billing")} />
           ) : undefined}
 
           {isDefaultShippingAddress ? (
-            <NeutralBadge label="Default shipping" />
+            <NeutralBadge label={t("Default shipping")} />
           ) : undefined}
         </div>
       ) : undefined}

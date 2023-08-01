@@ -3,6 +3,7 @@ import { EmptyText } from "@/components/core/EmptyText";
 import { RadioIsland } from "@/components/core/RadioIsland";
 import { SingleAddress } from "@/components/core/SingleAddress";
 import { Address, areAddressEqual } from "@/queries/user/data";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 type Props = {
@@ -25,6 +26,7 @@ export const CheckoutAddressUser: React.FC<Props> = ({
   addAddress,
   onCancelAddAddress,
 }) => {
+  const t = useTranslations("Checkout");
   const addressesRender = useMemo(
     () =>
       addresses.map((address) => {
@@ -54,7 +56,7 @@ export const CheckoutAddressUser: React.FC<Props> = ({
   return !addAddress ? (
     <div className={isLoading ? "opacity-75 cursor-not-allowed" : undefined}>
       {addresses.length === 0 ? (
-        <EmptyText>No addresses found.</EmptyText>
+        <EmptyText>{t("No addresses found")}</EmptyText>
       ) : undefined}
 
       <ul className="flex flex-col gap-4">{addressesRender}</ul>

@@ -1,4 +1,4 @@
-import { getStoredAuthTokenServer } from "@/app/account/@auth/login/actions";
+import { getStoredAuthTokenServer } from "@/app/[locale]/account/@auth/login/actions";
 import { ProfileMenu } from "@/components/user/ProfileMenu";
 
 export default async function Layout(props: {

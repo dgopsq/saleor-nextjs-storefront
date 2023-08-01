@@ -5,12 +5,14 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { logger } from "@/misc/logger";
 import { getStoredAuthToken } from "@/queries/user/token";
 import { useMutation } from "@apollo/client";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 
 /**
  *
  */
 export const EmailConfirmation: React.FC = () => {
+  const t = useTranslations("User");
   const [confirmEmail, { data }] = useMutation(UserConfirmEmailChangeDocument);
   const authToken = useMemo(getStoredAuthToken, []);
 
@@ -25,12 +27,12 @@ export const EmailConfirmation: React.FC = () => {
 
   useEffect(() => {
     if (data?.confirmEmailChange?.user)
-      successToast("Email changed successfully");
+      successToast(t("Email changed successfully"));
     else if (data?.confirmEmailChange?.errors.length) {
       logger.error("Email confirmation errors", data.confirmEmailChange.errors);
-      errorToast("Something went wrong while changing your email");
+      errorToast(t("Something went wrong while changing your email"));
     }
-  }, [data]);
+  }, [data, t]);
 
   return null;
 };

@@ -29,11 +29,18 @@ import { EmailForm, EmailFormRef } from "@/components/core/EmailForm";
 import { publicConfig } from "@/misc/config";
 import Link from "next/link";
 import { useGuestOrderAccountStore } from "@/misc/states/guestOrderAccount";
+import {
+  cartRoute,
+  checkoutShippingRoute,
+  loginRoute,
+} from "@/misc/navigation";
+import { useTranslations } from "next-intl";
 
 /**
  *
  */
 export const InformationsGuest: React.FC = () => {
+  const t = useTranslations("Checkout");
   const router = useRouter();
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const shippingAddressFormRef = useRef<AddressFormRef>(null);
@@ -119,7 +126,7 @@ export const InformationsGuest: React.FC = () => {
       emailQueryHasErrors
     ) {
       logger.warn("Errors while updating the guest informations.");
-      errorToast("An error occurred while submitting your informations.");
+      errorToast(t("An error occurred while submitting your informations"));
       return;
     }
 
@@ -132,7 +139,7 @@ export const InformationsGuest: React.FC = () => {
       lastName: billingAddress.lastName,
     });
 
-    router.push("/checkout/shipping");
+    router.push(checkoutShippingRoute);
   }, [
     router,
     data,
@@ -141,6 +148,7 @@ export const InformationsGuest: React.FC = () => {
     updateBillingAddress,
     updateEmail,
     setGuestOrderAccount,
+    t,
   ]);
 
   const emailInitialValues = useMemo(
@@ -191,19 +199,19 @@ export const InformationsGuest: React.FC = () => {
 
               <div className="mt-4">
                 <span className="text-sm text-gray-500">
-                  Already have an account?{" "}
+                  {t("Already have an account?") + " "}
                   <Link
                     className="text-indigo-600 hover:underline"
-                    href="/account/login"
+                    href={loginRoute}
                   >
-                    Login here
+                    {t("Login here")}
                   </Link>
                 </span>
               </div>
             </div>
 
             <div className="border-b border-gray-100 pb-12 mt-12">
-              <SectionHeading>Shipping address</SectionHeading>
+              <SectionHeading>{t("Shipping address")}</SectionHeading>
 
               <div className="mt-8">
                 <AddressForm
@@ -218,16 +226,16 @@ export const InformationsGuest: React.FC = () => {
             </div>
 
             <div className="mt-12">
-              <SectionHeading>Billing address</SectionHeading>
+              <SectionHeading>{t("Billing address")}</SectionHeading>
 
               <div className="mt-8">
                 {billingSameAsShipping ? (
                   <div className="flex flex-row items-center gap-4">
-                    <span>Same as the shipping address.</span>
+                    <span>{t("Same as the shipping address")}</span>
 
                     <div>
                       <TextButton
-                        text="Change"
+                        text={t("Change")}
                         onClick={() => setBillingSameAsShipping(false)}
                         variant="primary"
                       />
@@ -257,9 +265,9 @@ export const InformationsGuest: React.FC = () => {
             <CheckoutSummary
               checkout={data}
               isLoading={checkoutRefreshing}
-              ctaText="Continue to shipping"
+              ctaText={t("Continue to shipping")}
               onCtaClick={handleContinue}
-              onCartEditClick={() => router.push("/cart")}
+              onCartEditClick={() => router.push(cartRoute)}
             />
           </section>
         </div>

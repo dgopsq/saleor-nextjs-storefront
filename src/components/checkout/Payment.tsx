@@ -14,11 +14,14 @@ import {
 } from "@/queries/checkout/data";
 import { useRouter } from "next/navigation";
 import { useCheckoutGuard } from "@/misc/hooks/useCheckoutGuard";
+import { cartRoute, checkoutRoute } from "@/misc/navigation";
+import { useTranslations } from "next-intl";
 
 /**
  *
  */
 export const Payment: React.FC = () => {
+  const t = useTranslations("Checkout");
   const router = useRouter();
   const { data, loading: checkoutInfoLoading } = useCheckoutInfo();
   const { showCheckout } = useCheckoutGuard();
@@ -36,7 +39,8 @@ export const Payment: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!informationsStepValid || !shippingStepValid) router.push("/checkout");
+    if (!informationsStepValid || !shippingStepValid)
+      router.push(checkoutRoute);
   }, [router, informationsStepValid, shippingStepValid]);
 
   if (!data || !informationsStepValid || !shippingStepValid || !showCheckout)
@@ -48,7 +52,7 @@ export const Payment: React.FC = () => {
 
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <SectionHeading>Payment method</SectionHeading>
+          <SectionHeading>{t("Payment method")}</SectionHeading>
 
           <div className="mt-8">
             <CheckoutPaymentGateway
@@ -67,7 +71,7 @@ export const Payment: React.FC = () => {
         >
           <CheckoutSummary
             checkout={data}
-            onCartEditClick={() => router.push("/cart")}
+            onCartEditClick={() => router.push(cartRoute)}
           />
         </section>
       </div>

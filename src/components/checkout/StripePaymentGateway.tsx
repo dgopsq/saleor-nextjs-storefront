@@ -9,9 +9,11 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { StripeElementsOptions, loadStripe } from "@stripe/stripe-js";
+import { useTranslations } from "next-intl";
 import { FormEventHandler, useCallback, useMemo, useState } from "react";
 
 const CheckoutForm: React.FC = () => {
+  const t = useTranslations("Checkout");
   const [isLoading, setIsLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
@@ -33,12 +35,12 @@ const CheckoutForm: React.FC = () => {
       });
 
       if (error) {
-        errorToast("Something went wrong during the payment.");
+        errorToast(t("Something went wrong during the payment"));
       }
 
       setIsLoading(false);
     },
-    [stripe, elements]
+    [stripe, elements, t]
   );
 
   return (
@@ -50,7 +52,7 @@ const CheckoutForm: React.FC = () => {
           type="submit"
           variant="primary"
           size="large"
-          text="Buy now"
+          text={t("Buy now")}
           isLoading={isLoading}
         />
       </div>

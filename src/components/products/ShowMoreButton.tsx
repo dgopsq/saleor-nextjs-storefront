@@ -1,4 +1,5 @@
 import { Button } from "@/components/core/Button";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
 
@@ -16,6 +17,7 @@ export const ShowMoreButton: React.FC<Props> = ({
   isLoading,
   triggerOnVisible,
 }) => {
+  const t = useTranslations("Products");
   const [canTrigger, setCanTrigger] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
   const entry = useIntersectionObserver(ref, {});
@@ -37,7 +39,7 @@ export const ShowMoreButton: React.FC<Props> = ({
       <Button
         variant="secondary"
         size="large"
-        text="Show more"
+        text={t("Show more")}
         onClick={onClick}
         isLoading={isLoading}
       />

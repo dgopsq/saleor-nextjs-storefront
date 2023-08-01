@@ -6,11 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "@/components/core/Field";
 import { useMemo } from "react";
 import { Button } from "@/components/core/Button";
+import { useTranslations } from "next-intl";
 
 /**
  *
  */
-const ChangeInfoFormSchema = z.object({
+const changeInfoFormSchema = z.object({
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(1).max(50),
 });
@@ -18,7 +19,7 @@ const ChangeInfoFormSchema = z.object({
 /**
  *
  */
-export type ChangeInfoForm = z.infer<typeof ChangeInfoFormSchema>;
+export type ChangeInfoForm = z.infer<typeof changeInfoFormSchema>;
 
 type Props = {
   onSubmit: (data: ChangeInfoForm) => void;
@@ -34,6 +35,7 @@ export const ChangeInfoForm: React.FC<Props> = ({
   onSubmit,
   isLoading,
 }) => {
+  const t = useTranslations("User");
   const stableInitialValues = useMemo<ChangeInfoForm>(
     () => ({
       firstName: "",
@@ -48,7 +50,7 @@ export const ChangeInfoForm: React.FC<Props> = ({
     formState: { errors },
     handleSubmit,
   } = useForm<ChangeInfoForm>({
-    resolver: zodResolver(ChangeInfoFormSchema),
+    resolver: zodResolver(changeInfoFormSchema),
     values: stableInitialValues,
   });
 
@@ -59,7 +61,7 @@ export const ChangeInfoForm: React.FC<Props> = ({
           <div className="sm:col-span-3">
             <Field
               id="firstName"
-              label="First name"
+              label={t("First name")}
               register={register("firstName")}
               error={errors.firstName?.message}
             />
@@ -68,7 +70,7 @@ export const ChangeInfoForm: React.FC<Props> = ({
           <div className="sm:col-span-3">
             <Field
               id="lastName"
-              label="Last name"
+              label={t("Last name")}
               register={register("lastName")}
               error={errors.lastName?.message}
             />
@@ -81,7 +83,7 @@ export const ChangeInfoForm: React.FC<Props> = ({
           <Button
             variant="primary"
             size="medium"
-            text="Change info"
+            text={t("Change info")}
             type="submit"
             isLoading={isLoading}
           />

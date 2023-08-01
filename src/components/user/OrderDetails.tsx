@@ -15,6 +15,7 @@ import { formatDateFull } from "@/misc/date";
 import { parseOrder } from "@/queries/checkout/data";
 import { useQuery } from "@apollo/client";
 import { useFragment } from "@apollo/experimental-nextjs-app-support/ssr";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 type Props = {
@@ -25,6 +26,7 @@ type Props = {
  *
  */
 export const OrderDetails: React.FC<Props> = ({ number }) => {
+  const t = useTranslations("User");
   const { data, complete } = useFragment({
     fragment: GenericOrderFragmentDoc,
     fragmentName: "GenericOrder",
@@ -38,7 +40,6 @@ export const OrderDetails: React.FC<Props> = ({ number }) => {
 
   const parsedOrder = useMemo(() => {
     if (!complete) return null;
-    console.log("data", data);
     return parseOrder(data);
   }, [data, complete]);
 
@@ -46,18 +47,18 @@ export const OrderDetails: React.FC<Props> = ({ number }) => {
 
   return (
     <>
-      <PageHeading>{`Order ${parsedOrder.number}`}</PageHeading>
+      <PageHeading>{t("Order") + " " + parsedOrder.number}</PageHeading>
 
       <div className="mt-8">
         <Island variant="outline">
           <ul className="flex flex-col gap-1">
             <li>
-              <KeyValue label="Status" value={parsedOrder.statusDisplay} />
+              <KeyValue label={t("Status")} value={parsedOrder.statusDisplay} />
             </li>
 
             <li>
               <KeyValue
-                label="Created at"
+                label={t("Created at")}
                 value={formatDateFull(new Date(parsedOrder.createdAt))}
               />
             </li>
@@ -70,7 +71,7 @@ export const OrderDetails: React.FC<Props> = ({ number }) => {
           <div className="grid grid-cols-2">
             {parsedOrder?.shippingAddress ? (
               <div>
-                <SectionHeading>Shipping address</SectionHeading>
+                <SectionHeading>{t("Shipping address")}</SectionHeading>
 
                 <div className="mt-4">
                   <SingleAddress
@@ -83,7 +84,7 @@ export const OrderDetails: React.FC<Props> = ({ number }) => {
 
             {parsedOrder?.billingAddress ? (
               <div>
-                <SectionHeading>Billing address</SectionHeading>
+                <SectionHeading>{t("Billing address")}</SectionHeading>
 
                 <div className="mt-4">
                   <SingleAddress
