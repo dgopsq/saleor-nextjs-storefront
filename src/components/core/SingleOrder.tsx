@@ -58,7 +58,7 @@ export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
           <div className="mt-4">
             <TextButton
               variant="primary"
-              text={t("More details...")}
+              text={t("More details")}
               onClick={onDetailsClick}
             />
           </div>
