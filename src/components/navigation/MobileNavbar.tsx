@@ -2,10 +2,9 @@
 
 import { CloseIcon } from "@/components/core/Icon";
 import { Link } from "@/components/core/Link";
-import { accountRoute } from "@/misc/navigation";
-import { classNames } from "@/misc/styles";
+import { accountRoute, generateCategoryRoute } from "@/misc/navigation";
 import { Category } from "@/queries/categories/data";
-import { Dialog, Tab, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 type Props = {
@@ -47,8 +46,8 @@ export const MobileNavbar: React.FC<Props> = ({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
-              <div className="flex px-4 pb-2 pt-5">
+            <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl p-8">
+              <div className="flex pb-2">
                 <button
                   type="button"
                   className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
@@ -59,63 +58,51 @@ export const MobileNavbar: React.FC<Props> = ({
                 </button>
               </div>
 
-              {/* Links */}
-              <Tab.Group as="div" className="mt-2">
-                <div className="border-b border-gray-200">
-                  <Tab.List className="-mb-px flex space-x-8 px-4">
-                    {categories.map((category) => (
-                      <Tab
-                        key={category.name}
-                        className={({ selected }) =>
-                          classNames(
-                            selected
-                              ? "border-indigo-600 text-indigo-600"
-                              : "border-transparent text-gray-900",
-                            "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
-                          )
-                        }
+              <div className="mt-4">
+                <ul className="space-y-8">
+                  {categories.map((category) => (
+                    <li key={category.slug}>
+                      <Link
+                        href={generateCategoryRoute(category.slug)}
+                        className="text-lg font-medium text-gray-900"
+                        onClick={() => setOpen(false)}
                       >
                         {category.name}
-                      </Tab>
-                    ))}
-                  </Tab.List>
-                </div>
-                <Tab.Panels as={Fragment}>
-                  {categories.map((category, categoryIdx) => (
-                    <Tab.Panel
-                      key={category.name}
-                      className="space-y-12 px-4 pb-6 pt-10"
-                    >
-                      <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
-                        <div className="grid grid-cols-1 gap-x-6 gap-y-10">
-                          <div>
-                            <ul
-                              role="list"
-                              aria-labelledby={`mobile-featured-heading-${categoryIdx}`}
-                              className="mt-6 space-y-6"
-                            >
-                              {category.children.map((subCategory) => (
-                                <li key={subCategory.name} className="flex">
-                                  <Link
-                                    href={`/categories/${subCategory.slug}`}
-                                    onClick={() => setOpen(false)}
-                                  >
-                                    {subCategory.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </Tab.Panel>
-                  ))}
-                </Tab.Panels>
-              </Tab.Group>
+                      </Link>
 
-              <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                      <div>
+                        <ul
+                          role="list"
+                          aria-labelledby="desktop-collection-heading"
+                          className="mt-4 space-y-4 flex flex-col"
+                        >
+                          {category.children.map((subCategory) => (
+                            <li key={subCategory.name}>
+                              <Link
+                                href={generateCategoryRoute(subCategory.slug)}
+                                className="text-gray-500 hover:text-gray-800 text-sm font-medium"
+                                onClick={() => setOpen(false)}
+                              >
+                                {subCategory.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="space-y-6 border-t border-gray-200 mt-8 pt-8">
                 <div className="flow-root">
-                  <Link href={accountRoute}>Profile</Link>
+                  <Link
+                    href={accountRoute}
+                    className="text-lg font-medium text-gray-900"
+                    onClick={() => setOpen(false)}
+                  >
+                    Profile
+                  </Link>
                 </div>
               </div>
             </Dialog.Panel>

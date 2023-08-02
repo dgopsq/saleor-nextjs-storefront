@@ -55,10 +55,10 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                     >
                       <HamburgerIcon className="h-6 w-6" />
                     </button>
-                  </div>
 
-                  <div className="lg:hidden">
-                    <Logo />
+                    <div className="lg:hidden ml-4">
+                      <Logo />
+                    </div>
                   </div>
 
                   <div className="flex flex-1 items-center justify-end">
