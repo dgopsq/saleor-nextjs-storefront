@@ -4,20 +4,26 @@ import { classNames } from "@/misc/styles";
 type Props = {
   isActive?: boolean;
   Icon?: React.FC<BaseIconPublicProps>;
+  compactOnMobile?: boolean;
   children: string;
 };
 
 /**
  *
  */
-export const MenuItem: React.FC<Props> = ({ isActive, Icon, children }) => {
+export const MenuItem: React.FC<Props> = ({
+  isActive,
+  Icon,
+  children,
+  compactOnMobile,
+}) => {
   return (
     <div
       className={classNames(
         isActive
-          ? "bg-gray-50 text-indigo-600"
+          ? "bg-gray-50 border-gray-50 text-indigo-600"
           : "text-gray-700  hover:bg-gray-50",
-        "flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+        "flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold justify-center md:justify-start"
       )}
     >
       {Icon ? (
@@ -29,7 +35,9 @@ export const MenuItem: React.FC<Props> = ({ isActive, Icon, children }) => {
         />
       ) : undefined}
 
-      {children}
+      <span className={compactOnMobile ? "hidden sm:inline" : ""}>
+        {children}
+      </span>
     </div>
   );
 };

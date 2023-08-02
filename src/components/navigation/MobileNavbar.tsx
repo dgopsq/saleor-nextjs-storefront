@@ -5,7 +5,8 @@ import { Link } from "@/components/core/Link";
 import { accountRoute, generateCategoryRoute } from "@/misc/navigation";
 import { Category } from "@/queries/categories/data";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { usePathname } from "next-intl/client";
+import { Fragment, useMemo } from "react";
 
 type Props = {
   categories: Array<Category>;
@@ -21,6 +22,9 @@ export const MobileNavbar: React.FC<Props> = ({
   open,
   setOpen,
 }) => {
+  const path = usePathname();
+  const isProfilePage = useMemo(() => path.includes(accountRoute), [path]);
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -58,53 +62,43 @@ export const MobileNavbar: React.FC<Props> = ({
                 </button>
               </div>
 
-              <div className="mt-4">
-                <ul className="space-y-8">
-                  {categories.map((category) => (
-                    <li key={category.slug}>
-                      <Link
-                        href={generateCategoryRoute(category.slug)}
-                        className="text-lg font-medium text-gray-900"
-                        onClick={() => setOpen(false)}
-                      >
-                        {category.name}
-                      </Link>
-
-                      <div>
-                        <ul
-                          role="list"
-                          aria-labelledby="desktop-collection-heading"
-                          className="mt-4 space-y-4 flex flex-col"
+              {!isProfilePage ? (
+                <div className="mt-4">
+                  <ul className="space-y-8">
+                    {categories.map((category) => (
+                      <li key={category.slug}>
+                        <Link
+                          href={generateCategoryRoute(category.slug)}
+                          className="text-lg font-medium text-gray-900"
+                          onClick={() => setOpen(false)}
                         >
-                          {category.children.map((subCategory) => (
-                            <li key={subCategory.name}>
-                              <Link
-                                href={generateCategoryRoute(subCategory.slug)}
-                                className="text-gray-500 hover:text-gray-800 text-sm font-medium"
-                                onClick={() => setOpen(false)}
-                              >
-                                {subCategory.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                          {category.name}
+                        </Link>
 
-              <div className="space-y-6 border-t border-gray-200 mt-8 pt-8">
-                <div className="flow-root">
-                  <Link
-                    href={accountRoute}
-                    className="text-lg font-medium text-gray-900"
-                    onClick={() => setOpen(false)}
-                  >
-                    Profile
-                  </Link>
+                        <div>
+                          <ul
+                            role="list"
+                            aria-labelledby="desktop-collection-heading"
+                            className="mt-4 space-y-4 flex flex-col"
+                          >
+                            {category.children.map((subCategory) => (
+                              <li key={subCategory.name}>
+                                <Link
+                                  href={generateCategoryRoute(subCategory.slug)}
+                                  className="text-gray-500 hover:text-gray-800 text-sm font-medium"
+                                  onClick={() => setOpen(false)}
+                                >
+                                  {subCategory.name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              ) : undefined}
             </Dialog.Panel>
           </Transition.Child>
         </div>

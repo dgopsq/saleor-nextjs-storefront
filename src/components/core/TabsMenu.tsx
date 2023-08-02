@@ -20,15 +20,15 @@ type Props<T extends string> = {
  */
 export const TabsMenu = <T extends string>({ active, items }: Props<T>) => {
   return (
-    <nav className="flex flex-1 flex-col" aria-label="Sidebar">
-      <ul role="list" className="space-y-1">
+    <nav aria-label="Sidebar">
+      <ul className="space-x-1 flex flex-row md:flex-col md:space-y-1">
         {items.map((item) => {
-          const isActive = !!active?.endsWith(item.id);
+          const isActive = !!active?.startsWith(item.id);
 
           return (
-            <li key={item.id}>
+            <li key={item.id} className="flex-grow flex-shrink basis-full">
               <Link href={item.href}>
-                <MenuItem isActive={isActive} Icon={item.Icon}>
+                <MenuItem isActive={isActive} Icon={item.Icon} compactOnMobile>
                   {item.label}
                 </MenuItem>
               </Link>

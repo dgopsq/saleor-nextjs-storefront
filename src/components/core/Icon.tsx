@@ -13,6 +13,7 @@ import {
   TruckIcon,
   KeyIcon,
   ArrowLeftOnRectangleIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
 
 export type BaseIconPublicProps = {
@@ -126,4 +127,11 @@ export const AccountIcon: React.FC<BaseIconPublicProps> = (props) => (
  */
 export const LogoutIcon: React.FC<BaseIconPublicProps> = (props) => (
   <BaseIcon Icon={ArrowLeftOnRectangleIcon} {...props} />
+);
+
+/**
+ *
+ */
+export const OrderIcon: React.FC<BaseIconPublicProps> = (props) => (
+  <BaseIcon Icon={ShoppingBagIcon} {...props} />
 );

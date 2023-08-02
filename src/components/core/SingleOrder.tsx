@@ -26,7 +26,7 @@ export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
       return [
         ...acc,
         <Island key={line.id} variant="solid-darker">
-          <Image src={image.url} alt={image.alt ?? ""} width={80} height={80} />
+          <Image src={image.url} alt={image.alt ?? ""} width={60} height={60} />
         </Island>,
       ];
     }, [] as Array<React.ReactNode>);
@@ -66,7 +66,9 @@ export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
       </div>
 
       <div>
-        <div className="flex flex-row gap-2">{imagesRenderer}</div>
+        <div className="flex-row gap-2 hidden sm:flex md:pr-2">
+          {imagesRenderer}
+        </div>
       </div>
     </div>
   );

@@ -2,8 +2,8 @@
 
 import {
   AccountIcon,
-  CartIcon,
   LogoutIcon,
+  OrderIcon,
   ShippingIcon,
 } from "@/components/core/Icon";
 import { MenuItem } from "@/components/core/MenuItem";
@@ -25,22 +25,22 @@ export const ProfileMenu: React.FC = () => {
       <TabsMenu
         items={[
           {
-            id: "/account/profile",
+            id: profileRoute,
             label: t("Profile"),
             href: profileRoute,
             Icon: AccountIcon,
           },
           {
-            id: "/account/addresses",
+            id: addressesRoute,
             label: t("Addresses"),
             href: addressesRoute,
             Icon: ShippingIcon,
           },
           {
-            id: "/account/orders",
+            id: ordersRoute,
             label: t("Orders"),
             href: ordersRoute,
-            Icon: CartIcon,
+            Icon: OrderIcon,
           },
         ]}
         active={currentPath ?? undefined}
