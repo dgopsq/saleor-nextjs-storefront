@@ -25,7 +25,7 @@ import { useCallback, useEffect } from "react";
  */
 export const Login: React.FC = () => {
   const t = useTranslations("User");
-  const [createAccount, { loading, data }] = useMutation(CreateTokenDocument);
+  const [createToken, { loading, data }] = useMutation(CreateTokenDocument);
   const [checkoutAttach] = useMutation(CheckoutAttachDocument);
   const checkout = useCheckoutInfo();
 
@@ -33,42 +33,45 @@ export const Login: React.FC = () => {
     async (values: LoginForm) => {
       logger.debug("Executing user authentication.");
 
-      const createAccountRes = await createAccount({
+      const createTokenRes = await createToken({
         variables: {
           email: values.email,
           password: values.password,
         },
       });
 
-      const createAccountdata = createAccountRes.data ?? null;
+      const createTokenData = createTokenRes.data ?? null;
 
-      if (!createAccountdata) {
-        logger.error(
-          "Error while creating the account",
-          createAccountRes.errors
-        );
+      if (!createTokenData) {
+        logger.error("Error while creating the account", createTokenRes.errors);
         return;
       }
 
       logger.debug("Token creaded successfully, user authenticated.");
 
-      const maybeToken = createAccountdata.tokenCreate?.token ?? null;
+      const maybeToken = createTokenData.tokenCreate?.token ?? null;
       const maybeRefreshToken =
-        createAccountdata.tokenCreate?.refreshToken ?? null;
+        createTokenData.tokenCreate?.refreshToken ?? null;
       const maybeUserFragment =
         getFragmentData(
           GenericUserFragmentDoc,
-          createAccountdata.tokenCreate?.user
+          createTokenData.tokenCreate?.user
         ) ?? null;
       const maybeUserLastCheckoutId: string | null =
         maybeUserFragment?.checkouts?.edges[0]?.node.id ?? null;
 
-      if (maybeToken && maybeRefreshToken) {
-        logger.debug("Auth and Refresh Token found, creating cookies.");
+      if (!maybeToken || !maybeRefreshToken) {
+        logger.warn(
+          "Token or RefreshToken not found, probably a login with wrong credentials."
+        );
 
-        Cookies.set(publicConfig.userTokenStorageKey, maybeToken);
-        Cookies.set(publicConfig.userRefreshTokenStorageKey, maybeRefreshToken);
+        return;
       }
+
+      logger.debug("Auth and Refresh Token found, creating cookies.");
+
+      Cookies.set(publicConfig.userTokenStorageKey, maybeToken);
+      Cookies.set(publicConfig.userRefreshTokenStorageKey, maybeRefreshToken);
 
       if (checkout.data?.lines?.length) {
         logger.debug(
@@ -78,9 +81,15 @@ export const Login: React.FC = () => {
         // FIXME: What happens if this fails?
         // We should probably set the `maybeUserLastCheckoutId`
         // as the new checkout in that specific case.
-        checkoutAttach({
+        await checkoutAttach({
           variables: {
             checkoutId: checkout.data.id,
+          },
+          context: {
+            headers: {
+              // Here the client could not yet have the token.
+              Authorization: `Bearer ${maybeToken}`,
+            },
           },
         });
       } else if (maybeUserLastCheckoutId) {
@@ -91,7 +100,7 @@ export const Login: React.FC = () => {
 
       window.location.href = "/account";
     },
-    [createAccount, checkout, checkoutAttach]
+    [createToken, checkout, checkoutAttach]
   );
 
   useEffect(() => {
