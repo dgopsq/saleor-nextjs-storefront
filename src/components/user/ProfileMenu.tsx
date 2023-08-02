@@ -11,39 +11,39 @@ import { TabsMenu } from "@/components/core/TabsMenu";
 import { addressesRoute, ordersRoute, profileRoute } from "@/misc/navigation";
 import { logout } from "@/misc/user";
 import { useTranslations } from "next-intl";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { usePathname } from "next-intl/client";
 
 /**
  *
  */
 export const ProfileMenu: React.FC = () => {
   const t = useTranslations("User");
-  const selectedProfileSegment = useSelectedLayoutSegment("profile");
+  const currentPath = usePathname();
 
   return (
     <div>
       <TabsMenu
         items={[
           {
-            id: "profile",
+            id: "/account/profile",
             label: t("Profile"),
             href: profileRoute,
             Icon: AccountIcon,
           },
           {
-            id: "addresses",
+            id: "/account/addresses",
             label: t("Addresses"),
             href: addressesRoute,
             Icon: ShippingIcon,
           },
           {
-            id: "orders",
+            id: "/account/orders",
             label: t("Orders"),
             href: ordersRoute,
             Icon: CartIcon,
           },
         ]}
-        active={selectedProfileSegment ?? undefined}
+        active={currentPath ?? undefined}
       />
 
       <div className="border-b border-gray-50 w-full mt-6" />

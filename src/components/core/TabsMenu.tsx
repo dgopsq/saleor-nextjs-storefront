@@ -23,7 +23,7 @@ export const TabsMenu = <T extends string>({ active, items }: Props<T>) => {
     <nav className="flex flex-1 flex-col" aria-label="Sidebar">
       <ul role="list" className="space-y-1">
         {items.map((item) => {
-          const isActive = item.id === active;
+          const isActive = !!active?.endsWith(item.id);
 
           return (
             <li key={item.id}>
