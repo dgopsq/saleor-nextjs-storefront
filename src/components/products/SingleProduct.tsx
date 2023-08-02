@@ -39,12 +39,12 @@ export const SingleProduct: React.FC<Props> = ({ slug }) => {
   return (
     <div className="group relative">
       <Island variant="solid-darker">
-        <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden lg:aspect-none group-hover:opacity-75 lg:h-80">
+        <div className="w-full overflow-hidden lg:aspect-none group-hover:opacity-75">
           {imageSrc ? (
             <Image
               src={imageSrc}
               alt={imageAlt ?? ""}
-              className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+              className="h-full w-full object-cover object-center"
               width={200}
               height={200}
             />
