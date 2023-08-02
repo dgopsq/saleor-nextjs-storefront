@@ -134,7 +134,7 @@ export const CartProducts: React.FC<Props> = ({
               </div>
 
               {!compact ? (
-                <div className="basis-auto shrink-0 grow-0 flex flex-col  justify-between items-end mt-4 sm:mt-0">
+                <div className="basis-auto shrink-0 grow-0 flex flex-col justify-between items-end">
                   <div>
                     <QuantitySelect
                       value={line.quantity}
