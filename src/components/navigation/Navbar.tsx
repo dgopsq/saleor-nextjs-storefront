@@ -36,7 +36,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
       <header className="relative">
         <nav aria-label="Top">
           <div className="bg-white border-b border-gray-200">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4">
               <div>
                 <div className="flex h-20 items-center justify-between">
                   <div className="hidden lg:flex lg:items-center">

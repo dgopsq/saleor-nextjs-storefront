@@ -46,7 +46,7 @@ export const MobileNavbar: React.FC<Props> = ({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl p-8">
+            <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl px-4 py-8">
               <div className="flex pb-2">
                 <button
                   type="button"
