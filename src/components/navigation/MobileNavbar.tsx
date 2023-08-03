@@ -1,8 +1,7 @@
 "use client";
 
 import { CloseIcon } from "@/components/core/Icon";
-import { Link } from "@/components/core/Link";
-import { generateCategoryRoute } from "@/misc/navigation";
+import { CategoryLink } from "@/components/navigation/CategoryLink";
 import { Category } from "@/queries/categories/data";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
@@ -62,13 +61,12 @@ export const MobileNavbar: React.FC<Props> = ({
                 <ul className="space-y-8">
                   {categories.map((category) => (
                     <li key={category.slug}>
-                      <Link
-                        href={generateCategoryRoute(category.slug)}
-                        className="text-lg font-medium text-gray-900"
+                      <CategoryLink
+                        variant="main"
+                        slug={category.slug}
+                        name={category.name}
                         onClick={() => setOpen(false)}
-                      >
-                        {category.name}
-                      </Link>
+                      />
 
                       <div>
                         <ul
@@ -78,13 +76,12 @@ export const MobileNavbar: React.FC<Props> = ({
                         >
                           {category.children.map((subCategory) => (
                             <li key={subCategory.name}>
-                              <Link
-                                href={generateCategoryRoute(subCategory.slug)}
-                                className="text-gray-500 hover:text-gray-800 text-sm font-medium"
+                              <CategoryLink
+                                variant="sub"
+                                slug={subCategory.slug}
+                                name={subCategory.name}
                                 onClick={() => setOpen(false)}
-                              >
-                                {subCategory.name}
-                              </Link>
+                              />
                             </li>
                           ))}
                         </ul>

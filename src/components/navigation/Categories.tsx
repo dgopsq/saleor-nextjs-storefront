@@ -1,7 +1,6 @@
 "use client";
 
-import { Link } from "@/components/core/Link";
-import { generateCategoryRoute } from "@/misc/navigation";
+import { CategoryLink } from "@/components/navigation/CategoryLink";
 import { classNames } from "@/misc/styles";
 import { Category } from "@/queries/categories/data";
 import { Popover, Transition } from "@headlessui/react";
@@ -20,7 +19,7 @@ export const Categories: React.FC<Props> = ({ categories }) => {
       <div className="flex h-full justify-center space-x-8">
         {categories.map((category) => (
           <Popover key={category.name} className="flex">
-            {({ open }) => (
+            {({ open, close }) => (
               <>
                 <div className="relative flex">
                   <Popover.Button
@@ -53,12 +52,11 @@ export const Categories: React.FC<Props> = ({ categories }) => {
                     <div className="relative bg-white">
                       <div className="mx-auto max-w-7xl px-8 my-10">
                         <div>
-                          <Link
-                            href={generateCategoryRoute(category.slug)}
-                            className="text-lg font-medium text-gray-900"
-                          >
-                            {category.name}
-                          </Link>
+                          <CategoryLink
+                            variant="main"
+                            slug={category.slug}
+                            name={category.name}
+                          />
                         </div>
 
                         <ul
@@ -68,13 +66,12 @@ export const Categories: React.FC<Props> = ({ categories }) => {
                         >
                           {category.children.map((subCategory) => (
                             <li key={subCategory.name}>
-                              <Popover.Button
-                                as={Link}
-                                href={generateCategoryRoute(subCategory.slug)}
-                                className="text-gray-500 hover:text-gray-800 text-sm font-medium"
-                              >
-                                {subCategory.name}
-                              </Popover.Button>
+                              <CategoryLink
+                                variant="sub"
+                                slug={subCategory.slug}
+                                name={subCategory.name}
+                                onClick={close}
+                              />
                             </li>
                           ))}
                         </ul>
