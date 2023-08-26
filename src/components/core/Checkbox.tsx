@@ -6,7 +6,7 @@ type Props = {
 };
 
 /**
- *
+ * Common checkbox component.
  */
 export const Checkbox: React.FC<Props> = ({ label, id, value, onClick }) => {
   return (

@@ -16,7 +16,7 @@ type Props<T extends string> = {
 };
 
 /**
- *
+ * A managed form field to be used with a specific form library.
  */
 export const Field = <T extends string>({
   label,

@@ -5,7 +5,7 @@ type Props = {
 };
 
 /**
- *
+ * Renderer component for an EditorJS text.
  */
 export const EditorJSRenderer: React.FC<Props> = ({ data }) => {
   const edjsParser = edjsHTML();

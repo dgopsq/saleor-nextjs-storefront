@@ -8,7 +8,7 @@ import { Button } from "@/components/core/Button";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The schema for the change email form.
  */
 const changeEmailFormSchema = z.object({
   oldPassword: z.string().min(8).max(50),
@@ -16,7 +16,7 @@ const changeEmailFormSchema = z.object({
 });
 
 /**
- *
+ * Type describing the change email form.
  */
 export type ChangeEmailForm = z.infer<typeof changeEmailFormSchema>;
 
@@ -26,7 +26,7 @@ type Props = {
 };
 
 /**
- *
+ * The form used by the user to change her/his email.
  */
 export const ChangeEmailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
   const t = useTranslations("User");

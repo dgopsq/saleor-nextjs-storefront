@@ -22,7 +22,8 @@ type Props = {
 };
 
 /**
- *
+ * Select component populated with the list of countries.
+ * The intrinsic value of this component is the country code.
  */
 export const CountrySelect: React.FC<Props> = ({
   value,
