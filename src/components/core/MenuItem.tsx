@@ -9,7 +9,7 @@ type Props = {
 };
 
 /**
- *
+ * Component used to display a menu with a list of items.
  */
 export const MenuItem: React.FC<Props> = ({
   isActive,

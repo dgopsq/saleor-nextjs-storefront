@@ -7,7 +7,7 @@ type Props = PropsWithChildren<{
 }>;
 
 /**
- *
+ * Component used to display a radio button with an island around it.
  */
 export const RadioIsland: React.FC<Props> = ({ isSelected, children }) => {
   return (

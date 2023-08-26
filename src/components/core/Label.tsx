@@ -4,7 +4,7 @@ type Props = {
 };
 
 /**
- *
+ * Component used to display a label for a form field.
  */
 export const Label: React.FC<Props> = ({ htmlFor, children }) => {
   return (

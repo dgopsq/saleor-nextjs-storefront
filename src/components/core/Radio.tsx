@@ -4,7 +4,7 @@ type Props = {
 };
 
 /**
- *
+ * Display a radio button.
  */
 export const Radio: React.FC<Props> = ({ selected, onClick }) => {
   return (

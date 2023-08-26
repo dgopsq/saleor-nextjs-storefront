@@ -10,7 +10,9 @@ type Props = PropsWithChildren<{
 }>;
 
 /**
- *
+ * A contained section of the page.
+ * It could be just a bordered container or a solid one
+ * with a background.
  */
 export const Island: React.FC<Props> = ({
   variant,

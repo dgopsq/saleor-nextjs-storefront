@@ -9,7 +9,7 @@ type Props = {
 };
 
 /**
- *
+ * Component used to display a single address.
  */
 export const SingleAddress: React.FC<Props> = ({
   address,

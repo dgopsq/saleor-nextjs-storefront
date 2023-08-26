@@ -13,7 +13,7 @@ type Props<T extends string | number> = {
 };
 
 /**
- *
+ * Select input field with a list of options.
  */
 export const Select = <T extends string | number>({
   id,

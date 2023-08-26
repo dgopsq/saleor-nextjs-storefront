@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
 }>;
 
 /**
- *
+ * Component used to display a link to a product.
  */
 export const ProductLink: React.FC<Props> = ({
   product,

@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 type Props = PropsWithChildren<LinkProps & { className?: string }>;
 
 /**
- *
+ * Component used to display a link.
  */
 export const Link = ({ className, ...props }: Props) => {
   return (

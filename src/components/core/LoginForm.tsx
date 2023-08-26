@@ -8,7 +8,7 @@ import { Button } from "@/components/core/Button";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The schema for the login form.
  */
 const LoginFormSchema = z.object({
   email: z.string().email(),
@@ -16,7 +16,7 @@ const LoginFormSchema = z.object({
 });
 
 /**
- *
+ * Type describing the login form.
  */
 export type LoginForm = z.infer<typeof LoginFormSchema>;
 
@@ -26,7 +26,7 @@ type Props = {
 };
 
 /**
- *
+ * The form used by the user to login.
  */
 export const LoginForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
   const t = useTranslations("User");
