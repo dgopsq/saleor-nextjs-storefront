@@ -29,7 +29,7 @@ type Props = {
 };
 
 /**
- *
+ * The checkout informations page for logged in users.
  */
 export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
   const t = useTranslations("Checkout");

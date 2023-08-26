@@ -21,7 +21,7 @@ type Props = {
 };
 
 /**
- *
+ * The list of products in the cart.
  */
 export const CartProducts: React.FC<Props> = ({
   products,

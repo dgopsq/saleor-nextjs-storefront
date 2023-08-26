@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- *
+ * The list of shipping methods in the checkout.
  */
 export const CheckoutDeliveryMethod: React.FC<Props> = ({
   deliveryMethods,

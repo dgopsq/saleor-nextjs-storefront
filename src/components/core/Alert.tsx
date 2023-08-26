@@ -5,7 +5,7 @@ type BaseAlertProps = {
 };
 
 /**
- *
+ * Alert showing a success message.
  */
 export const SuccessAlert: React.FC<BaseAlertProps> = ({ text }) => (
   <div className="rounded-md bg-green-100 p-4">
@@ -21,7 +21,7 @@ export const SuccessAlert: React.FC<BaseAlertProps> = ({ text }) => (
 );
 
 /**
- *
+ * Alert showing an error message.
  */
 export const ErrorAlert: React.FC<BaseAlertProps> = ({ text }) => (
   <div className="rounded-md bg-red-100 p-4">

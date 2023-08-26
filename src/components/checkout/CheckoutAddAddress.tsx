@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- *
+ * The form to add a new address in the checkout.
  */
 export const CheckoutAddAddress: React.FC<Props> = ({
   onCancel,

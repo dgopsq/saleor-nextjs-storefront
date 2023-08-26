@@ -8,7 +8,7 @@ type Props = {
 };
 
 /**
- *
+ * The summary of the cart used in the checkout.
  */
 export const CartSummary: React.FC<Props> = ({ checkout }) => {
   const t = useTranslations("Checkout");

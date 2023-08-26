@@ -18,7 +18,7 @@ type Props = {
 };
 
 /**
- *
+ * The steps component used during the checkout.
  */
 export const CheckoutSteps: React.FC<Props> = ({ currentStep }) => {
   const t = useTranslations("Checkout");

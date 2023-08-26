@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 
 /**
- *
+ * The checkout shipping page.
  */
 export const Shipping: React.FC = () => {
   const t = useTranslations("Checkout");

@@ -15,7 +15,7 @@ type BaseButtonProps = {
 >;
 
 /**
- *
+ * Generic button component with various variants and styles.
  */
 export const Button: React.FC<BaseButtonProps> = ({
   text,
@@ -62,7 +62,7 @@ export const Button: React.FC<BaseButtonProps> = ({
 };
 
 /**
- *
+ * Generic text-button component with various variants and styles.
  */
 export const TextButton: React.FC<
   Omit<BaseButtonProps, "size" | "isLoading">

@@ -13,7 +13,7 @@ import { z } from "zod";
 const defaultCountry = CountryCode.It;
 
 /**
- *
+ * The schema for the address form.
  */
 const addressFormSchema = z.object({
   firstName: z.string().trim().min(1),
@@ -29,7 +29,7 @@ const addressFormSchema = z.object({
 });
 
 /**
- *
+ * Type describing the address form.
  */
 export type AddressForm = z.infer<typeof addressFormSchema>;
 
@@ -44,7 +44,7 @@ type Props = {
 };
 
 /**
- *
+ * The form to add a new address in the checkout.
  */
 export const AddressForm = forwardRef<AddressFormRef, Props>(
   ({ initialValues, compact, asyncErrors }, ref) => {

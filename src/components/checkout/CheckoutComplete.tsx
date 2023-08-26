@@ -9,7 +9,7 @@ import { useGuestOrderAccountStore } from "@/misc/states/guestOrderAccount";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The checkout complete page.
  */
 export const CheckoutComplete: React.FC = () => {
   const t = useTranslations("Checkout");

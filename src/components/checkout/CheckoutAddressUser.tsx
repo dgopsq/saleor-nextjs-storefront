@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- *
+ * The list of addresses of the user in the checkout.
  */
 export const CheckoutAddressUser: React.FC<Props> = ({
   addresses,

@@ -4,7 +4,8 @@ import { CartIcon } from "@/components/core/Icon";
 import { useCheckoutInfo } from "@/misc/hooks/useCheckoutInfo";
 
 /**
- *
+ * The cart button composed by an icon and the
+ * number of items in the cart.
  */
 export const CartButton: React.FC = () => {
   const { data } = useCheckoutInfo();

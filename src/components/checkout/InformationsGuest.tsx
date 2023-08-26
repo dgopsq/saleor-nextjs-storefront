@@ -37,7 +37,7 @@ import {
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The checkout informations page for guests.
  */
 export const InformationsGuest: React.FC = () => {
   const t = useTranslations("Checkout");
