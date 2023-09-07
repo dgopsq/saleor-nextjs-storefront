@@ -13,7 +13,7 @@
 ## Getting Started
 
 **Requirements:**
-- An instance of the _Saleor_ backend up and running in order to successfully run this project (the easiest way is probably to use [Saleor Cloud](https://cloud.saleor.io/) and its free tier)
+- An instance of the _Saleor_ backend up and running (the easiest way is probably to use [Saleor Cloud](https://cloud.saleor.io/) and its free tier)
 - The [Saleor Stripe App](https://docs.saleor.io/docs/3.x/developer/app-store/apps/stripe) installed in the dashboard
 
 **Follow these steps in order to execute the project correctly:**
