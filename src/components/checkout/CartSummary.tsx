@@ -1,4 +1,3 @@
-import { QuestionIcon } from "@/components/core/Icon";
 import { formatPrice } from "@/misc/currencies";
 import { Checkout } from "@/queries/checkout/data";
 import { useTranslations } from "next-intl";
@@ -31,12 +30,6 @@ export const CartSummary: React.FC<Props> = ({ checkout }) => {
         <div className="flex items-center justify-between border-t border-secondary-200 pt-4">
           <dt className="flex items-center text-sm text-secondary-600">
             <span>{t("Shipping estimate")}</span>
-            <a
-              href="#"
-              className="ml-2 flex-shrink-0 text-secondary-400 hover:text-secondary-500"
-            >
-              <QuestionIcon className="h-5 w-5" />
-            </a>
           </dt>
           <dd className="text-sm font-medium text-secondary-900">
             {formatPrice(
