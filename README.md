@@ -12,9 +12,11 @@
 
 ## Getting Started
 
- You need an instance of the _Saleor_ backend up and running in order to successfully run this project. The easiest way is probably to use [Saleor Cloud](https://cloud.saleor.io/) and its free tier.
+**Requirements:**
+- An instance of the _Saleor_ backend up and running in order to successfully run this project (the easiest way is probably to use [Saleor Cloud](https://cloud.saleor.io/) and its free tier)
+- The [Saleor Stripe App](https://docs.saleor.io/docs/3.x/developer/app-store/apps/stripe) installed in the dashboard
 
-Follow these steps in order to execute the project correctly:
+**Follow these steps in order to execute the project correctly:**
 
 1. Rename the `.env.local.example` into `.env.local` and fill the `NEXT_PUBLIC_GRAPHQL_URL` environment variable with the correct URL to your GraphQL API;
 
