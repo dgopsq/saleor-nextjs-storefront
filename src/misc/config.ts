@@ -109,12 +109,11 @@ export const publicConfig = {
   /**
    * The default HTML title used in the store.
    */
-  seoTitle: process.env.NEXT_PUBLIC_SEO_TITLE || "NextJS + Saleor",
+  seoTitle: process.env.NEXT_PUBLIC_SEO_TITLE || "Your shop title",
 
   /**
    * The default HTML description used in the store.
    */
   seoDescription:
-    process.env.NEXT_PUBLIC_SEO_DESCRIPTION ||
-    "Ecommerce built with NextJS and Saleor.",
+    process.env.NEXT_PUBLIC_SEO_DESCRIPTION || "Your shop description.",
 };
