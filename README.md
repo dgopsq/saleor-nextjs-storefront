@@ -1,6 +1,9 @@
 
 [Saleor](https://saleor.io/) storefront built using [Next.js](https://nextjs.org/) 13 and the new **App Router**.
 
+> [!NOTE]
+> This repository is currently **👷‍♀️ WIP 👷** and it's **NOT** a production ready storefront. Feel free to open an issue if you see bugs or sections that could be improved!
+
 ## Features
 
 - 🕺 Fully functional Saleor storefront using the new Next 13 app router
