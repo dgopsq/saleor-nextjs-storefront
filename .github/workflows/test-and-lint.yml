@@ -8,6 +8,9 @@ on:
 
 name: Test and lint workflow
 
+env:
+  NEXT_PUBLIC_GRAPHQL_URL: https://demo.saleor.io/graphql/
+
 jobs:
   cache-and-install:
     runs-on: ubuntu-latest
@@ -42,6 +45,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Generate the GraphQL
+        run: pnpm generate:graphql
 
       - name: Compile the code
         run: pnpm compile
