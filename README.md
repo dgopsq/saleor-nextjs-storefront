@@ -7,7 +7,7 @@
 ## Features
 
 - 🕺 Fully functional Saleor storefront using the new Next 13 app router
-- 💅 Styled using [Tailwind](https://tailwindcss.com/) and [Tailwind UI](https://tailwindui.com/)
+- 💅 Styled using [Tailwind](https://tailwindcss.com/)
 - 🛒 Multi steps checkout with Stripe (using the [Saleor Stripe App](https://docs.saleor.io/docs/3.x/developer/app-store/apps/stripe))
 - 📚 Out of the box i18n with [next-intl](https://next-intl-docs.vercel.app/)
 - 💁‍♀️ User profile page handling the latest orders, all the personal addresses and the security informations
