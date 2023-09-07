@@ -26,6 +26,5 @@
 
 ## Configuration
 
-You can configure your storefront using the environment variables in `src/misc/config.ts`. The only required configuration is `NEXT_PUBLIC_GRAPHQL_URL`, everything else is optional and has been documented directly in the file.
-
+You can configure your storefront using the environment variables in [`src/misc/config.ts`](https://github.com/dgopsq/saleor-nextjs-base/blob/main/src/misc/config.ts). The only required configuration is `NEXT_PUBLIC_GRAPHQL_URL`, everything else is optional and has been documented directly in the file.
 
