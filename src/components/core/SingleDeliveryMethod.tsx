@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders a single delivery method.
  */
 export const SingleDeliveryMethod: React.FC<Props> = ({ deliveryMethod }) => {
   const { name, description, price } = deliveryMethod;

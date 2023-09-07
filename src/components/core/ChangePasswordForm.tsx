@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The schema for the change password form.
  */
 const changePasswordFormSchema = z.object({
   oldPassword: z.string().min(8).max(50),
@@ -18,7 +18,7 @@ const changePasswordFormSchema = z.object({
 });
 
 /**
- *
+ * Type describing the change password form.
  */
 export type ChangePasswordForm = z.infer<typeof changePasswordFormSchema>;
 
@@ -28,7 +28,7 @@ type Props = {
 };
 
 /**
- *
+ * The form used by the user to change her/his password.
  */
 export const ChangePasswordForm: React.FC<Props> = ({
   onSubmit,

@@ -21,7 +21,7 @@ type Props = {
 };
 
 /**
- *
+ * The list of products in the cart.
  */
 export const CartProducts: React.FC<Props> = ({
   products,
@@ -51,7 +51,7 @@ export const CartProducts: React.FC<Props> = ({
     );
 
   return (
-    <ul role="list" className="divide-y divide-gray-100">
+    <ul role="list" className="divide-y divide-secondary-100">
       {products.map((line, index) => {
         const imageUrl = line.variant.images[0]?.url ?? null;
         const imageAlt = line.variant.images[0]?.alt ?? "";
@@ -101,7 +101,7 @@ export const CartProducts: React.FC<Props> = ({
                   {line.variant.attributes.map(({ attribute, values }) => (
                     <p
                       key={attribute.id}
-                      className="mt-2 text-sm font-medium text-gray-400"
+                      className="mt-2 text-sm font-medium text-secondary-400"
                     >
                       {`${attribute.name}: ${values
                         .map((value) => value.name)
@@ -114,7 +114,7 @@ export const CartProducts: React.FC<Props> = ({
                   <p
                     className={classNames(
                       compact ? "text-sm" : "",
-                      "font-semibold text-gray-900"
+                      "font-semibold text-secondary-900"
                     )}
                   >
                     {line.variant.price

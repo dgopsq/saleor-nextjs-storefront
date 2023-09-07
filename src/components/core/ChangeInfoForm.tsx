@@ -9,7 +9,7 @@ import { Button } from "@/components/core/Button";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The schema for the change informations form.
  */
 const changeInfoFormSchema = z.object({
   firstName: z.string().min(1).max(50),
@@ -17,7 +17,7 @@ const changeInfoFormSchema = z.object({
 });
 
 /**
- *
+ * Type describing the change informations form.
  */
 export type ChangeInfoForm = z.infer<typeof changeInfoFormSchema>;
 
@@ -28,7 +28,7 @@ type Props = {
 };
 
 /**
- *
+ * The form used by the user to change her/his informations.
  */
 export const ChangeInfoForm: React.FC<Props> = ({
   initialValues,

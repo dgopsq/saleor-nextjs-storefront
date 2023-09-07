@@ -12,7 +12,7 @@ type Props = {
 };
 
 /**
- *
+ * The list of payment gateways in the checkout.
  */
 export const CheckoutPaymentGateway: React.FC<Props> = ({
   paymentGateways,

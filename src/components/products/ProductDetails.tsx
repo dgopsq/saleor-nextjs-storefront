@@ -24,7 +24,7 @@ import { productsRoute } from "@/misc/navigation";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * Appends the variant id to the URL.
  */
 function appendVariantToUrl(params: {
   variantId: string;
@@ -51,7 +51,8 @@ type Props = {
 };
 
 /**
- *
+ * Renders a single product with all its details.
+ * This component is used for the product details page.
  */
 export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
   useSuspenseQuery(GetProductDocument, { variables: { slug } });
@@ -138,13 +139,13 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
 
           {/* Product info */}
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold tracking-tight text-secondary-900">
               {product.name}
             </h1>
 
             <div className="mt-3">
               <h2 className="sr-only">{t("Product information")}</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
+              <p className="text-3xl tracking-tight text-secondary-900">
                 {formattedPrice}
               </p>
             </div>

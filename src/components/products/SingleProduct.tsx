@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders the preview of a single product.
  */
 export const SingleProduct: React.FC<Props> = ({ slug }) => {
   const { data, complete } = useFragment({
@@ -53,12 +53,14 @@ export const SingleProduct: React.FC<Props> = ({ slug }) => {
       </Island>
       <div className="mt-4 flex justify-between">
         <div>
-          <h3 className="text-sm text-gray-700">
+          <h3 className="text-sm text-secondary-700">
             <span aria-hidden="true" className="absolute inset-0" />
             {name}
           </h3>
         </div>
-        <p className="text-sm font-medium text-gray-900">{formattedPrice}</p>
+        <p className="text-sm font-medium text-secondary-900">
+          {formattedPrice}
+        </p>
       </div>
     </div>
   );

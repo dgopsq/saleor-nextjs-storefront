@@ -29,7 +29,7 @@ type Props = {
 };
 
 /**
- *
+ * The checkout informations page for logged in users.
  */
 export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
   const t = useTranslations("Checkout");
@@ -115,7 +115,7 @@ export const InformationsUser: React.FC<Props> = ({ userInfo }) => {
 
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" className="lg:col-span-7">
-          <div className="border-b border-gray-100 pb-12">
+          <div className="border-b border-secondary-100 pb-12">
             <div className="flex flex-row items-center gap-4">
               <SectionHeading>{t("Shipping address")}</SectionHeading>
 

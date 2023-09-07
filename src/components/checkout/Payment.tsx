@@ -18,7 +18,7 @@ import { cartRoute, checkoutRoute } from "@/misc/navigation";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The checkout payment page.
  */
 export const Payment: React.FC = () => {
   const t = useTranslations("Checkout");

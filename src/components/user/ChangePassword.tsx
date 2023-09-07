@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
- *
+ * Renders the page to change the user's password.
  */
 export const ChangePassword: React.FC = () => {
   const t = useTranslations("User");

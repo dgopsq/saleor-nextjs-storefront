@@ -8,7 +8,7 @@ import { Button } from "@/components/core/Button";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * The schema for the signup form.
  */
 const SignupFormSchema = z.object({
   firstName: z.string().min(1).max(50),
@@ -18,7 +18,7 @@ const SignupFormSchema = z.object({
 });
 
 /**
- *
+ * Type describing the signup form.
  */
 export type SignupForm = z.infer<typeof SignupFormSchema>;
 
@@ -29,7 +29,7 @@ type Props = {
 };
 
 /**
- *
+ * The form used by the user to signup.
  */
 export const SignupForm: React.FC<Props> = ({
   onSubmit,

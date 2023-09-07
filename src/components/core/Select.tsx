@@ -13,7 +13,7 @@ type Props<T extends string | number> = {
 };
 
 /**
- *
+ * Select input field with a list of options.
  */
 export const Select = <T extends string | number>({
   id,
@@ -25,7 +25,7 @@ export const Select = <T extends string | number>({
   return (
     <select
       id={id}
-      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-secondary-900 ring-1 ring-inset ring-secondary-300 focus:ring-2 focus:ring-primary-600 sm:text-sm sm:leading-6"
       value={value}
       onChange={({ target: { value } }) => onChange(parseValue(value))}
     >

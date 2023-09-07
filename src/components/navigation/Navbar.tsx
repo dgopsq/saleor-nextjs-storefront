@@ -18,7 +18,7 @@ type Props = {
 };
 
 /**
- *
+ * The main Navbar component.
  */
 export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
 
       <header className="relative">
         <nav aria-label="Top">
-          <div className="bg-white border-b border-gray-200">
+          <div className="bg-white border-b border-secondary-200">
             <div className="mx-auto max-w-7xl px-4">
               <div>
                 <div className="flex h-20 items-center justify-between">
@@ -50,7 +50,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                   <div className="flex flex-1 items-center lg:hidden">
                     <button
                       type="button"
-                      className="-ml-2 rounded-md bg-white p-2 text-gray-400"
+                      className="-ml-2 rounded-md bg-white p-2 text-secondary-400"
                       onClick={() => setOpen(true)}
                     >
                       <HamburgerIcon className="h-6 w-6" />
@@ -76,7 +76,7 @@ export const Navbar: React.FC<Props> = ({ categories }) => {
                           </div>
 
                           <span
-                            className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
+                            className="mx-4 h-6 w-px bg-secondary-200 lg:mx-6"
                             aria-hidden="true"
                           />
 

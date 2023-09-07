@@ -7,14 +7,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 /**
- *
+ * The schema for the email form.
  */
 const EmailFormSchema = z.object({
   email: z.string().email(),
 });
 
 /**
- *
+ * Type describing the email form.
  */
 export type EmailForm = z.infer<typeof EmailFormSchema>;
 
@@ -27,7 +27,7 @@ type Props = {
 };
 
 /**
- *
+ * The form used by the user to change her/his email.
  */
 export const EmailForm = forwardRef<EmailFormRef, Props>(
   ({ initialValues }, ref) => {

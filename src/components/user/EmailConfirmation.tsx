@@ -9,7 +9,9 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 
 /**
- *
+ * Controller component used to handle the email change confirmation.
+ * This won't render anything but it will handle the confirmation logic
+ * and show a toast with the result.
  */
 export const EmailConfirmation: React.FC = () => {
   const t = useTranslations("User");

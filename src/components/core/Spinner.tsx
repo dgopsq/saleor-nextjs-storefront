@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- *
+ * A loading spinner.
  */
 export const Spinner: React.FC<Props> = ({ size, variant }) => {
   const computedSize = match(size)
@@ -17,7 +17,7 @@ export const Spinner: React.FC<Props> = ({ size, variant }) => {
 
   const computedVariant = match(variant)
     .with("white", () => "text-transparent fill-white")
-    .with("main", () => "text-transparent fill-indigo-500")
+    .with("main", () => "text-transparent fill-primary-500")
     .exhaustive();
 
   return (

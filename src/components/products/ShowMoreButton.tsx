@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- *
+ * Button used to show more items in a pagination context.
  */
 export const ShowMoreButton: React.FC<Props> = ({
   onClick,

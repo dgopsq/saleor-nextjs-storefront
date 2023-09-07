@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 /**
- *
+ * The cart page.
  */
 export const Cart: React.FC = () => {
   const t = useTranslations("Checkout");

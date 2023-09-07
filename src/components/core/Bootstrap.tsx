@@ -6,7 +6,8 @@ import { useApolloClient } from "@apollo/client";
 import { useEffect } from "react";
 
 /**
- *
+ * Bootstrap component used to trigger initialization jobs.
+ * This will be executed with a valid Apollo client in the context.
  */
 export const Bootstrap: React.FC = () => {
   const apolloClient = useApolloClient();
@@ -22,7 +23,7 @@ export const Bootstrap: React.FC = () => {
 };
 
 /**
- *
+ * Bootstrap component used to handle translations inside the zod library.
  */
 export const FormBootstrap: React.FC = () => {
   // Handle translations inside the zod library.

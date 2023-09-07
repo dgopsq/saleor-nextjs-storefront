@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
- *
+ * Renders the page to change the user's email.
  */
 export const ChangeEmail: React.FC = () => {
   const t = useTranslations("User");
@@ -49,12 +49,12 @@ export const ChangeEmail: React.FC = () => {
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
           <div className="md:col-span-3">
-            <label className="block text-sm font-medium leading-6 text-gray-900">
+            <label className="block text-sm font-medium leading-6 text-secondary-900">
               {t("Current email")}
             </label>
             <div className="mt-2">
               <input
-                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 bg-gray-100 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 px-2 text-secondary-900 shadow-sm ring-1 bg-secondary-100 ring-inset ring-secondary-300 placeholder:text-secondary-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
                 type="email"
                 value={userInfo?.email || ""}
                 disabled

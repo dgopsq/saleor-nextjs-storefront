@@ -4,7 +4,7 @@ type Props = {
 };
 
 /**
- *
+ * Component used to display a key-value pair.
  */
 export const KeyValue: React.FC<Props> = ({ label, value }) => {
   return (

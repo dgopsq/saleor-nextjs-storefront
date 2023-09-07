@@ -25,7 +25,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders the page to edit an address.
  */
 export const EditAddress = ({ id }: Props) => {
   const t = useTranslations("User");
@@ -184,16 +184,16 @@ export const EditAddress = ({ id }: Props) => {
     <div>
       <PageHeading>{t("Edit address")}</PageHeading>
 
-      <div className="mt-8 pb-16 border-b border-gray-100">
+      <div className="mt-8 pb-16 border-b border-secondary-100">
         <AddressForm
           ref={addressFormRef}
           initialValues={addressToAddressForm(parseAddress(data))}
           asyncErrors={updateData?.accountAddressUpdate?.errors ?? []}
         />
 
-        <div className="bg-gray-50 rounded-lg mt-16">
+        <div className="bg-secondary-50 rounded-lg mt-16">
           <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">
+            <h3 className="text-base font-semibold leading-6 text-secondary-900">
               {t("Set this address as default")}
             </h3>
 

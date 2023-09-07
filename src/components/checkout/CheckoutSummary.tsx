@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- *
+ * The order's summary in the checkout.
  */
 export const CheckoutSummary: React.FC<Props> = ({
   checkout,

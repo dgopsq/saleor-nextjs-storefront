@@ -9,7 +9,7 @@ type Props = {
 };
 
 /**
- *
+ * Component used to display a single address.
  */
 export const SingleAddress: React.FC<Props> = ({
   address,
@@ -41,7 +41,7 @@ export const SingleAddress: React.FC<Props> = ({
             {firstName} {lastName}
           </div>
 
-          <div className="text-sm text-gray-700">{`${streetAddress1}, ${city} (${countryArea}), ${postalCode}, ${country}`}</div>
+          <div className="text-sm text-secondary-700">{`${streetAddress1}, ${city} (${countryArea}), ${postalCode}, ${country}`}</div>
         </div>
       ) : (
         <div className="flex flex-row items-center gap-2">
@@ -50,11 +50,11 @@ export const SingleAddress: React.FC<Props> = ({
               {firstName} {lastName}
             </li>
 
-            <li className="text-sm text-gray-700">{streetAddress1}</li>
+            <li className="text-sm text-secondary-700">{streetAddress1}</li>
 
-            <li className="text-sm text-gray-700">{`${city} (${countryArea}), ${postalCode}`}</li>
+            <li className="text-sm text-secondary-700">{`${city} (${countryArea}), ${postalCode}`}</li>
 
-            <li className="text-sm text-gray-700">{country}</li>
+            <li className="text-sm text-secondary-700">{country}</li>
           </ul>
         </div>
       )}

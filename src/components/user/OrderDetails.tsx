@@ -23,7 +23,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders the page to show the details of an order.
  */
 export const OrderDetails: React.FC<Props> = ({ number }) => {
   const t = useTranslations("User");

@@ -65,7 +65,7 @@ type Props = {
 };
 
 /**
- *
+ * The specific payment gateway for Stripe.
  */
 export const StripePaymentGateway: React.FC<Props> = ({ config }) => {
   const maybeConfig = useMemo(() => {

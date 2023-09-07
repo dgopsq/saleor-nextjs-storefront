@@ -9,7 +9,8 @@ import { match } from "ts-pattern";
 const notificationDuration = 5000;
 
 /**
- *
+ * Main notifications component used to display toasts on a specific
+ * part of the page.
  */
 export const Notifications = () => {
   const { toasts, handlers } = useToaster();
@@ -48,15 +49,15 @@ export const Notifications = () => {
                     <div className="flex-shrink-0">
                       {match(toast.type)
                         .with("success", () => (
-                          <SuccessIcon className="h-6 w-6 text-green-400" />
+                          <SuccessIcon className="h-6 w-6 text-success-400" />
                         ))
                         .with("error", () => (
-                          <FailureIcon className="h-6 w-6 text-red-400" />
+                          <FailureIcon className="h-6 w-6 text-danger-400" />
                         ))
                         .otherwise(() => undefined)}
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-secondary-900">
                         {typeof toast.message === "function"
                           ? toast.message(toast)
                           : toast.message}
@@ -73,14 +74,14 @@ export const Notifications = () => {
 };
 
 /**
- *
+ * Trigger a success toast.
  */
 export function successToast(message: string) {
   toast.success(message, { duration: notificationDuration });
 }
 
 /**
- *
+ * Trigger an error toast.
  */
 export function errorToast(message: string) {
   toast.error(message, { duration: notificationDuration });

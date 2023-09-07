@@ -14,7 +14,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders all products from a specific category.
  */
 export const CategoryProducts: React.FC<Props> = ({ slug }) => {
   const variables = useMemo(() => getCategoryProductsVariables(slug), [slug]);

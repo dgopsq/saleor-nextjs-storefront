@@ -7,7 +7,9 @@ import { useCheckoutGuard } from "@/misc/hooks/useCheckoutGuard";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 
 /**
- *
+ * Hub component for the checkout informations.
+ * It will render the guest or user informations
+ * depending on the user state.
  */
 export const Informations: React.FC = () => {
   const userInfo = useUserInfo();
