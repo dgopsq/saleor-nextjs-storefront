@@ -18,10 +18,9 @@
 
 **Follow these steps in order to execute the project correctly:**
 
-1. Rename the `.env.local.example` into `.env.local` and fill the `NEXT_PUBLIC_GRAPHQL_URL` environment variable with the correct URL to your GraphQL API;
-
-2. Start the project in development mode using `pnpm dev`;
-3. Open [http://localhost:3000](http://localhost:3000) with your browser;
+1. Rename the `.env.local.example` into `.env.local` and fill the `NEXT_PUBLIC_GRAPHQL_URL` environment variable with the correct URL to your GraphQL API
+2. Start the project in development mode using `pnpm dev`
+3. Open [http://localhost:3000](http://localhost:3000) with your browser
 4. 🎉
 
 ## Configuration
