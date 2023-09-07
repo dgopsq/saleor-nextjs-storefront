@@ -89,7 +89,7 @@ export const ProductVariants: React.FC<Props> = ({
               <div key={attribute.id}>
                 <label
                   htmlFor={`attribute-${attribute.id}`}
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-sm font-medium leading-6 text-secondary-900"
                 >
                   {attribute.name}
                 </label>

@@ -9,7 +9,11 @@
   "plugins": ["@typescript-eslint"],
   "root": true,
 
-  "ignorePatterns": ["src/__generated__/*", "next.config.js"],
+  "ignorePatterns": [
+    "src/__generated__/*",
+    "next.config.js",
+    "tailwind.config.js"
+  ],
 
   "rules": {
     "no-unused-vars": ["off"],

@@ -49,15 +49,15 @@ export const Notifications = () => {
                     <div className="flex-shrink-0">
                       {match(toast.type)
                         .with("success", () => (
-                          <SuccessIcon className="h-6 w-6 text-green-400" />
+                          <SuccessIcon className="h-6 w-6 text-success-400" />
                         ))
                         .with("error", () => (
-                          <FailureIcon className="h-6 w-6 text-red-400" />
+                          <FailureIcon className="h-6 w-6 text-danger-400" />
                         ))
                         .otherwise(() => undefined)}
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-secondary-900">
                         {typeof toast.message === "function"
                           ? toast.message(toast)
                           : toast.message}

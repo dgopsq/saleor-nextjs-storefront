@@ -22,9 +22,9 @@ export const Island: React.FC<Props> = ({
   isSelected,
 }) => {
   const computedVariant = match(variant)
-    .with("outline", () => "border border-gray-100")
-    .with("solid", () => "bg-gray-50 border border-gray-50")
-    .with("solid-darker", () => "bg-gray-200 border border-gray-200")
+    .with("outline", () => "border border-secondary-100")
+    .with("solid", () => "bg-secondary-50 border border-secondary-50")
+    .with("solid-darker", () => "bg-secondary-200 border border-secondary-200")
     .exhaustive();
 
   return (
@@ -35,7 +35,7 @@ export const Island: React.FC<Props> = ({
         noPadding ? "" : "p-6",
         className ?? "",
         isSelected
-          ? "outline outline-2 outline-offset-2 outline-indigo-600"
+          ? "outline outline-2 outline-offset-2 outline-primary-600"
           : ""
       )}
     >

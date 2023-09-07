@@ -19,13 +19,13 @@ export const ProductImages: React.FC<Props> = ({ images }) => {
           {images.map((image) => (
             <Tab
               key={image.id}
-              className="relative flex h-28 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none"
+              className="relative flex h-28 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-secondary-900 hover:bg-secondary-50 focus:outline-none"
             >
               {({ selected }) => (
                 <div>
                   <span
                     className={classNames(
-                      selected ? "bg-gray-50" : "",
+                      selected ? "bg-secondary-50" : "",
                       "pointer-events-none absolute inset-0 rounded-md"
                     )}
                     aria-hidden="true"

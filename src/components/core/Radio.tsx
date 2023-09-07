@@ -11,7 +11,7 @@ export const Radio: React.FC<Props> = ({ selected, onClick }) => {
     <input
       type="radio"
       checked={selected}
-      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600 cursor-pointer"
+      className="h-4 w-4 border-secondary-300 text-primary-600 focus:ring-primary-600 cursor-pointer"
       onClick={onClick}
     />
   );

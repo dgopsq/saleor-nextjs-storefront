@@ -31,9 +31,9 @@ export const Button: React.FC<BaseButtonProps> = ({
     .exhaustive();
 
   const computedVariant = match(variant)
-    .with("primary", () => "bg-indigo-600 enabled:hover:bg-indigo-700")
-    .with("secondary", () => "bg-slate-400 enabled:hover:bg-slate-500")
-    .with("danger", () => "bg-red-600 enabled:hover:bg-red-700")
+    .with("primary", () => "bg-primary-600 enabled:hover:bg-primary-700")
+    .with("secondary", () => "bg-secondary-400 enabled:hover:bg-secondary-500")
+    .with("danger", () => "bg-danger-600 enabled:hover:bg-danger-700")
     .exhaustive();
 
   const disabledState = isLoading || isDisabled;
@@ -68,9 +68,12 @@ export const TextButton: React.FC<
   Omit<BaseButtonProps, "size" | "isLoading">
 > = ({ text, variant, isDisabled, ...props }) => {
   const computedVariant = match(variant)
-    .with("primary", () => "text-indigo-600 enabled:hover:text-indigo-700")
-    .with("secondary", () => "text-slate-600 enabled:hover:text-slate-700")
-    .with("danger", () => "text-red-600 enabled:hover:text-red-700")
+    .with("primary", () => "text-primary-600 enabled:hover:text-primary-700")
+    .with(
+      "secondary",
+      () => "text-secondary-600 enabled:hover:text-secondary-700"
+    )
+    .with("danger", () => "text-danger-600 enabled:hover:text-danger-700")
     .exhaustive();
 
   const disabledState = isDisabled;

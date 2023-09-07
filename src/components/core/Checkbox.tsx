@@ -17,13 +17,13 @@ export const Checkbox: React.FC<Props> = ({ label, id, value, onClick }) => {
           aria-describedby="comments-description"
           name="comments"
           type="checkbox"
-          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+          className="h-4 w-4 rounded border-secondary-300 text-primary-600 focus:ring-primary-600"
           checked={value}
           onChange={onClick}
         />
       </div>
       <div className="ml-3 text-sm leading-6">
-        <label htmlFor={id} className="font-medium text-gray-900">
+        <label htmlFor={id} className="font-medium text-secondary-900">
           {label}
         </label>
       </div>

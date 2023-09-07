@@ -37,9 +37,9 @@ export const Field = <T extends string>({
         <input
           id={id}
           className={classNames(
-            "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
-            disabled ? "bg-gray-50 cursor-not-allowed" : "",
-            error ? "ring-red-600" : ""
+            "block w-full rounded-md border-0 py-1.5 px-2 text-secondary-900 shadow-sm ring-1 ring-inset ring-secondary-300 placeholder:text-secondary-400 focus:ring-1 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6",
+            disabled ? "bg-secondary-50 cursor-not-allowed" : "",
+            error ? "ring-danger-600" : ""
           )}
           type={type}
           autoComplete={autoComplete}
@@ -49,7 +49,7 @@ export const Field = <T extends string>({
           {...register}
         />
         {error ? (
-          <p className="text-xs text-red-600 mt-1">{error}</p>
+          <p className="text-xs text-danger-600 mt-1">{error}</p>
         ) : undefined}
       </div>
     </>

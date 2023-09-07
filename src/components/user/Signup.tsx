@@ -69,7 +69,7 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
 
       {!hideLoginLink ? (
         <div className="mt-8 flex flex-row justify-center">
-          <p className="text-sm text-gray-600 text-center">
+          <p className="text-sm text-secondary-600 text-center">
             {t("Already have an account?") + " "}
             <Link href={loginRoute}>{t("Login here")}</Link>
           </p>

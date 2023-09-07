@@ -191,17 +191,17 @@ export const InformationsGuest: React.FC = () => {
       <form className="w-full" onSubmit={handleFormSubmit}>
         <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
-            <div className="border-b border-gray-100 pb-12">
+            <div className="border-b border-secondary-100 pb-12">
               <EmailForm
                 ref={emailFormRef}
                 initialValues={emailInitialValues}
               />
 
               <div className="mt-4">
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-secondary-500">
                   {t("Already have an account?") + " "}
                   <Link
-                    className="text-indigo-600 hover:underline"
+                    className="text-primary-600 hover:underline"
                     href={loginRoute}
                   >
                     {t("Login here")}
@@ -210,7 +210,7 @@ export const InformationsGuest: React.FC = () => {
               </div>
             </div>
 
-            <div className="border-b border-gray-100 pb-12 mt-12">
+            <div className="border-b border-secondary-100 pb-12 mt-12">
               <SectionHeading>{t("Shipping address")}</SectionHeading>
 
               <div className="mt-8">

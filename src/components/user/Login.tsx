@@ -122,7 +122,7 @@ export const Login: React.FC = () => {
 
         <div className="mt-2">
           <div className="mt-8 flex flex-row justify-center">
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-sm text-secondary-600 text-center">
               {t("Don't have an account yet?") + " "}
               <Link href={signupRoute}>{t("Signup here")}</Link>
             </p>

@@ -23,7 +23,7 @@ export const CheckoutComplete: React.FC = () => {
       </div>
 
       <div className="mt-4">
-        <p className="text-xl text-gray-600">
+        <p className="text-xl text-secondary-600">
           {t("You will receive an email confirmation shortly")}
         </p>
       </div>
@@ -46,7 +46,7 @@ export const CheckoutComplete: React.FC = () => {
       ) : (
         <div>
           <div className="mt-14">
-            <p className="text-md text-gray-500">
+            <p className="text-md text-secondary-500">
               {t.rich(
                 "Keep track of your order in your Profile Page or Continue your shopping",
                 {

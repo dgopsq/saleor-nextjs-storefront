@@ -46,7 +46,7 @@ export const ProfileMenu: React.FC = () => {
         active={currentPath ?? undefined}
       />
 
-      <div className="border-b border-gray-50 w-full mt-6" />
+      <div className="border-b border-secondary-50 w-full mt-6" />
 
       <div className="mt-6">
         <button className="w-full" onClick={logout}>

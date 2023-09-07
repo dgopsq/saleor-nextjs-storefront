@@ -24,10 +24,11 @@ export const CategoryLink: React.FC<Props> = ({
     <Link
       href={route}
       className={match(variant)
-        .with("main", () => "text-lg font-medium text-gray-900")
+        .with("main", () => "text-lg font-medium text-secondary-900")
         .with(
           "sub",
-          () => "text-gray-500 hover:text-gray-800 text-sm font-medium"
+          () =>
+            "text-secondary-500 hover:text-secondary-800 text-sm font-medium"
         )
         .exhaustive()}
       onClick={onClick}

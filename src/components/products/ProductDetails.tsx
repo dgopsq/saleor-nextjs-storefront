@@ -139,13 +139,13 @@ export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
 
           {/* Product info */}
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold tracking-tight text-secondary-900">
               {product.name}
             </h1>
 
             <div className="mt-3">
               <h2 className="sr-only">{t("Product information")}</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
+              <p className="text-3xl tracking-tight text-secondary-900">
                 {formattedPrice}
               </p>
             </div>

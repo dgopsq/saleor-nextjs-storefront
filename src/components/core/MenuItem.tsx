@@ -21,15 +21,15 @@ export const MenuItem: React.FC<Props> = ({
     <div
       className={classNames(
         isActive
-          ? "bg-gray-50 border-gray-50 text-indigo-600"
-          : "text-gray-700  hover:bg-gray-50",
+          ? "bg-secondary-50 border-secondary-50 text-primary-600"
+          : "text-secondary-700  hover:bg-secondary-50",
         "flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold justify-center md:justify-start"
       )}
     >
       {Icon ? (
         <Icon
           className={classNames(
-            isActive ? "text-indigo-600" : "text-gray-400",
+            isActive ? "text-primary-600" : "text-secondary-400",
             "h-6 w-6 shrink-0"
           )}
         />
