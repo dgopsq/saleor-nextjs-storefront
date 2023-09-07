@@ -1,3 +1,4 @@
+import { CheckIcon, SuccessIcon } from "@/components/core/Icon";
 import { Route } from "next";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -38,16 +39,23 @@ export const CheckoutSteps: React.FC<Props> = ({ currentStep }) => {
           <li key={step.name} className="md:flex-1">
             {currentStep > index ? (
               <Link href={step.route}>
-                <span className="group flex flex-col border-l-4 border-primary-600 py-2 pl-4 hover:border-primary-800 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                  <span className="text-sm font-medium text-primary-600 group-hover:text-primary-800">
-                    {formatStepIndex(index)}
+                <span className="group flex flex-col p-4 border border-primary-600 bg-primary-600 rounded-lg">
+                  <div className="flex flex-row items-center justify-between">
+                    <span className="text-sm font-medium text-white">
+                      {formatStepIndex(index)}
+                    </span>
+
+                    <SuccessIcon className="text-white w-5 h-5" />
+                  </div>
+
+                  <span className="text-sm font-medium text-white">
+                    {step.name}
                   </span>
-                  <span className="text-sm font-medium">{step.name}</span>
                 </span>
               </Link>
             ) : currentStep === index ? (
               <span
-                className="flex flex-col border-l-4 border-primary-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                className="flex flex-col p-4 bg-secondary-50 border border-secondary-50 rounded-lg"
                 aria-current="step"
               >
                 <span className="text-sm font-medium text-primary-600">
@@ -56,7 +64,7 @@ export const CheckoutSteps: React.FC<Props> = ({ currentStep }) => {
                 <span className="text-sm font-medium">{step.name}</span>
               </span>
             ) : (
-              <span className="group flex flex-col border-l-4 border-secondary-200 py-2 pl-4 hover:border-secondary-300 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+              <span className="group flex flex-col p-4 border border-secondary-100 rounded-lg">
                 <span className="text-sm font-medium text-secondary-500 group-hover:text-secondary-700">
                   {formatStepIndex(index)}
                 </span>
