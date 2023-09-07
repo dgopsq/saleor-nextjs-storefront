@@ -1,4 +1,4 @@
-import { CheckIcon, SuccessIcon } from "@/components/core/Icon";
+import { SuccessIcon } from "@/components/core/Icon";
 import { Route } from "next";
 import { useTranslations } from "next-intl";
 import Link from "next/link";

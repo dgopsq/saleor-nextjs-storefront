@@ -1,4 +1,3 @@
-
 [Saleor](https://saleor.io/) storefront built using [Next.js](https://nextjs.org/) 13 and the new **App Router**.
 
 > [!NOTE]
@@ -16,17 +15,18 @@
 ## Getting Started
 
 **Requirements:**
+
 - An instance of the _Saleor_ backend up and running (the easiest way is probably to use [Saleor Cloud](https://cloud.saleor.io/) and its free tier)
 - The [Saleor Stripe App](https://docs.saleor.io/docs/3.x/developer/app-store/apps/stripe) installed in the dashboard
 
 **Follow these steps in order to execute the project correctly:**
 
 1. Rename the `.env.local.example` into `.env.local` and fill the `NEXT_PUBLIC_GRAPHQL_URL` environment variable with the correct URL to your GraphQL API
-2. Start the project in development mode using `pnpm dev`
-3. Open [http://localhost:3000](http://localhost:3000) with your browser
-4. 🎉
+2. Generate the GraphQL types using `pnpm generate:graphql`
+3. Start the project in development mode using `pnpm dev`
+4. Open [http://localhost:3000](http://localhost:3000) with your browser
+5. 🎉
 
 ## Configuration
 
 You can configure your storefront using the environment variables in [`src/misc/config.ts`](https://github.com/dgopsq/saleor-nextjs-base/blob/main/src/misc/config.ts). The only required configuration is `NEXT_PUBLIC_GRAPHQL_URL`, everything else is optional and has been documented directly in the file.
-

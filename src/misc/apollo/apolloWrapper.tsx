@@ -1,12 +1,7 @@
 "use client";
 
 import { publicConfig } from "@/misc/config";
-import {
-  ApolloClient,
-  ApolloLink,
-  Observable,
-  SuspenseCache,
-} from "@apollo/client";
+import { ApolloClient, ApolloLink, Observable } from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
@@ -97,19 +92,12 @@ const makeClient = () => {
   });
 };
 
-function makeSuspenseCache() {
-  return new SuspenseCache();
-}
-
 /**
  * The Apollo Provider wrapper.
  */
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
   return (
-    <ApolloNextAppProvider
-      makeClient={makeClient}
-      makeSuspenseCache={makeSuspenseCache}
-    >
+    <ApolloNextAppProvider makeClient={makeClient}>
       {children}
     </ApolloNextAppProvider>
   );

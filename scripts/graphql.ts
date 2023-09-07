@@ -2,7 +2,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "https://orologiomalvagio.eu.saleor.cloud/graphql/",
+  schema: process.env.NEXT_PUBLIC_GRAPHQL_URL || "",
   documents: "./src/**/*.graphql",
   generates: {
     "./src/__generated__/": {
