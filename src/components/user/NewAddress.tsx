@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 
 /**
- *
+ * Renders the page to create a new address.
  */
 export const NewAddress: React.FC = () => {
   const t = useTranslations("User");

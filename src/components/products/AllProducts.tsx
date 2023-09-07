@@ -14,7 +14,7 @@ const baseVariables = getAllProductsVariables();
 type Props = Record<string, never>;
 
 /**
- *
+ * Renders all products with pagination.
  */
 export const AllProducts: React.FC<Props> = () => {
   const [nextDataLoading, nextDataTransition] = useTransition();

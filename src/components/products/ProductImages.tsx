@@ -9,7 +9,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders all product images.
  */
 export const ProductImages: React.FC<Props> = ({ images }) => {
   return (

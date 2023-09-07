@@ -5,7 +5,8 @@ import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { useMemo } from "react";
 
 /**
- *
+ * A button used in the navbar composed by the
+ * user profile icon and the user name.
  */
 export const UserButton: React.FC = () => {
   const userInfo = useUserInfo();

@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- *
+ * A loading spinner.
  */
 export const Spinner: React.FC<Props> = ({ size, variant }) => {
   const computedSize = match(size)

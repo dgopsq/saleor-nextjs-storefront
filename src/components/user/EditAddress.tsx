@@ -25,7 +25,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders the page to edit an address.
  */
 export const EditAddress = ({ id }: Props) => {
   const t = useTranslations("User");

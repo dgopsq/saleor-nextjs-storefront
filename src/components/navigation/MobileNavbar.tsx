@@ -13,7 +13,7 @@ type Props = {
 };
 
 /**
- *
+ * A mobile specific navigation menu.
  */
 export const MobileNavbar: React.FC<Props> = ({
   categories,

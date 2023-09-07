@@ -12,7 +12,7 @@ import { generateAddressRoute, newAddressRoute } from "@/misc/navigation";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * Renders the user addresses page.
  */
 export const Addresses: React.FC = () => {
   const userInfo = useUserInfo();

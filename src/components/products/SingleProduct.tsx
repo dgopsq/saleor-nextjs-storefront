@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders the preview of a single product.
  */
 export const SingleProduct: React.FC<Props> = ({ slug }) => {
   const { data, complete } = useFragment({

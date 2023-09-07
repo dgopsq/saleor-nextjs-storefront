@@ -14,7 +14,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders a list of product variants.
  */
 export const ProductVariants: React.FC<Props> = ({
   variants,

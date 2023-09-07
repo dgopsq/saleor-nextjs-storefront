@@ -19,7 +19,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders the page to signup.
  */
 export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
   const t = useTranslations("User");

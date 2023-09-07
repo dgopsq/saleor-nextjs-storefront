@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- *
+ * Select input used for the product quantity.
  */
 export const QuantitySelect: React.FC<Props> = ({
   id,

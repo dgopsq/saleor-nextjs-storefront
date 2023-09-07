@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "next-intl/client";
 
 /**
- *
+ * Renders the user profile menu.
  */
 export const ProfileMenu: React.FC = () => {
   const t = useTranslations("User");

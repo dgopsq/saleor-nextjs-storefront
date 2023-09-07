@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- *
+ * Link to a specific category.
  */
 export const CategoryLink: React.FC<Props> = ({
   variant,

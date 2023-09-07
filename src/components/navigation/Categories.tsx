@@ -11,7 +11,8 @@ type Props = {
 };
 
 /**
- *
+ * Renders an horizontal list of categories with the relative
+ * subcategories in a dropdown.
  */
 export const Categories: React.FC<Props> = ({ categories }) => {
   return (

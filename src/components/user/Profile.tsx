@@ -7,7 +7,7 @@ import { ProfileInfo } from "@/components/user/ProfileInfo";
 import { useTranslations } from "next-intl";
 
 /**
- *
+ * Renders the user profile page.
  */
 export const Profile: React.FC = () => {
   const t = useTranslations("User");

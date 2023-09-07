@@ -13,7 +13,7 @@ type Props = {
 };
 
 /**
- *
+ * Renders a single order.
  */
 export const SingleOrder: React.FC<Props> = ({ order, onDetailsClick }) => {
   const t = useTranslations("User");

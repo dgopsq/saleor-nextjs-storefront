@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
- *
+ * Renders the page to change the user's email.
  */
 export const ChangeEmail: React.FC = () => {
   const t = useTranslations("User");

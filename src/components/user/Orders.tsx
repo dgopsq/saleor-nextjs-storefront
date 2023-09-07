@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 /**
- *
+ * Renders the page to show the orders of the user.
  */
 export const Orders: React.FC = () => {
   const t = useTranslations("User");

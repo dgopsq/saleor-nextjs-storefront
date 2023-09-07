@@ -3,7 +3,7 @@ import { homeRoute } from "@/misc/navigation";
 import Image from "next/image";
 
 /**
- *
+ * The Logo component.
  */
 export const Logo: React.FC = () => (
   <Link href={homeRoute}>

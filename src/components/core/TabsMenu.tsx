@@ -16,7 +16,7 @@ type Props<T extends string> = {
 };
 
 /**
- *
+ * Simple vertical tabs menu.
  */
 export const TabsMenu = <T extends string>({ active, items }: Props<T>) => {
   return (

@@ -21,7 +21,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
 
 /**
- *
+ * Renders the page to login.
  */
 export const Login: React.FC = () => {
   const t = useTranslations("User");

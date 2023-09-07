@@ -18,7 +18,7 @@ type Props = {
 };
 
 /**
- *
+ * Button to add a product to the cart.
  */
 export const AddToCartButton: React.FC<Props> = ({ variantId, qty }) => {
   const t = useTranslations("Products");

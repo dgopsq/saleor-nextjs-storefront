@@ -20,7 +20,7 @@ import { logger } from "@/misc/logger";
 import { commonApolloTypePolicies } from "@/misc/apollo/apolloCommons";
 
 /**
- *
+ * The type of the Apollo Client instance.
  */
 export type ClientApolloInstance = ApolloClient<unknown>;
 
@@ -101,6 +101,9 @@ function makeSuspenseCache() {
   return new SuspenseCache();
 }
 
+/**
+ * The Apollo Provider wrapper.
+ */
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
   return (
     <ApolloNextAppProvider

@@ -18,7 +18,7 @@ type Props = {
 };
 
 /**
- *
+ * The main Navbar component.
  */
 export const Navbar: React.FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
