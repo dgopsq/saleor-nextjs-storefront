@@ -13,7 +13,7 @@ export const publicConfig = {
    * The storage key used to store the checkout ID.
    */
   checkoutIdStorageKey:
-    process.env.NEXT_PUBLIC_CHECKOUT_ID_STORAGE_KEY || "checkout-token",
+    process.env.NEXT_PUBLIC_CHECKOUT_ID_STORAGE_KEY || "checkout-id",
 
   /**
    * The default channel used for the checkout.
