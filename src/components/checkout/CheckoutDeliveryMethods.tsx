@@ -22,7 +22,7 @@ export const CheckoutDeliveryMethod: React.FC<Props> = ({
   const deliveryMethodsRender = useMemo(
     () =>
       deliveryMethods.map((deliveryMethod) => {
-        const isSameAddr = deliveryMethod.id === value?.id;
+        const isSameMethod = deliveryMethod.id === value?.id;
 
         const handleClick = () => {
           if (!isLoading) onChange?.(deliveryMethod);
@@ -35,7 +35,7 @@ export const CheckoutDeliveryMethod: React.FC<Props> = ({
               type="button"
               className="w-full h-full"
             >
-              <RadioIsland isSelected={isSameAddr}>
+              <RadioIsland isSelected={isSameMethod}>
                 <SingleDeliveryMethod deliveryMethod={deliveryMethod} />
               </RadioIsland>
             </button>

@@ -78,6 +78,7 @@ export function useCheckoutInfo(): UseCheckoutInfoReturn {
   // FIXME: This could be buggy or prone to create errors.
   useEffect(() => {
     if (!complete) return;
+    if (data.deliveryMethod) return;
 
     const parsedMethods = data.shippingMethods.map((method) => {
       return getFragmentData(GenericShippingMethodFragmentDoc, method);
