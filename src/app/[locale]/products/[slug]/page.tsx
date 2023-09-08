@@ -40,7 +40,7 @@ export async function generateMetadata(
 
   const { data } = await client.query({
     query: GetProductMetaDocument,
-    variables: { slug: params.slug },
+    variables: { slug: params.slug, channel: publicConfig.defaultChannel },
   });
 
   const title = data?.product?.seoTitle || data?.product?.name || undefined;

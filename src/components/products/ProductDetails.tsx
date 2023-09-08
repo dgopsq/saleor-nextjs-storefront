@@ -55,7 +55,9 @@ type Props = {
  * This component is used for the product details page.
  */
 export const ProductDetails: React.FC<Props> = ({ slug, selectedVariant }) => {
-  useSuspenseQuery(GetProductDocument, { variables: { slug } });
+  useSuspenseQuery(GetProductDocument, {
+    variables: { slug, channel: publicConfig.defaultChannel },
+  });
 
   const t = useTranslations("Products");
   const [qty, setQty] = useState(1);

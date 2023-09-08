@@ -16,10 +16,9 @@ export const publicConfig = {
     process.env.NEXT_PUBLIC_CHECKOUT_ID_STORAGE_KEY || "checkout-id",
 
   /**
-   * The default channel used for the checkout.
+   * The default channel used all around the app.
    */
-  defaultCheckoutChannel:
-    process.env.NEXT_PUBLIC_DEFAULT_CHECKOUT_CHANNEL || "default-channel",
+  defaultChannel: process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "default-channel",
 
   /**
    * The default email used in the checkout while dealing

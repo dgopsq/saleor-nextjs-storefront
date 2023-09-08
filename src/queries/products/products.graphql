@@ -102,8 +102,15 @@ query GetProducts(
   $after: String
   $filters: ProductFilterInput
   $sortBy: ProductOrder
+  $channel: String!
 ) {
-  products(first: $first, after: $after, filter: $filters, sortBy: $sortBy) {
+  products(
+    first: $first
+    after: $after
+    filter: $filters
+    sortBy: $sortBy
+    channel: $channel
+  ) {
     edges {
       node {
         ...PreviewProduct
@@ -118,15 +125,15 @@ query GetProducts(
   }
 }
 
-query GetProduct($slug: String!) {
-  product(slug: $slug) {
+query GetProduct($slug: String!, $channel: String!) {
+  product(slug: $slug, channel: $channel) {
     ...PreviewProduct
     ...DetailedProduct
   }
 }
 
-query GetProductMeta($slug: String!) {
-  product(slug: $slug) {
+query GetProductMeta($slug: String!, $channel: String!) {
+  product(slug: $slug, channel: $channel) {
     slug
     name
     description

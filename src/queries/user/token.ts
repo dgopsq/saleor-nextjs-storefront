@@ -35,6 +35,7 @@ export async function refreshAuthToken(): Promise<AuthToken | null> {
         }`,
         variables: {
           refreshToken: maybeStoredRefreshToken,
+          channel: publicConfig.defaultChannel,
         },
       }),
     }).then((res) => res.json());
@@ -72,7 +73,10 @@ export async function retrieveCheckoutId(
 
     const checkoutInfoRes = await client.query({
       query: GetCheckoutInfoDocument,
-      variables: { checkoutId: localCheckoutId },
+      variables: {
+        checkoutId: localCheckoutId,
+        channel: publicConfig.defaultChannel,
+      },
       errorPolicy: "ignore",
     });
 
@@ -93,7 +97,7 @@ export async function retrieveCheckoutId(
   else logger.debug("Creating the Checkout Id for a guest user.");
 
   const email = maybeUser?.email ?? publicConfig.defaultCheckoutEmail;
-  const channel = publicConfig.defaultCheckoutChannel;
+  const channel = publicConfig.defaultChannel;
 
   const createCheckoutRes = await client.mutate({
     mutation: CreateCheckoutDocument,
