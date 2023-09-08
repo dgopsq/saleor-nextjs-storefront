@@ -119,4 +119,10 @@ export const publicConfig = {
    */
   seoDescription:
     process.env.NEXT_PUBLIC_SEO_DESCRIPTION || "Your shop description.",
+
+  /**
+   * Disable email confirmation while signing up.
+   */
+  disableEmailConfirmation:
+    process.env.NEXT_PUBLIC_DISABLE_EMAIL_CONFIRMATION === "true",
 };

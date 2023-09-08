@@ -50,8 +50,16 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
 
             errorToast(t("Something went wrong, please try again"));
           } else {
-            successToast(t("Account created successfully, check your email"));
-            router.push(homeRoute);
+            if (!publicConfig.disableEmailConfirmation) {
+              successToast(t("Account created successfully, check your email"));
+              router.push(homeRoute);
+            } else {
+              successToast(
+                t("Account created successfully, you can now login")
+              );
+
+              router.push(loginRoute);
+            }
           }
         },
       });
