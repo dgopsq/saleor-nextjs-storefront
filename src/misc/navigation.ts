@@ -2,6 +2,8 @@
  * Routes
  */
 
+import { publicConfig } from "@/misc/config";
+
 export const homeRoute = "/";
 export const cartRoute = "/cart";
 export const productsRoute = "/products";
@@ -22,17 +24,23 @@ export const newAddressRoute = "/account/addresses/new";
 export const ordersRoute = "/account/orders";
 
 /**
- *
+ * Generate the category route of a product.
  */
 export const generateCategoryRoute = (slug: string) =>
   `${categoriesRoute}/${slug}`;
 
 /**
- *
+ * Generate the address route.
  */
 export const generateAddressRoute = (id: string) => `${addressesRoute}/${id}`;
 
 /**
- *
+ * Generate the order route.
  */
 export const generateOrderRoute = (id: string) => `${ordersRoute}/${id}`;
+
+/**
+ * Generate the complete URL based on a path.
+ */
+export const generateFullUrl = (path: string) =>
+  `${publicConfig.baseUrl}${path}`;
