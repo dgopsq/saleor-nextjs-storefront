@@ -1,6 +1,7 @@
 import { Button } from "@/components/core/Button";
 import { errorToast } from "@/components/core/Notifications";
 import { publicConfig } from "@/misc/config";
+import { generateFullUrl } from "@/misc/navigation";
 import { stripeConfigSchema } from "@/misc/stripe";
 import {
   Elements,
@@ -30,7 +31,7 @@ const CheckoutForm: React.FC = () => {
         elements,
         confirmParams: {
           // Make sure to change this to your payment completion page
-          return_url: publicConfig.stripePaymentCallbackUrl,
+          return_url: generateFullUrl(publicConfig.stripePaymentCallbackPath),
         },
       });
 

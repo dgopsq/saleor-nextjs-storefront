@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate:graphql": "graphql-codegen --require dotenv/config --config scripts/graphql.ts dotenv_config_path=.env.local",
+    "generate:graphql:ci": "graphql-codegen --config scripts/graphql.ts",
     "compile": "tsc --noEmit"
   },
   "dependencies": {
@@ -29,7 +30,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "next": "13.4.12",
+    "next": "13.4.20-canary.21",
     "next-intl": "3.0.0-beta.9",
     "postcss": "8.4.24",
     "react": "18.2.0",

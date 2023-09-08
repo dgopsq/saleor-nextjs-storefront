@@ -1,10 +1,10 @@
-query GetCategories($first: Int!) {
+query GetCategories($first: Int!, $channel: String!) {
   categories(first: $first, level: 0) {
     edges {
       node {
         name
         slug
-        products {
+        products(channel: $channel) {
           totalCount
         }
         children(first: $first) {
@@ -12,7 +12,7 @@ query GetCategories($first: Int!) {
             node {
               name
               slug
-              products {
+              products(channel: $channel) {
                 totalCount
               }
             }
@@ -23,9 +23,14 @@ query GetCategories($first: Int!) {
   }
 }
 
-query GetCategoryProducts($slug: String!, $first: Int!, $sortBy: ProductOrder) {
+query GetCategoryProducts(
+  $slug: String!
+  $first: Int!
+  $sortBy: ProductOrder
+  $channel: String!
+) {
   category(slug: $slug) {
-    products(first: $first, sortBy: $sortBy) {
+    products(first: $first, sortBy: $sortBy, channel: $channel) {
       edges {
         node {
           ...PreviewProduct

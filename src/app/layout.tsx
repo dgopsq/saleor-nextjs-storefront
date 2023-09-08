@@ -8,6 +8,7 @@ import { Notifications } from "@/components/core/Notifications";
 import { getApolloClient } from "@/misc/apollo/apollo";
 import { Bootstrap } from "@/components/core/Bootstrap";
 import { commonMetadata } from "@/misc/metadata";
+import { publicConfig } from "@/misc/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default async function Layout({
 
   const { data } = await apolloClient.query({
     query: GetCategoriesDocument,
-    variables: { first: 10 },
+    variables: { first: 10, channel: publicConfig.defaultChannel },
   });
 
   const parsedCategories = parsePopulatedCategories(

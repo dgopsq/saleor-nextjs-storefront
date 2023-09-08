@@ -7,7 +7,7 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { SignupForm } from "@/components/core/SignupForm";
 import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
-import { homeRoute, loginRoute } from "@/misc/navigation";
+import { generateFullUrl, homeRoute, loginRoute } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,10 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
     (values: SignupForm) => {
       createAccount({
         variables: {
-          account: { ...values, redirectUrl: publicConfig.signupRedirectUrl },
+          account: {
+            ...values,
+            redirectUrl: generateFullUrl(publicConfig.signupRedirectPath),
+          },
         },
         onCompleted: (data) => {
           if (!data?.accountRegister) {

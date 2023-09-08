@@ -7,6 +7,7 @@ import { errorToast, successToast } from "@/components/core/Notifications";
 import { publicConfig } from "@/misc/config";
 import { useUserInfo } from "@/misc/hooks/useUserInfo";
 import { logger } from "@/misc/logger";
+import { generateFullUrl } from "@/misc/navigation";
 import { useMutation } from "@apollo/client";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect } from "react";
@@ -25,7 +26,7 @@ export const ChangeEmail: React.FC = () => {
         variables: {
           password: data.oldPassword,
           newEmail: data.newEmail,
-          redirectUrl: publicConfig.emailChangeRedirectUrl,
+          redirectUrl: generateFullUrl(publicConfig.emailChangeRedirectPath),
         },
         errorPolicy: "ignore",
       });

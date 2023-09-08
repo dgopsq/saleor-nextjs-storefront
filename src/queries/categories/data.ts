@@ -95,5 +95,9 @@ export const getCategoryProductsVariables = (
 ): GetCategoryProductsQueryVariables => ({
   slug: categorySlug,
   first: publicConfig.productsPageSize,
-  sortBy: { field: ProductOrderField.Price, direction: OrderDirection.Asc },
+  sortBy: {
+    field: ProductOrderField.Price,
+    direction: OrderDirection.Asc,
+  },
+  channel: publicConfig.defaultChannel,
 });

@@ -4,11 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "orologiomalvagio.eu.saleor.cloud",
-      },
-      {
-        protocol: "https",
-        hostname: "tailwindui.com",
+        hostname: "saleor-next-storefront-dgopsq.eu.saleor.cloud",
       },
     ],
   },

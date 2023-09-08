@@ -1,5 +1,10 @@
 export const publicConfig = {
   /**
+   * The base URL of the app.
+   */
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+
+  /**
    * The Saleor GraphQL URL used to retrieve all the data.
    */
   graphqlUrl: process.env.NEXT_PUBLIC_GRAPHQL_URL || "",
@@ -16,10 +21,9 @@ export const publicConfig = {
     process.env.NEXT_PUBLIC_CHECKOUT_ID_STORAGE_KEY || "checkout-id",
 
   /**
-   * The default channel used for the checkout.
+   * The default channel used all around the app.
    */
-  defaultCheckoutChannel:
-    process.env.NEXT_PUBLIC_DEFAULT_CHECKOUT_CHANNEL || "default-channel",
+  defaultChannel: process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "default-channel",
 
   /**
    * The default email used in the checkout while dealing
@@ -44,9 +48,8 @@ export const publicConfig = {
   /**
    * The redirect URL used in the signup email confirmation.
    */
-  signupRedirectUrl:
-    process.env.NEXT_PUBLIC_SIGNUP_REDIRECT_URL ||
-    "http://localhost:3000/account/login",
+  signupRedirectPath:
+    process.env.NEXT_PUBLIC_SIGNUP_REDIRECT_URL || "/account/login",
 
   /**
    * The storage key used to store the user token.
@@ -65,17 +68,17 @@ export const publicConfig = {
    * The redirect URL used in the confirmation email sent
    * while changing the user email.
    */
-  emailChangeRedirectUrl:
+  emailChangeRedirectPath:
     process.env.NEXT_PUBLIC_EMAIL_CHANGE_REDIRECT_URL ||
-    "http://localhost:3000/account/authentication",
+    "/account/authentication",
 
   /**
    * The callback URL used by Stripe in order to finalize
    * a payment.
    */
-  stripePaymentCallbackUrl:
+  stripePaymentCallbackPath:
     process.env.NEXT_PUBLIC_STRIPE_PAYMENT_CALLBACK_URL ||
-    "http://localhost:3000/checkout/stripe/callback",
+    "/checkout/stripe/callback",
 
   /**
    * The Stripe gateway ID.
@@ -99,7 +102,7 @@ export const publicConfig = {
   /**
    * The homepage URL.
    */
-  homepageUrl: process.env.NEXT_PUBLIC_HOMEPAGE_URL || "http://localhost:3000",
+  homepagePath: process.env.NEXT_PUBLIC_HOMEPAGE_URL || "/",
 
   /**
    * The default locale used in the store.
