@@ -9,7 +9,7 @@ on:
 name: Test and lint workflow
 
 env:
-  NEXT_PUBLIC_GRAPHQL_URL: https://demo.saleor.io/graphql/
+  NEXT_PUBLIC_GRAPHQL_URL: https://saleor-next-storefront-dgopsq.eu.saleor.cloud/graphql/
 
 jobs:
   cache-and-install:
