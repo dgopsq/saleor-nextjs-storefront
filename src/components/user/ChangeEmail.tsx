@@ -27,6 +27,7 @@ export const ChangeEmail: React.FC = () => {
           password: data.oldPassword,
           newEmail: data.newEmail,
           redirectUrl: generateFullUrl(publicConfig.emailChangeRedirectPath),
+          channel: publicConfig.defaultChannel,
         },
         errorPolicy: "ignore",
       });

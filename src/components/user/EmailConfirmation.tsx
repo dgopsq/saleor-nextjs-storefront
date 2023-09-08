@@ -2,6 +2,7 @@
 
 import { UserConfirmEmailChangeDocument } from "@/__generated__/graphql";
 import { errorToast, successToast } from "@/components/core/Notifications";
+import { publicConfig } from "@/misc/config";
 import { logger } from "@/misc/logger";
 import { getStoredAuthToken } from "@/queries/user/token";
 import { useMutation } from "@apollo/client";
@@ -24,7 +25,10 @@ export const EmailConfirmation: React.FC = () => {
 
     if (!token || !authToken) return;
 
-    confirmEmail({ variables: { token }, errorPolicy: "ignore" });
+    confirmEmail({
+      variables: { token, channel: publicConfig.defaultChannel },
+      errorPolicy: "ignore",
+    });
   }, [confirmEmail, authToken]);
 
   useEffect(() => {

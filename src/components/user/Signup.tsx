@@ -33,6 +33,7 @@ export const Signup: React.FC<Props> = ({ hideLoginLink, initialValues }) => {
           account: {
             ...values,
             redirectUrl: generateFullUrl(publicConfig.signupRedirectPath),
+            channel: publicConfig.defaultChannel,
           },
         },
         onCompleted: (data) => {

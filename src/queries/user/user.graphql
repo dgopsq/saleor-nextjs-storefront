@@ -111,11 +111,13 @@ mutation UserEmailChange(
   $newEmail: String!
   $password: String!
   $redirectUrl: String!
+  $channel: String!
 ) {
   requestEmailChange(
     newEmail: $newEmail
     password: $password
     redirectUrl: $redirectUrl
+    channel: $channel
   ) {
     errors {
       code
@@ -128,8 +130,8 @@ mutation UserEmailChange(
   }
 }
 
-mutation UserConfirmEmailChange($token: String!) {
-  confirmEmailChange(token: $token) {
+mutation UserConfirmEmailChange($token: String!, $channel: String!) {
+  confirmEmailChange(token: $token, channel: $channel) {
     errors {
       code
       message
