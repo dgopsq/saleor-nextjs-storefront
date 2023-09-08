@@ -3,6 +3,7 @@ export const publicConfig = {
    * The base URL of the app.
    */
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+
   /**
    * The Saleor GraphQL URL used to retrieve all the data.
    */
