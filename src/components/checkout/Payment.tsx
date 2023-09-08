@@ -39,9 +39,10 @@ export const Payment: React.FC = () => {
   );
 
   useEffect(() => {
+    if (!data) return;
     if (!informationsStepValid || !shippingStepValid)
-      router.push(checkoutRoute);
-  }, [router, informationsStepValid, shippingStepValid]);
+      router.replace(checkoutRoute);
+  }, [router, informationsStepValid, shippingStepValid, data]);
 
   if (!data || !informationsStepValid || !shippingStepValid || !showCheckout)
     return <LoadingSpinner />;

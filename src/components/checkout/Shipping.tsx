@@ -58,8 +58,9 @@ export const Shipping: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!informationsStepValid) router.push(checkoutRoute);
-  }, [router, informationsStepValid]);
+    if (!data) return;
+    if (!informationsStepValid) router.replace(checkoutRoute);
+  }, [router, informationsStepValid, data]);
 
   if (!data || !informationsStepValid || !showCheckout)
     return <LoadingSpinner />;
